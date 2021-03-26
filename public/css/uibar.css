@@ -1,0 +1,10 @@
+.nav-link{
+    color: rgb(0, 0, 0)!important;
+}
+.nav-link:hover{
+    color: rgba(216,216,216)!important;
+}
+
+.offcanvas-header{
+    display: none;
+}

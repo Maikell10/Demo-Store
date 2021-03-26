@@ -1,0 +1,186 @@
+.navbar {
+    height: 70px;
+}
+
+.content-wrapper {
+    margin-top: 70px;
+}
+
+.brand-link {
+    display: flex;
+    height: 62px;
+    margin-top: 8px;
+}
+
+.brand-link .brand-image {
+    margin-left: -.2rem
+}
+
+/* Tamaño del scroll */
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Estilos barra (thumb) de scroll */
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgb(117, 116, 116);
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #4d8b05;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos track de scroll */
+.sidebar::-webkit-scrollbar-track {
+    background: rgb(65, 64, 64);
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track:hover,
+.sidebar::-webkit-scrollbar-track:active {
+    background: rgb(65, 64, 64);
+}
+
+
+
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Estilos barra (thumb) de scroll */
+body::-webkit-scrollbar-thumb {
+    background: #4bc57d;
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #4d8b05;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos track de scroll */
+body::-webkit-scrollbar-track {
+    background: rgb(190, 189, 189);
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-track:hover,
+body::-webkit-scrollbar-track:active {
+    background: rgb(153, 152, 152);
+}
+
+/* Estilos de footer del sidebar */
+.svg:hover path {
+    fill: #4BC57D;
+}
+
+.svgP {
+    max-width: 150%;
+    height: 25px;
+    margin-left: -20px;
+    margin-top: -5px
+}
+
+.svgP path {
+    fill: rgba(56, 196, 21, 0.747);
+}
+
+.text-mail {
+    color: #a7a4a4;
+}
+
+.text-mail:hover {
+    color: #4BC57D;
+}
+
+#searchButtonAdmin {
+    display: none;
+}
+
+@media only screen and (max-width: 400px)
+{
+    #searchButtonAdmin {
+        display: block;
+    }
+    #mainSearchButtonAdmin {
+        display: none;
+    }
+    #miboton {
+        margin-left: -60px;
+    }
+}
+
+.hover_zoom i {
+    -webkit-transition:all .4s ease; /* Safari y Chrome */
+    -moz-transition:all .4s ease; /* Firefox */
+    -o-transition:all .4s ease; /* IE 9 */
+    -ms-transition:all .4s ease; /* Opera */
+}
+
+.hover_zoom i:hover {
+    -webkit-transform:scale(1.25);
+    -moz-transform:scale(1.25);
+    -ms-transform:scale(1.25);
+    -o-transform:scale(1.25);
+    transform:scale(1.25);
+}
+
+.hover_zoom_a {
+    -webkit-transition:all .4s ease; /* Safari y Chrome */
+    -moz-transition:all .4s ease; /* Firefox */
+    -o-transition:all .4s ease; /* IE 9 */
+    -ms-transition:all .4s ease; /* Opera */
+}
+
+.hover_zoom_a:hover {
+    -webkit-transform:scale(1.45);
+    -moz-transform:scale(1.45);
+    -ms-transform:scale(1.45);
+    -o-transform:scale(1.45);
+    transform:scale(1.45);
+}
+
+.hover_zoom_home {
+    -webkit-transition:all .4s ease; /* Safari y Chrome */
+    -moz-transition:all .4s ease; /* Firefox */
+    -o-transition:all .4s ease; /* IE 9 */
+    -ms-transition:all .4s ease; /* Opera */
+}
+
+.hover_zoom_home:hover {
+    -webkit-transform:scale(1.05);
+    -moz-transform:scale(1.05);
+    -ms-transform:scale(1.05);
+    -o-transform:scale(1.05);
+    transform:scale(1.05);
+}
+
+
+
+.direct-chat-messages::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Estilos barra (thumb) de scroll */
+.direct-chat-messages::-webkit-scrollbar-thumb {
+    background: #4bc57d;
+    border-radius: 4px;
+}
+
+.direct-chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #4d8b05;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos track de scroll */
+.direct-chat-messages::-webkit-scrollbar-track {
+    background: rgb(190, 189, 189);
+    border-radius: 4px;
+}
+
+.direct-chat-messages::-webkit-scrollbar-track:hover,
+.direct-chat-messages::-webkit-scrollbar-track:active {
+    background: rgb(153, 152, 152);
+}
