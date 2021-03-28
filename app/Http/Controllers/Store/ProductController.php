@@ -8,9 +8,12 @@ use App\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Rating as RatingResources;
 use App\Rating;
+use App\Visit;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class ProductController extends Controller
 {
@@ -40,7 +43,7 @@ class ProductController extends Controller
             $search = request()->main_search;
         }
 
-        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', '%'.$search.'%')->inRandomOrder()->paginate(8);
+        $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('nombre', 'like', '%' . $search . '%')->inRandomOrder()->paginate(8);
         $categories = Category::with('subCategories')->inRandomOrder()->get();
 
         $user = Auth::user();
@@ -52,7 +55,7 @@ class ProductController extends Controller
             $direct_m = $controller->direct_m($user->id);
             foreach ($direct_m as $direct_m1) {
                 if ($direct_m1->status == 'NO-VIEW') {
-                    $cant_dm_new = $cant_dm_new +1;
+                    $cant_dm_new = $cant_dm_new + 1;
                 }
             }
         }
@@ -89,7 +92,8 @@ class ProductController extends Controller
      */
     public function show($slug)
     {
-        $producto = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('slug', $slug)->firstOrFail();
+
+        $producto = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('slug', $slug)->firstOrFail();
         $category = Category::where('id', $producto->main_category->sub_category->category_id)->firstOrFail();
 
         $categorias = Category::orderBy('nombre')->get();
@@ -97,20 +101,50 @@ class ProductController extends Controller
         $arr_conex_client_t = $this->arr_ip();
 
         $user = Auth::user();
+        if ($user) {
+            if ($producto->users[0]->id == $user->id) {
+                // The user is the same that the user's onw of the product
+            } else {
+                // Getting ip Client for visits
+                $visit_old = Visit::where('ip_client', FacadesRequest::ip())->where('product_id', $producto->id)->orderBy('created_at', 'DESC')->get();
+                if ($visit_old == '[]') {
+                    $visit = new Visit();
+                    $visit->ip_client = FacadesRequest::ip();
+                    $visit->product_id = $producto->id;
+                    $visit->save();
 
-        // Direct Messages
-        $controller = new Controller();
-        $cant_dm_new = 0;
-        if ($user != null) {
-            $direct_m = $controller->direct_m($user->id);
-            foreach ($direct_m as $direct_m1) {
-                if ($direct_m1->status == 'NO-VIEW') {
-                    $cant_dm_new = $cant_dm_new +1;
+                    $prod_v = Product::findOrFail($producto->id);
+                    $prod_v->visitas = ($prod_v->visitas) + 1;
+                    $prod_v->save();
+                } else {
+                    if (($visit_old[0]->created_at)->modify('+30 minutes') < Carbon::now()) {
+                        $visit = new Visit();
+                        $visit->ip_client = FacadesRequest::ip();
+                        $visit->product_id = $producto->id;
+                        $visit->save();
+
+                        $prod_v = Product::findOrFail($producto->id);
+                        $prod_v->visitas = ($prod_v->visitas) + 1;
+                        $prod_v->save();
+                    }
                 }
             }
         }
 
-        $comments = Comment::with('answers','users')->where('product_id', $producto->id)->latest()->get();
+        // Direct Messages
+        $controller = new Controller();
+        $cant_dm_new = 0;
+        $direct_m = 0;
+        if ($user != null) {
+            $direct_m = $controller->direct_m($user->id);
+            foreach ($direct_m as $direct_m1) {
+                if ($direct_m1->status == 'NO-VIEW') {
+                    $cant_dm_new = $cant_dm_new + 1;
+                }
+            }
+        }
+
+        $comments = Comment::with('answers', 'users')->where('product_id', $producto->id)->latest()->get();
 
         return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new'));
     }
