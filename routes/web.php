@@ -70,6 +70,7 @@ Route::get('/', function () {
     $user = Auth::user();
 
     $cant_dm_new = 0;
+    $direct_m = 0;
     if ($user != null) {
         $direct_m = DirectMessages::where('user_id', $user->id)->where('type', 'STORE')->orderBy('created_at', 'asc')->get();
         foreach ($direct_m as $direct_m1) {
@@ -280,6 +281,9 @@ Route::get('admin/products-visits', function () {
         } else {
             $profit_visits = 100;
         }
+
+        // Total Sales
+        $total_sales_count = Sale::count();
 
         return view('admin.visits', compact('notifications','direct_m','total_sales_count','visits','profit_visits'));
     }

@@ -390,7 +390,7 @@
                                         class="menu_social_list d-flex flex-row align-items-start justify-content-start">
                                         <li><a href="https://www.facebook.com/tuminimercado.fb" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                                         <li><a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                                        <li><a href="https://twitter.com/TuMiniMercado1" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
                                         <li><a href="https://www.instagram.com/tu_minimercado/" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
                                     </ul>
                                 </div>
@@ -507,7 +507,9 @@
                                                 <li><a href="#"><i class="fa fa-youtube-play"
                                                             aria-hidden="true"></i></a>
                                                 </li>
-                                                <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                                <!-- <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a> 
+                                                </li> -->
+                                                <li><a href="https://twitter.com/TuMiniMercado1" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> 
                                                 </li>
                                                 <li><a href="https://www.instagram.com/tu_minimercado/" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                                                 </li>
