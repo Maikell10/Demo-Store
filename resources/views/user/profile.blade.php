@@ -61,19 +61,19 @@
 
                                         <ul class="list-group list-group-unbordered mb-3">
                                             <li class="list-group-item">
-                                                <b>{{ __('Shopping') }}</b> <a class="float-right">20</a>
+                                                <b>{{ __('Shopping') }}</b> <a class="float-right">{{$sales_count}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Positive Ratings') }}</b> <a class="float-right">18</a>
+                                                <b>{{ __('Positive Ratings') }}</b> <a class="float-right">{{$positive_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">1</a>
+                                                <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">{{$negative_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Negative Ratings') }}</b> <a class="float-right">1</a>
+                                                <b>{{ __('Negative Ratings') }}</b> <a class="float-right">{{$neutral_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Comments') }}</b> <a class="float-right">32</a>
+                                                <b>{{ __('Comments') }}</b> <a class="float-right">{{$comments}}</a>
                                             </li>
                                         </ul>
 

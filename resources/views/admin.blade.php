@@ -96,161 +96,161 @@
     });
 
     $(function () {
-  'use strict'
+        'use strict'
 
-  var ticksStyle = {
-    fontColor: '#495057',
-    fontStyle: 'bold'
-  }
-
-  var mode      = 'index'
-  var intersect = true
-
-  var $salesChart = $('#sales-chart2')
-  var salesChart  = new Chart($salesChart, {
-    type   : 'bar',
-    data   : {
-      labels  : ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-      datasets: [
-        {
-          backgroundColor: '#007bff',
-          borderColor    : '#007bff',
-          data           : [1000, 2000, 3000, 2500, 2700, 2500, 3000]
-        },
-        {
-          backgroundColor: '#ced4da',
-          borderColor    : '#ced4da',
-          data           : [700, 1700, 2700, 2000, 1800, 1500, 2000]
+        var ticksStyle = {
+            fontColor: '#495057',
+            fontStyle: 'bold'
         }
-      ]
-    },
-    options: {
-      maintainAspectRatio: false,
-      tooltips           : {
-        mode     : mode,
-        intersect: intersect
-      },
-      hover              : {
-        mode     : mode,
-        intersect: intersect
-      },
-      legend             : {
-        display: false
-      },
-      scales             : {
-        yAxes: [{
-          // display: false,
-          gridLines: {
-            display      : true,
-            lineWidth    : '4px',
-            color        : 'rgba(0, 0, 0, .2)',
-            zeroLineColor: 'transparent'
-          },
-          ticks    : $.extend({
-            beginAtZero: true,
 
-            // Include a dollar sign in the ticks
-            callback: function (value, index, values) {
-              if (value >= 1000) {
-                value /= 1000
-                value += 'k'
-              }
-              return '$' + value
+        var mode      = 'index'
+        var intersect = true
+
+        var $salesChart = $('#sales-chart2')
+        var salesChart  = new Chart($salesChart, {
+            type   : 'bar',
+            data   : {
+            labels  : ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+            datasets: [
+                {
+                backgroundColor: '#007bff',
+                borderColor    : '#007bff',
+                data           : [1000, 2000, 3000, 2500, 2700, 2500, 3000]
+                },
+                {
+                backgroundColor: '#ced4da',
+                borderColor    : '#ced4da',
+                data           : [700, 1700, 2700, 2000, 1800, 1500, 2000]
+                }
+            ]
+            },
+            options: {
+            maintainAspectRatio: false,
+            tooltips           : {
+                mode     : mode,
+                intersect: intersect
+            },
+            hover              : {
+                mode     : mode,
+                intersect: intersect
+            },
+            legend             : {
+                display: false
+            },
+            scales             : {
+                yAxes: [{
+                // display: false,
+                gridLines: {
+                    display      : true,
+                    lineWidth    : '4px',
+                    color        : 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+                ticks    : $.extend({
+                    beginAtZero: true,
+
+                    // Include a dollar sign in the ticks
+                    callback: function (value, index, values) {
+                    if (value >= 1000) {
+                        value /= 1000
+                        value += 'k'
+                    }
+                    return '$' + value
+                    }
+                }, ticksStyle)
+                }],
+                xAxes: [{
+                display  : true,
+                gridLines: {
+                    display: false
+                },
+                ticks    : ticksStyle
+                }]
             }
-          }, ticksStyle)
-        }],
-        xAxes: [{
-          display  : true,
-          gridLines: {
-            display: false
-          },
-          ticks    : ticksStyle
-        }]
-      }
-    }
-  })
+            }
+        })
 
-  var $visitorsChart = $('#visits-chart')
-  var visitorsChart  = new Chart($visitorsChart, {
-    data   : {
-      labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
-      datasets: [{
-        type                : 'line',
-        data                : [
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(6)->toDateString())->get()->count()) !!},  
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(5)->toDateString())->get()->count()) !!},  
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(4)->toDateString())->get()->count()) !!},  
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(3)->toDateString())->get()->count()) !!}, 
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(2)->toDateString())->get()->count()) !!}, 
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDay()->toDateString())->get()->count()) !!}, 
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->toDateString())->get()->count()) !!}
-        ],
-        backgroundColor     : 'transparent',
-        borderColor         : '#007bff',
-        pointBorderColor    : '#007bff',
-        pointBackgroundColor: '#007bff',
-        fill                : false
-        // pointHoverBackgroundColor: '#007bff',
-        // pointHoverBorderColor    : '#007bff'
-      },
-        {
-          type                : 'line',
-          data                : [
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(13)->toDateString())->get()->count()) !!}, 
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(12)->toDateString())->get()->count()) !!}, 
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(11)->toDateString())->get()->count()) !!}, 
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(10)->toDateString())->get()->count()) !!},
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(9)->toDateString())->get()->count()) !!},
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(8)->toDateString())->get()->count()) !!}, 
-            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(7)->toDateString())->get()->count()) !!}
-            ],
-          backgroundColor     : 'tansparent',
-          borderColor         : '#ced4da',
-          pointBorderColor    : '#ced4da',
-          pointBackgroundColor: '#ced4da',
-          fill                : false
-          // pointHoverBackgroundColor: '#ced4da',
-          // pointHoverBorderColor    : '#ced4da'
-        }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      tooltips           : {
-        mode     : mode,
-        intersect: intersect
-      },
-      hover              : {
-        mode     : mode,
-        intersect: intersect
-      },
-      legend             : {
-        display: false
-      },
-      scales             : {
-        yAxes: [{
-          // display: false,
-          gridLines: {
-            display      : true,
-            lineWidth    : '4px',
-            color        : 'rgba(0, 0, 0, .2)',
-            zeroLineColor: 'transparent'
-          },
-          ticks    : $.extend({
-            beginAtZero : true,
-            //suggestedMax: 200
-          }, ticksStyle)
-        }],
-        xAxes: [{
-          display  : true,
-          gridLines: {
-            display: false
-          },
-          ticks    : ticksStyle
-        }]
-      }
-    }
-  })
-});
+        var $visitorsChart = $('#visits-chart')
+        var visitorsChart  = new Chart($visitorsChart, {
+            data   : {
+            labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
+            datasets: [{
+                type                : 'line',
+                data                : [
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(6)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(5)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(4)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(3)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(2)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDay()->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->toDateString())->get()->count()) !!}
+                ],
+                backgroundColor     : 'transparent',
+                borderColor         : '#007bff',
+                pointBorderColor    : '#007bff',
+                pointBackgroundColor: '#007bff',
+                fill                : false
+                // pointHoverBackgroundColor: '#007bff',
+                // pointHoverBorderColor    : '#007bff'
+            },
+                {
+                type                : 'line',
+                data                : [
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(13)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(12)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(11)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(10)->toDateString())->get()->count()) !!},
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(9)->toDateString())->get()->count()) !!},
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(8)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(7)->toDateString())->get()->count()) !!}
+                    ],
+                backgroundColor     : 'tansparent',
+                borderColor         : '#ced4da',
+                pointBorderColor    : '#ced4da',
+                pointBackgroundColor: '#ced4da',
+                fill                : false
+                // pointHoverBackgroundColor: '#ced4da',
+                // pointHoverBorderColor    : '#ced4da'
+                }]
+            },
+            options: {
+            maintainAspectRatio: false,
+            tooltips           : {
+                mode     : mode,
+                intersect: intersect
+            },
+            hover              : {
+                mode     : mode,
+                intersect: intersect
+            },
+            legend             : {
+                display: false
+            },
+            scales             : {
+                yAxes: [{
+                // display: false,
+                gridLines: {
+                    display      : true,
+                    lineWidth    : '4px',
+                    color        : 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+                ticks    : $.extend({
+                    beginAtZero : true,
+                    //suggestedMax: 200
+                }, ticksStyle)
+                }],
+                xAxes: [{
+                display  : true,
+                gridLines: {
+                    display: false
+                },
+                ticks    : ticksStyle
+                }]
+            }
+            }
+        })
+    });
 </script>
 @endsection
 
@@ -262,7 +262,7 @@
             <div class="col-lg-12">
                 <div class="card card-success card-outline">
                     <div class="card-body">
-                        <h5 class="card-title">Bienvenido {{ Auth::user()->name }}</h5>
+                        <h5 class="card-title">{{__('Welcome ')}}<font class="font-weight-bold">{{ Auth::user()->name }}</font></h5>
                         <br>
 
                         <!-- Small boxes (Stat box) -->
@@ -295,7 +295,7 @@
                                     <div class="icon">
                                         <i class="ion ion-stats-bars"></i>
                                     </div>
-                                    <a href="#" class="small-box-footer">{{__('More info ')}}<i
+                                    <a href="{{route('admin.bounce')}}" class="small-box-footer">{{__('More info ')}}<i
                                             class="fas fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
@@ -327,7 +327,7 @@
                                     <div class="icon">
                                         <i class="ion ion-pie-graph"></i>
                                     </div>
-                                    <a href="#" class="small-box-footer">{{__('More info ')}}<i
+                                    <a href="{{route('admin.visits')}}" class="small-box-footer">{{__('More info ')}}<i
                                             class="fas fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>

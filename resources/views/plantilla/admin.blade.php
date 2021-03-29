@@ -113,7 +113,7 @@
                             style="height: 40px; width: 40px; object-fit: cover">
                         @else
                         <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
-                            class="img-circle elevation-2" alt="User Image">
+                            class="img-circle elevation-2" alt="User Image" style="height: 40px; width: 40px; object-fit: cover">
                         @endif
                         @endif
                         <span class="caret"></span>

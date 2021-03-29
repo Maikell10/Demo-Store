@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Store;
 
+use App\Comment;
 use App\Http\Controllers\Controller;
+use App\RatingStore;
+use App\Sale;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,7 +36,15 @@ class ProfileController extends Controller
             }
         }
 
-        return view('user.profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
+        $sales_count = Sale::where('user_id',$user->id)->where('state', 'Finalizada')->count();
+
+        $positive_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', '+')->count();
+        $negative_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', '-')->count();
+        $neutral_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', 'N')->count();
+
+        $comments = Comment::where('user_id',$user->id)->where('parent_id', null)->count();
+
+        return view('user.profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'comments'));
     }
 
     /**
