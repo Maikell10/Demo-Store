@@ -8,6 +8,7 @@ use App\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Rating as RatingResources;
 use App\Rating;
+use App\Sale;
 use App\Visit;
 use Carbon\Carbon;
 use DateTime;
@@ -92,6 +93,8 @@ class ProductController extends Controller
      */
     public function show($slug)
     {
+        $can_rate = '[]';
+        $rate_old = '[]';
 
         $producto = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('slug', $slug)->firstOrFail();
         $category = Category::where('id', $producto->main_category->sub_category->category_id)->firstOrFail();
@@ -99,7 +102,7 @@ class ProductController extends Controller
         $categorias = Category::orderBy('nombre')->get();
 
         $arr_conex_client_t = $this->arr_ip();
-
+        
         $user = Auth::user();
         if ($user) {
             if ($producto->users[0]->id == $user->id) {
@@ -128,6 +131,8 @@ class ProductController extends Controller
                         $prod_v->save();
                     }
                 }
+                $can_rate = Sale::where('user_id', Auth::user()->id)->where('product_id', $producto->id)->get();
+                $rate_old = Rating::where('user_id', Auth::user()->id)->where('product_id', $producto->id)->get();
             }
         }
 
@@ -146,7 +151,7 @@ class ProductController extends Controller
 
         $comments = Comment::with('answers', 'users')->where('product_id', $producto->id)->latest()->get();
 
-        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new'));
+        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old'));
     }
 
     /**

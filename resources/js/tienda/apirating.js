@@ -2,6 +2,7 @@ const apirating = new Vue({
     el: "#apirating",
     data: {
         rating: 0,
+        review_rating: '',
         user_id: $('#user_id_rating').val(),
         product_id: $('#product_id_rating').val(),
 
@@ -23,37 +24,65 @@ const apirating = new Vue({
     methods: {
         setRating() {
             if (this.user_id != '') {
-                axios
-                .get("http://tiendademo1.test/api/rating/new", {
-                    params: { product_id: this.product_id, user_id: this.user_id, rating:this.rating }
-                })
-                .then(response => {
-                    if (response.data == 'positivo') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Gracias por tu Valoración!',
-                            showConfirmButton: false,
-                            timer: 1200
-                        })
-                        this.getRating()
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Fallo al Valorar!',
-                            showConfirmButton: false,
-                            timer: 1200
-                        })
-                    }
-                }).catch(err => {
+                if (this.rating > 0) {
+                    Swal.fire({
+                        title: "Estas seguro de proceder con la valoración?",
+                        //text: "¡No podrás revertir esto!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Sí!",
+                        cancelButtonText: "Cancelar"
+                    }).then(result => {
+                        if (result.value) {
+                            axios
+                            .get("http://tiendademo1.test/api/rating/new", {
+                                params: { product_id: this.product_id, user_id: this.user_id, rating:this.rating, review_rating:this.review_rating }
+                            })
+                            .then(response => {
+                                if (response.data == 'positivo') {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Gracias por tu Valoración!',
+                                        showConfirmButton: false,
+                                        timer: 1200
+                                    })
+                                    this.getRating()
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Fallo al Valorar!',
+                                        showConfirmButton: false,
+                                        timer: 1200
+                                    })
+                                }
+                            }).catch(err => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Fallo al Valorar!',
+                                    showConfirmButton: false,
+                                    timer: 1200
+                                })
+                            })
+                        } else {
+                            Swal.fire(
+                                "Cancelado!",
+                                "Cancelado!",
+                                "error"
+                            );
+                        }
+                    })
+                    
+                }else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Fallo al Valorar!',
                         showConfirmButton: false,
                         timer: 1200
                     })
-                })
+                }
             }
-            
         },
         getRating() {
             fetch(`http://tiendademo1.test/api/rating/${this.product_id}`)

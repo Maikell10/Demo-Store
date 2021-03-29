@@ -131,6 +131,7 @@
     "Product Details": "Detalles del Producto",
     "You must log in to ask": "Debe iniciar sesión para preguntar",
     "Write a question": "Escribe una pregunta",
+    "Write a review": "Escribe una reseña",
 
     "All Products in": "Todos los Productos en",
     "There are no products available in this category": "No se encuentran productos disponibles en esta categoría",
@@ -160,7 +161,8 @@
     "Page Expired": "Página Expirada",
     "This action is unauthorized.": "No se Encuentra Autorizado",
 
-    "User Rating": "Valoración del Usuario",
+    "You can rate the product now and leave a review": "Puedes valorar el producto ahora y dejar una reseña",
+    "You have already rated the product": "Ya has valorado el producto",
     "Ratings of ": "Reseñas de ",
     "Publish": "Valorar",
     "Verified": "Verificado",

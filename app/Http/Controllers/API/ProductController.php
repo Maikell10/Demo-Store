@@ -58,6 +58,7 @@ class ProductController extends Controller
                 $rating->product_id = $request->product_id;
                 $rating->user_id = $request->user_id;
                 $rating->rating = $request->rating;
+                $rating->review = $request->review_rating;
                 $rating->save();
             } else {
                 // El rating ya existe con el usuario
@@ -66,6 +67,7 @@ class ProductController extends Controller
                 $rating->product_id = $request->product_id;
                 $rating->user_id = $request->user_id;
                 $rating->rating = $request->rating;
+                $rating->review = $request->review_rating;
                 $rating->save();
             }
             

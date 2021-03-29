@@ -196,13 +196,24 @@
 
         <div class="card border-success mt-2">
             <div class="card-body">
-                <!--
-                <h4 class="">{{ __('User Rating') }}</h4>
+
+                @if (isset(Auth::user()->id) && $can_rate != '[]' && $rate_old == '[]')
+                <h4 class="">{{ __('You can rate the product now and leave a review') }}</h4>
                 <hr>
                 <star-rating v-model="rating" :increment="0.5" text-class="custom-text"></star-rating>
-                <div class="text-center mt-2">
+                <div class="w-75 m-auto">
+                    <textarea class="form-control text-center mt-2" placeholder="{{__('Write a review')}}" id="review_rating" rows="3"
+                        v-model="review_rating"></textarea>
+                </div>
+                <div class="text-center mt-2 mb-2">
                     <button @click="setRating" class="btn btn-outline-success">{{ __('Publish') }}</button>
-                </div>-->
+                </div>
+                @endif
+
+                @if (isset(Auth::user()->id) && $can_rate != '[]' && $rate_old != '[]')
+                    <h4 class="">{{ __('You have already rated the product') }} <i class="nav-icon fas fa-check text-success"></i></h4>
+                    <hr>
+                @endif
 
                 <input type="text" value="{{ !empty(Auth::user()->id) ? Auth::user()->id:'' }}" id="user_id_rating"
                     hidden>
