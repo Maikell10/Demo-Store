@@ -9,6 +9,8 @@ use App\Image;
 use App\Purchase;
 use App\Sale;
 use App\User;
+use App\Visit;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -154,8 +156,35 @@ Route::get('/admin', function () {
 
         $sales_count = Sale::select('state', 'sales.updated_at', 'sales.created_at')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('state', 'Finalizada')->orderBy('sales.created_at', 'desc')->count();
 
+        $sales_canceled_count = Sale::select('state', 'sales.updated_at', 'sales.created_at')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('state', 'Cancelada')->orderBy('sales.created_at', 'desc')->count();
+
+        // Visits
+        $visits = Visit::orderBy('created_at', 'desc')->get();
+        // Visits This Week and Last Week
+        $visits_tw = Visit::where('created_at', '<=', Carbon::now())->where('created_at', '>=', Carbon::now()->subDays(6))->get()->count();
+        $visits_lw = Visit::where('created_at', '<=', Carbon::now()->subDays(7))->where('created_at', '>=', Carbon::now()->subDays(14))->get()->count();
+        // Get the Profit since last week
+        if ($visits_lw != 0) {
+            if($visits_tw != 0) {
+                $profit_visits = (($visits_tw * 100) / $visits_lw) - 100;
+            } else {
+                $profit_visits = 0;
+            }
+        } else {
+            $profit_visits = 100;
+        }
+
+        // Total Sales
+        $total_sales_count = Sale::count();
+        $total_sale = 0;
+        $sales = Sale::where('state', 'Finalizada')->get();
+        foreach ($sales as $sale) {
+            $total_sale = $total_sale + ($sale->price_sale * $sale->cantidad);
+        }
+        
+
         $user_count = User::count();
-        return view('admin', compact('products','user_count','prod_cant','comments_count','answers_count','purchases_count','notifications','direct_m','sales_count'));
+        return view('admin', compact('products','user_count','prod_cant','comments_count','answers_count','purchases_count','notifications','direct_m','sales_count','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
 })->name('admin')->middleware('auth','isseller');

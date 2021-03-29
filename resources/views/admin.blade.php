@@ -170,13 +170,21 @@
     }
   })
 
-  var $visitorsChart = $('#visitors-chart')
+  var $visitorsChart = $('#visits-chart')
   var visitorsChart  = new Chart($visitorsChart, {
     data   : {
-      labels  : ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
+      labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
       datasets: [{
         type                : 'line',
-        data                : [100, 120, 170, 167, 180, 177, 160],
+        data                : [
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(6)->toDateString())->get()->count()) !!},  
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(5)->toDateString())->get()->count()) !!},  
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(4)->toDateString())->get()->count()) !!},  
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(3)->toDateString())->get()->count()) !!}, 
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(2)->toDateString())->get()->count()) !!}, 
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDay()->toDateString())->get()->count()) !!}, 
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->toDateString())->get()->count()) !!}
+        ],
         backgroundColor     : 'transparent',
         borderColor         : '#007bff',
         pointBorderColor    : '#007bff',
@@ -187,7 +195,15 @@
       },
         {
           type                : 'line',
-          data                : [60, 80, 70, 67, 80, 77, 100],
+          data                : [
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(13)->toDateString())->get()->count()) !!}, 
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(12)->toDateString())->get()->count()) !!}, 
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(11)->toDateString())->get()->count()) !!}, 
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(10)->toDateString())->get()->count()) !!},
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(9)->toDateString())->get()->count()) !!},
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(8)->toDateString())->get()->count()) !!}, 
+            {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(7)->toDateString())->get()->count()) !!}
+            ],
           backgroundColor     : 'tansparent',
           borderColor         : '#ced4da',
           pointBorderColor    : '#ced4da',
@@ -221,7 +237,7 @@
           },
           ticks    : $.extend({
             beginAtZero : true,
-            suggestedMax: 200
+            //suggestedMax: 200
           }, ticksStyle)
         }],
         xAxes: [{
@@ -262,7 +278,8 @@
                                     <div class="icon">
                                         <i class="ion ion-bag"></i>
                                     </div>
-                                    <a href="{{route('admin.order.index')}}" class="small-box-footer">{{__('More info ')}}<i
+                                    <a href="{{route('admin.order.index')}}"
+                                        class="small-box-footer">{{__('More info ')}}<i
                                             class="fas fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
@@ -271,7 +288,7 @@
                                 <!-- small box -->
                                 <div class="small-box bg-success">
                                     <div class="inner">
-                                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+                                        <h3>{{number_format(($sales_canceled_count * 100)/$total_sales_count,2)}}<sup style="font-size: 20px">%</sup></h3>
 
                                         <p>{{__('Bounce Rate')}}</p>
                                     </div>
@@ -303,7 +320,7 @@
                                 <!-- small box -->
                                 <div class="small-box bg-danger">
                                     <div class="inner">
-                                        <h3>65</h3>
+                                        <h3>{{$visits->count()}}</h3>
 
                                         <p>{{__('Products Visits')}}</p>
                                     </div>
@@ -363,11 +380,13 @@
 
                                         <div class="info-box-content">
                                             <span class="info-box-text">{{__('Inventory')}}</span>
-                                            <span class="info-box-number">{{number_format($prod_cant,0)}} <small>'{{__('Total Units')}}'</small> </span>
+                                            <span class="info-box-number">{{number_format($prod_cant,0)}}
+                                                <small>'{{__('Total Units')}}'</small> </span>
                                         </div>
 
                                         <div class="info-box-content">
-                                            <span class="info-box-number">{{number_format(count($products),0)}} <small>'{{__('Products')}}'</small> </span>
+                                            <span class="info-box-number">{{number_format(count($products),0)}}
+                                                <small>'{{__('Products')}}'</small> </span>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -421,36 +440,48 @@
                                 <div class="card">
                                     <div class="card-header border-0">
                                         <div class="d-flex justify-content-between">
-                                            <h3 class="card-title">{{__('Online Store Visitors')}}</h3>
-                                            <a href="javascript:void(0);">{{__('View Report')}}</a>
+                                            <h3 class="card-title">{{__('Online Store Visits')}}</h3>
+                                            <!-- <a href="javascript:void(0);">{{__('View Report')}}</a> -->
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <p class="d-flex flex-column">
-                                                <span class="text-bold text-lg">820</span>
-                                                <span>{{__('Visitors Over Time')}}</span>
+                                                <span class="text-bold text-lg">{{number_format($visits->count(),0)}}</span>
+                                                <span>{{__('Visits Over Time')}}</span>
                                             </p>
                                             <p class="ml-auto d-flex flex-column text-right">
-                                                <span class="text-success">
-                                                    <i class="fas fa-arrow-up"></i> 12.5%
-                                                </span>
-                                                <span class="text-muted">{{__('Since last week')}}</span>
+                                                @if ($profit_visits < 0)
+                                                    <span class="text-danger">
+                                                        <i class="fas fa-arrow-down"></i> {{number_format($profit_visits,2)}}%
+                                                    </span>
+                                                @endif
+                                                @if ($profit_visits == 0)
+                                                    <span class="text-secondary">
+                                                        <i class="fas fa-minus"></i> {{number_format($profit_visits,2)}}%
+                                                    </span>
+                                                @endif
+                                                @if ($profit_visits > 0)
+                                                    <span class="text-success">
+                                                        <i class="fas fa-arrow-up"></i> {{number_format($profit_visits,2)}}%
+                                                    </span>
+                                                @endif
+                                                <span class="text-muted">{{__('Since the last 7 days')}}</span>
                                             </p>
                                         </div>
                                         <!-- /.d-flex -->
 
                                         <div class="position-relative mb-4">
-                                            <canvas id="visitors-chart" height="200"></canvas>
+                                            <canvas id="visits-chart" height="200"></canvas>
                                         </div>
 
                                         <div class="d-flex flex-row justify-content-end">
                                             <span class="mr-2">
-                                                <i class="fas fa-square text-primary"></i>{{__(' This Week')}}
+                                                <i class="fas fa-square text-primary"></i>{{__(' Last 7 Days')}}
                                             </span>
 
                                             <span>
-                                                <i class="fas fa-square text-gray"></i>{{__(' Last Week')}}
+                                                <i class="fas fa-square text-gray"></i>{{__(' Previous 7 Days')}}
                                             </span>
                                         </div>
                                     </div>
@@ -463,13 +494,13 @@
                                     <div class="card-header border-0">
                                         <div class="d-flex justify-content-between">
                                             <h3 class="card-title">{{__('Sales')}}</h3>
-                                            <a href="javascript:void(0);">{{__('View Report')}}</a>
+                                            <!-- <a href="javascript:void(0);">{{__('View Report')}}</a> -->
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <p class="d-flex flex-column">
-                                                <span class="text-bold text-lg">$18,230.00</span>
+                                                <span class="text-bold text-lg">${{number_format($total_sale,2)}}</span>
                                                 <span>{{__('Sales Over Time')}}</span>
                                             </p>
                                             <p class="ml-auto d-flex flex-column text-right">
