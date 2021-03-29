@@ -134,6 +134,30 @@ class ProductController extends Controller
                 $can_rate = Sale::where('user_id', Auth::user()->id)->where('product_id', $producto->id)->get();
                 $rate_old = Rating::where('user_id', Auth::user()->id)->where('product_id', $producto->id)->get();
             }
+        } else {
+            // Getting ip Client for visits
+            $visit_old = Visit::where('ip_client', FacadesRequest::ip())->where('product_id', $producto->id)->orderBy('created_at', 'DESC')->get();
+            if ($visit_old == '[]') {
+                $visit = new Visit();
+                $visit->ip_client = FacadesRequest::ip();
+                $visit->product_id = $producto->id;
+                $visit->save();
+
+                $prod_v = Product::findOrFail($producto->id);
+                $prod_v->visitas = ($prod_v->visitas) + 1;
+                $prod_v->save();
+            } else {
+                if (($visit_old[0]->created_at)->modify('+30 minutes') < Carbon::now()) {
+                    $visit = new Visit();
+                    $visit->ip_client = FacadesRequest::ip();
+                    $visit->product_id = $producto->id;
+                    $visit->save();
+
+                    $prod_v = Product::findOrFail($producto->id);
+                    $prod_v->visitas = ($prod_v->visitas) + 1;
+                    $prod_v->save();
+                }
+            }
         }
 
         // Direct Messages
