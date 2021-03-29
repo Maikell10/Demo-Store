@@ -81,6 +81,7 @@ return $data;*/
         // Direct Messages
         $controller = new Controller();
         $cant_dm_new = 0;
+        $direct_m = 0;
         if ($user != null) {
             $direct_m = $controller->direct_m(Auth::user()->id);
             foreach ($direct_m as $direct_m1) {

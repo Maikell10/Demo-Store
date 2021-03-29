@@ -93,7 +93,11 @@
                         @for ($a = 0; $a < count($products); $a++)
                         <div class="row card border-success" style="flex-direction: row;">
                             <div class="col-md-4 mt-2" style="max-inline-size: fit-content;">
+                                @if ($products[$a]->images->count() <= 0)
+                                <img src="/imagenes/boxed-bg.jpg" style="object-fit: contain; max-height: 200px;width: -webkit-fill-available;">
+                                @else
                                 <img src="{{$products[$a]->images[0]->url}}" style="object-fit: contain; max-height: 200px;width: -webkit-fill-available;">
+                                @endif
                             </div>
                             <div class="col-md">
                                 <div class="row ml-1 mr-1 mt-3">

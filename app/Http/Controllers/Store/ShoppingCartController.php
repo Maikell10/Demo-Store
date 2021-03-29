@@ -18,6 +18,7 @@ class ShoppingCartController extends Controller
     public function index()
     {
         $arr_conex_client_t = $this->arr_ip();
+        $direct_m = 0;
 
         if (isset(Auth::user()->name)) {
             $sessions = session()->get('hjwebajjasxwk8164qds4.as84');
