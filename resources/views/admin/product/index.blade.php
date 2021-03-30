@@ -66,7 +66,6 @@
                 <table class="table1 table-head-fixed table-hover">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Imagen</th>
                             <th>Nombre</th>
                             <th>Cantidad</th>
@@ -82,7 +81,6 @@
                         @if ($producto->users[0]->id === Auth::user()->id || Auth::user()->id === 1)
 
                         <tr>
-                            <td>{{$producto->id}}</td>
                             <td>
                                 @if ($producto->images->count() <= 0) <img style="height:100px;width:100px"
                                     src="/imagenes/boxed-bg.jpg" class="rounded-circle">

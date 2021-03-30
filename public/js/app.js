@@ -51537,38 +51537,42 @@ $(document).ready(function () {
 $(function () {
   if ($('#applocate').val() != '') {
     if ($('#applocate').val() == 'es') {
-      $("#tableData").DataTable({
-        "aaSorting": [],
-        "responsive": true,
-        "autoWidth": false,
-        //"paginate": false,
-        language: {
-          "decimal": "",
-          "emptyTable": "No hay información",
-          "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-          "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
-          "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-          "infoPostFix": "",
-          "thousands": ",",
-          "lengthMenu": "Mostrar _MENU_ Entradas",
-          "loadingRecords": "Cargando...",
-          "processing": "Procesando...",
-          "search": "Buscar:",
-          "zeroRecords": "Sin resultados encontrados",
-          "paginate": {
-            "first": "Primero",
-            "last": "Ultimo",
-            "next": "Siguiente",
-            "previous": "Anterior"
+      if ($("#tableData").length > 0) {
+        $("#tableData").DataTable({
+          "aaSorting": [],
+          "responsive": true,
+          "autoWidth": false,
+          //"paginate": false,
+          language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+              "first": "Primero",
+              "last": "Ultimo",
+              "next": "Siguiente",
+              "previous": "Anterior"
+            }
           }
-        }
-      });
+        });
+      }
     } else {
-      $("#tableData").DataTable({
-        "aaSorting": [],
-        "responsive": true,
-        "autoWidth": false
-      });
+      if ($("#tableData").length > 0) {
+        $("#tableData").DataTable({
+          "aaSorting": [],
+          "responsive": true,
+          "autoWidth": false
+        });
+      }
     }
   }
 });

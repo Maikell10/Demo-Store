@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 
-//DEFINE('DS', DIRECTORY_SEPARATOR);
+DEFINE('DS', DIRECTORY_SEPARATOR);
 
 class AdminProductController extends Controller
 {
@@ -37,7 +37,12 @@ class AdminProductController extends Controller
 
         $nombre = $request->get('nombre');
 
-        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->paginate(10);
+        if(Auth::user()->id == 1) {
+            $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->paginate(10);
+        } else {
+            $productos = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->paginate(10);
+        }
+        
 
         return view('admin.product.index', compact('productos','notifications','direct_m'));
     }
@@ -82,13 +87,24 @@ class AdminProductController extends Controller
             $imagenes = $request->file('imagenes');
 
             foreach ($imagenes as $imagen) {
-                $nombre = time() . '_' . $imagen->getClientOriginalName();
+                if(pathinfo($imagen->getClientOriginalName(), PATHINFO_EXTENSION) == 'jfif') {
+                    $solo_nombre = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME);
+                    $nombre = time() . '_' . $solo_nombre . '.jpg';
+    
+                    $ruta = public_path() . DS . 'imagenes';
+    
+                    $imagen->move($ruta, $nombre);
+    
+                    $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
+                } else {
+                    $nombre = time() . '_' . $imagen->getClientOriginalName();
 
-                $ruta = public_path() . DS . 'imagenes';
-
-                $imagen->move($ruta, $nombre);
-
-                $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
+                    $ruta = public_path() . DS . 'imagenes';
+    
+                    $imagen->move($ruta, $nombre);
+    
+                    $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
+                }
             }
         }
 
@@ -219,13 +235,24 @@ class AdminProductController extends Controller
             $imagenes = $request->file('imagenes');
 
             foreach ($imagenes as $imagen) {
-                $nombre = time() . '_' . $imagen->getClientOriginalName();
+                if(pathinfo($imagen->getClientOriginalName(), PATHINFO_EXTENSION) == 'jfif') {
+                    $solo_nombre = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME);
+                    $nombre = time() . '_' . $solo_nombre . '.jpg';
+    
+                    $ruta = public_path() . DS . 'imagenes';
+    
+                    $imagen->move($ruta, $nombre);
+    
+                    $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
+                } else {
+                    $nombre = time() . '_' . $imagen->getClientOriginalName();
 
-                $ruta = public_path() . DS . 'imagenes';
-
-                $imagen->move($ruta, $nombre);
-
-                $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
+                    $ruta = public_path() . DS . 'imagenes';
+    
+                    $imagen->move($ruta, $nombre);
+    
+                    $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
+                }
             }
         }
 

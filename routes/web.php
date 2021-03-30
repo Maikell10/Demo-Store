@@ -69,10 +69,11 @@ Route::get('/', function () {
     
     $user = Auth::user();
 
+    // Direct Messages
     $cant_dm_new = 0;
     $direct_m = 0;
     if ($user != null) {
-        $direct_m = DirectMessages::where('user_id', $user->id)->where('type', 'STORE')->orderBy('created_at', 'asc')->get();
+        $direct_m = $controller->direct_m($user->id);
         foreach ($direct_m as $direct_m1) {
             if ($direct_m1->status == 'NO-VIEW') {
                 $cant_dm_new = $cant_dm_new +1;
@@ -213,8 +214,8 @@ Route::get('/user', function () {
         // Visits
         $visits = Visit::select('ip_client','visits.created_at')->join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->orderBy('visits.created_at', 'desc')->get();
         // Visits This Week and Last Week
-        /*$visits_tw = Visit::where('created_at', '<=', Carbon::now())->where('created_at', '>=', Carbon::now()->subDays(6))->get()->count();
-        $visits_lw = Visit::where('created_at', '<=', Carbon::now()->subDays(7))->where('created_at', '>=', Carbon::now()->subDays(14))->get()->count();
+        $visits_tw = Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('visits.created_at', '<=', Carbon::now())->where('visits.created_at', '>=', Carbon::now()->subDays(6))->get()->count();
+        $visits_lw = Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('visits.created_at', '<=', Carbon::now()->subDays(7))->where('visits.created_at', '>=', Carbon::now()->subDays(14))->get()->count();
         // Get the Profit since last week
         if ($visits_lw != 0) {
             if($visits_tw != 0) {
@@ -224,10 +225,10 @@ Route::get('/user', function () {
             }
         } else {
             $profit_visits = 100;
-        }*/
+        }
 
         //return $comments = Comment::with('products','products.users')->join('product_user', 'comments.product_id', '=', 'product_user.product_id')->where('product_user.user_id', 6)->get();
-        return view('user.user', compact('notifications','direct_m','sales_canceled_count','total_sales_count','visits'));
+        return view('user.user', compact('notifications','direct_m','sales_canceled_count','total_sales_count','visits','profit_visits'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
 })->name('user')->middleware('auth','verified','isseller');
@@ -251,7 +252,24 @@ Route::get('admin/bounce', function () {
         return view('admin.bounce', compact('notifications','direct_m','sales_canceled_count','total_sales_count'));
     }
     if (Auth::user()->roles[0]->slug == 'registeredseller') {
+        // Notifications
+        $controller = new Controller();
+        $notifications = $controller->notifications(Auth::user()->id);
 
+        // Messages
+        $direct_m = $controller->direct_m(Auth::user()->id);
+
+        $sales_canceled_count = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('state', 'Cancelada')->where('product_user.user_id',Auth::user()->id)->count();
+
+        // Total Sales
+        $total_sales_count = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->count();
+        $total_sale = 0;
+        $sales = Sale::where('state', 'Finalizada')->get();
+        foreach ($sales as $sale) {
+            $total_sale = $total_sale + ($sale->price_sale * $sale->cantidad);
+        }
+
+        return view('admin.bounce', compact('notifications','direct_m','sales_canceled_count','total_sales_count'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
 })->name('admin.bounce')->middleware('auth','verified','isseller');
@@ -288,7 +306,33 @@ Route::get('admin/products-visits', function () {
         return view('admin.visits', compact('notifications','direct_m','total_sales_count','visits','profit_visits'));
     }
     if (Auth::user()->roles[0]->slug == 'registeredseller') {
+        // Notifications
+        $controller = new Controller();
+        $notifications = $controller->notifications(Auth::user()->id);
 
+        // Messages
+        $direct_m = $controller->direct_m(Auth::user()->id);
+
+        // Visits
+        $visits = Visit::select('ip_client','visits.created_at')->join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->orderBy('visits.created_at', 'desc')->get();
+        // Visits This Week and Last Week
+        $visits_tw = Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('visits.created_at', '<=', Carbon::now())->where('visits.created_at', '>=', Carbon::now()->subDays(6))->get()->count();
+        $visits_lw = Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('visits.created_at', '<=', Carbon::now()->subDays(7))->where('visits.created_at', '>=', Carbon::now()->subDays(14))->get()->count();
+        // Get the Profit since last week
+        if ($visits_lw != 0) {
+            if($visits_tw != 0) {
+                $profit_visits = (($visits_tw * 100) / $visits_lw) - 100;
+            } else {
+                $profit_visits = 0;
+            }
+        } else {
+            $profit_visits = 100;
+        }
+
+        // Total Sales
+        $total_sales_count = Sale::count();
+
+        return view('admin.visits', compact('notifications','direct_m','total_sales_count','visits','profit_visits'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
 })->name('admin.visits')->middleware('auth','verified','isseller');

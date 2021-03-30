@@ -77,6 +77,7 @@
                                             </li>
                                         </ul>
 
+                                        <h3 class="profile-username text-center h5">{{__('Since:')}} {{ \Carbon\Carbon::parse(Auth::user()->created_at)->format('d/m/Y') }}</h3>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -165,34 +166,6 @@
                                                     </p>
                                                 </div>
                                                 <!-- /.post -->
-
-                                                <!-- Post -->
-                                                <div class="post">
-                                                    <div class="user-block">
-                                                        @if (auth()->user()->social_image() != 'no hay img')
-                                                        <img src="{{auth()->user()->social_image()}}" class="img-circle img-bordered-sm elevation-2" alt="User Image"
-                                                        style="max-height: 40px; width: 40px; object-fit: cover">
-                                                        @else
-                                                        @if (isset(Auth::user()->image->url))
-                                                        <img src="{{ Auth::user()->image->url }}" class="img-circle img-bordered-sm elevation-2" alt="User Image"
-                                                            style="max-height: 40px; width: 40px; object-fit: cover">
-                                                        @else
-                                                        <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
-                                                            class="img-circle img-bordered-sm elevation-2" alt="User Image">
-                                                        @endif
-                                                        @endif
-
-                                                        <span class="username">
-                                                            <a href="#">{{ Auth::user()->name }}</a>
-                                                        </span>
-                                                        <span class="description">Compra Realizada - 5:30 PM hoy</span>
-                                                    </div>
-                                                    <!-- /.user-block -->
-                                                    <p>
-                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a> compró el producto: <a href="#" class="alert-link">iPhone 11 128 GB</a> al vendedor <a href="#" class="alert-link">Test</a>
-                                                    </p>
-                                                </div>
-                                                <!-- /.post -->
                                                 
                                             </div>
                                             <!-- /.tab-pane -->
@@ -236,51 +209,29 @@
                                                                 placeholder="{{__('Name')}}">
                                                         </div>
                                                     </div>
+                                                    
+                                                    
                                                     <div class="form-group row">
-                                                        <label for="inputEmail"
-                                                            class="col-sm-2 col-form-label">Email</label>
+                                                        <label for="inputPassword"
+                                                            class="col-sm-2 col-form-label">{{__('Password')}}</label>
                                                         <div class="col-sm-10">
-                                                            <input type="email" class="form-control" id="inputEmail"
-                                                                placeholder="Email">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputName2"
-                                                            class="col-sm-2 col-form-label">Name</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="inputName2"
-                                                                placeholder="Name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputExperience"
-                                                            class="col-sm-2 col-form-label">Experience</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea class="form-control" id="inputExperience"
-                                                                placeholder="Experience"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="inputSkills"
-                                                            class="col-sm-2 col-form-label">Skills</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="inputSkills"
-                                                                placeholder="Skills">
+                                                            <input type="text" class="form-control" id="inputPassword"
+                                                                placeholder="{{__('Password')}}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="offset-sm-2 col-sm-10">
                                                             <div class="checkbox">
                                                                 <label>
-                                                                    <input type="checkbox"> I agree to the <a
-                                                                href="{{url('terminos')}}">terms and conditions</a>
+                                                                    <input type="checkbox"> {{__('I agree to the')}} <a
+                                                                href="{{url('terminos')}}">{{__('Terms and Conditions')}}</a>
                                                                 </label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="offset-sm-2 col-sm-10">
-                                                            <button type="submit" class="btn btn-danger">Submit</button>
+                                                            <button type="submit" class="btn btn-danger">{{__('Send')}}</button>
                                                         </div>
                                                     </div>
                                                 </form>

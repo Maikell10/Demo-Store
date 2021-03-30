@@ -29,13 +29,13 @@
             datasets: [{
                 type                : 'line',
                 data                : [
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(6)->toDateString())->get()->count()) !!},  
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(5)->toDateString())->get()->count()) !!},  
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(4)->toDateString())->get()->count()) !!},  
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(3)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(2)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDay()->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->toDateString())->get()->count()) !!}
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(6)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(5)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(4)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(3)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(2)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDay()->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->toDateString())->get()->count()) !!}
                 ],
                 backgroundColor     : 'transparent',
                 borderColor         : '#007bff',
@@ -48,13 +48,13 @@
                 {
                 type                : 'line',
                 data                : [
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(13)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(12)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(11)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(10)->toDateString())->get()->count()) !!},
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(9)->toDateString())->get()->count()) !!},
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(8)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(7)->toDateString())->get()->count()) !!}
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(13)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(12)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(11)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(10)->toDateString())->get()->count()) !!},
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(9)->toDateString())->get()->count()) !!},
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(8)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->whereDate('visits.created_at', \Carbon\Carbon::now()->subDays(7)->toDateString())->get()->count()) !!}
                     ],
                 backgroundColor     : 'tansparent',
                 borderColor         : '#ced4da',

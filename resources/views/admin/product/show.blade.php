@@ -405,7 +405,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-
+                            
                             @foreach ($producto->images as $image)
                             <div id="idimagen-{{$image->id}}" class="col-sm-2">
                                 <a href="{{$image->url}}" data-toggle="lightbox" data-title="Id:{{$image->id}}"
