@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+
 use App\MainCategory;
 use App\Product;
 use App\SubCategory;
@@ -11,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+
+use Intervention\Image\Facades\Image;
 
 DEFINE('DS', DIRECTORY_SEPARATOR);
 
@@ -78,7 +81,7 @@ class AdminProductController extends Controller
         $request->validate([
             'nombre' => 'required|unique:products,nombre',
             'slug' => 'required|unique:products,slug',
-            'imagenes.*' => 'image|mimes:jpeg,jpg,png,gif,svg|max:2048',
+            'imagenes.*' => 'image|mimes:jpeg,jpg,png,gif,svg|max:15048',
         ]);
 
         $urlimagenes = [];
@@ -93,7 +96,9 @@ class AdminProductController extends Controller
     
                     $ruta = public_path() . DS . 'imagenes';
     
-                    $imagen->move($ruta, $nombre);
+                    //$imagen->move($ruta, $nombre);
+                    $path = $ruta . DS . $nombre;
+                    Image::make($imagen)->save($path,50);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 } else {
@@ -101,8 +106,10 @@ class AdminProductController extends Controller
 
                     $ruta = public_path() . DS . 'imagenes';
     
-                    $imagen->move($ruta, $nombre);
-    
+                    //$imagen->move($ruta, $nombre);
+                    $path = $ruta . DS . $nombre;
+                    Image::make($imagen)->save($path,50);
+
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 }
             }
@@ -226,7 +233,7 @@ class AdminProductController extends Controller
         $request->validate([
             'nombre' => 'required|unique:products,nombre,' . $id,
             'slug' => 'required|unique:products,slug,' . $id,
-            'imagenes.*' => 'image|mimes:jpeg,jpg,png,gif,svg|max:2048',
+            'imagenes.*' => 'image|mimes:jpeg,jpg,png,gif,svg|max:15048',
         ]);
 
         $urlimagenes = [];
@@ -241,15 +248,19 @@ class AdminProductController extends Controller
     
                     $ruta = public_path() . DS . 'imagenes';
     
-                    $imagen->move($ruta, $nombre);
+                    //$imagen->move($ruta, $nombre);
+                    $path = $ruta . DS . $nombre;
+                    Image::make($imagen)->save($path,50);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 } else {
                     $nombre = time() . '_' . $imagen->getClientOriginalName();
 
                     $ruta = public_path() . DS . 'imagenes';
-    
-                    $imagen->move($ruta, $nombre);
+                    
+                    //$imagen->move($ruta, $nombre);
+                    $path = $ruta . DS . $nombre;
+                    Image::make($imagen)->save($path,50);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 }

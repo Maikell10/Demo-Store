@@ -17446,8 +17446,11 @@ var appTienda = new Vue({
 
     ;
     this.precio_total = this.format(this.precio_total);
-    document.getElementById('final').scrollIntoView(true);
-    document.getElementById('inicio').scrollIntoView(true);
+
+    if ($("#final").length > 0) {
+      document.getElementById('final').scrollIntoView(true);
+      document.getElementById('inicio').scrollIntoView(true);
+    }
   }
 });
 

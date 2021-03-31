@@ -95,7 +95,7 @@
 
                             </div>
                             <!-- /.col -->
-                            <div class="col-md-9">
+                            <div class="col-md-9" id="apiProfileUser">
                                 <div class="card">
                                     <div class="card-header p-2">
                                         <ul class="nav nav-pills">
@@ -205,8 +205,9 @@
                                                     <div class="form-group row">
                                                         <label for="inputName" class="col-sm-2 col-form-label">{{__('Name')}}</label>
                                                         <div class="col-sm-10">
-                                                            <input type="email" class="form-control" id="inputName"
-                                                                placeholder="{{__('Name')}}">
+                                                            <input type="hidden" id="inputNameH" value="{{ Auth::user()->name }}">
+                                                            <input type="text" class="form-control" id="inputName"
+                                                                placeholder="{{__('Name')}}"  v-model="inputName">
                                                         </div>
                                                     </div>
                                                     
@@ -215,23 +216,22 @@
                                                         <label for="inputPassword"
                                                             class="col-sm-2 col-form-label">{{__('Password')}}</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="inputPassword"
-                                                                placeholder="{{__('Password')}}">
+                                                            <input type="password" class="form-control" id="inputPassword"
+                                                                placeholder="{{__('Password')}}" v-model="inputPassword">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="offset-sm-2 col-sm-10">
                                                             <div class="checkbox">
                                                                 <label>
-                                                                    <input type="checkbox"> {{__('I agree to the')}} <a
-                                                                href="{{url('terminos')}}">{{__('Terms and Conditions')}}</a>
+                                                                    <input type="checkbox" v-model="inputCheckbox" id="inputCheckbox" @click='setCheck()'> {{__('I agree to the')}} <a href="{{url('terminos')}}">{{__('Terms and Conditions')}}</a>
                                                                 </label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="offset-sm-2 col-sm-10">
-                                                            <button type="submit" class="btn btn-danger">{{__('Send')}}</button>
+                                                            <button type="submit" disabled  id="btnConfig" class="btn btn-outline-success" @click='updateUser({{$user->id}})'>{{__('Edit')}}</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -257,7 +257,7 @@
 
 
 
-<!-- Modal Lnaguage -->
+<!-- Modal Picture -->
 <div class="modal fade" id="profilePictureModal" tabindex="-1" aria-labelledby="profilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

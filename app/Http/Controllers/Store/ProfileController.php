@@ -10,6 +10,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 DEFINE('DS', DIRECTORY_SEPARATOR);
 
@@ -135,5 +136,32 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateUser(Request $request)
+    {
+        if($request->inputPassword != '') {
+            $request->validate([
+                'inputName' => 'required|max:255|string',
+                'inputPassword' => 'string|min:8|confirmed',
+            ]);
+        } else {
+            $request->validate([
+                'inputName' => 'required|max:255|string',
+            ]);
+        }
+
+        $user = User::findOrFail($request->id);
+        
+        $user->name = $request->inputName;
+        //$user->user_id = $request->user_id;
+        $user->save();
+                    
+
+        if (isset($user->id)) {
+            return response()->json('positivo');
+        } else {
+            return response()->json('negativo');
+        }
     }
 }

@@ -36,4 +36,5 @@ Route::get('rating/{id}','API\ProductController@getRating')->name('api.getRating
 // AddProduct Shopping
 Route::get('shopping/add','API\ProductController@fillTable')->name('api.fillTable');
 
-
+// Edit User-Profile
+Route::get('profile/edit','Store\ProfileController@updateUser')->name('api.updateUser');

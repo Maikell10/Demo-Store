@@ -51346,6 +51346,10 @@ __webpack_require__(/*! ./tienda/bootstrap */ "./resources/js/tienda/bootstrap.j
 
 __webpack_require__(/*! ./comun */ "./resources/js/comun.js");
 
+if (document.getElementById("apiProfileUser")) {
+  __webpack_require__(/*! ./tienda/apiProfileUser */ "./resources/js/tienda/apiProfileUser.js");
+}
+
 /***/ }),
 
 /***/ "./resources/js/components/ExampleComponent.vue":
@@ -51629,6 +51633,103 @@ var confirmareliminar = new Vue({
       $(e.currentTarget).find('input[name="purchaseDetailID"]').val(purchaseDetailID);
       confirmareliminar.deseas_eliminar_purchase_detail($('#purchaseDetailID').val());
     });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/tienda/apiProfileUser.js":
+/*!***********************************************!*\
+  !*** ./resources/js/tienda/apiProfileUser.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var apiProfileUser = new Vue({
+  el: "#apiProfileUser",
+  data: {
+    inputName: $('#inputNameH').val(),
+    inputPassword: '',
+    inputCheckbox: false
+  },
+  methods: {
+    setCheck: function setCheck() {
+      if (this.inputCheckbox == true) {
+        $('#btnConfig').prop('disabled', true);
+      }
+
+      if (this.inputCheckbox == false) {
+        $('#btnConfig').prop('disabled', false);
+      }
+    },
+    updateUser: function updateUser(id, e) {
+      var _this = this;
+
+      if (this.inputName.length > 0) {
+        Swal.fire({
+          title: "Estas seguro de Editar tus Datos?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí!",
+          cancelButtonText: "No"
+        }).then(function (result) {
+          if (result.value) {
+            axios.get("http://tiendademo1.test/api/profile/edit", {
+              params: {
+                id: id,
+                inputName: _this.inputName,
+                inputPassword: _this.inputPassword
+              }
+            }).then(function (response) {
+              if (response.data == 'positivo') {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Editado!',
+                  showConfirmButton: false,
+                  timer: 1200
+                });
+                location.reload();
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Fallo al Editar!',
+                  showConfirmButton: false,
+                  timer: 1200
+                });
+              }
+            })["catch"](function (err) {
+              alert(response);
+              Swal.fire({
+                icon: 'error',
+                title: 'Fallo al Editar!',
+                showConfirmButton: false,
+                timer: 1200
+              });
+            });
+          } else {
+            Swal.fire("Cancelado!", "Cancelado!", "error");
+          }
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Fallo al Valorar!',
+          showConfirmButton: false,
+          timer: 1200
+        });
+      }
+    }
+  },
+  mounted: function mounted() {
+    $("#btnConfig").on("click", function (e) {
+      e.preventDefault();
+    });
+
+    if (this.inputCheckbox == false) {
+      $('#btnConfig').prop('disabled', true);
+    }
   }
 });
 
@@ -52543,8 +52644,11 @@ var appTienda = new Vue({
 
     ;
     this.precio_total = this.format(this.precio_total);
-    document.getElementById('final').scrollIntoView(true);
-    document.getElementById('inicio').scrollIntoView(true);
+
+    if ($("#final").length > 0) {
+      document.getElementById('final').scrollIntoView(true);
+      document.getElementById('inicio').scrollIntoView(true);
+    }
   }
 });
 

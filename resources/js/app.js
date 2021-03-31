@@ -7,3 +7,7 @@
 require('./tienda/bootstrap');
 
 require('./comun');
+
+if (document.getElementById("apiProfileUser")) {
+    require("./tienda/apiProfileUser");
+}
