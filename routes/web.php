@@ -183,10 +183,79 @@ Route::get('/admin', function () {
         foreach ($sales as $sale) {
             $total_sale = $total_sale + ($sale->price_sale * $sale->cantidad);
         }
-        
+
+        // Sales Grafic Chart
+        $priceSaleSumT = [];
+        $priceSaleSumT_ant = [];
+        $saleCanT = [];
+        $saleCanT_ant = [];
+        $year_act = Carbon::now()->format('Y');
+        if (Carbon::now()->format('m') <= '07') {
+            for ($i=1; $i < 8; $i++) { 
+                $priceSalesSum = Sale::where('state', 'Finalizada')->whereYear('updated_at', '=', $year_act)->whereMonth('updated_at', '=', $i)->get();
+                $priceSalesSumD = 0;
+                foreach ($priceSalesSum as $priceSaleSum) {
+                    $priceSalesSumD = $priceSalesSumD + ($priceSaleSum['price_sale'] * $priceSaleSum['cantidad']);
+                }
+                $priceSaleSumT[] = $priceSalesSumD;
+                $saleCanT[] = $priceSalesSum->count();
+
+                $priceSalesSum_ant = Sale::where('state', 'Finalizada')->whereYear('updated_at', '=', $year_act-1)->whereMonth('updated_at', '=', $i)->get();
+                $priceSalesSumD_ant = 0;
+                foreach ($priceSalesSum_ant as $priceSaleSum_ant) {
+                    $priceSalesSumD_ant = $priceSalesSumD_ant + ($priceSaleSum_ant['price_sale'] * $priceSaleSum_ant['cantidad']);
+                }
+                $priceSaleSumT_ant[] = $priceSalesSumD_ant;
+                $saleCanT_ant[] = $priceSalesSum_ant->count();
+            }
+        } else {
+            for ($i=6; $i <= 12; $i++) { 
+                $priceSalesSum = Sale::where('state', 'Finalizada')->whereYear('updated_at', '=', $year_act)->whereMonth('updated_at', '=', $i)->get();
+                $priceSalesSumD = 0;
+                foreach ($priceSalesSum as $priceSaleSum) {
+                    $priceSalesSumD = $priceSalesSumD + ($priceSaleSum['price_sale'] * $priceSaleSum['cantidad']);
+                }
+                $priceSaleSumT[] = $priceSalesSumD;
+                $saleCanT[] = $priceSalesSum->count();
+
+                $priceSalesSum_ant = Sale::where('state', 'Finalizada')->whereYear('updated_at', '=', $year_act-1)->whereMonth('updated_at', '=', $i)->get();
+                $priceSalesSumD_ant = 0;
+                foreach ($priceSalesSum_ant as $priceSaleSum_ant) {
+                    $priceSalesSumD_ant = $priceSalesSumD_ant + ($priceSaleSum_ant['price_sale'] * $priceSaleSum_ant['cantidad']);
+                }
+                $priceSaleSumT_ant[] = $priceSalesSumD_ant;
+                $saleCanT_ant[] = $priceSalesSum_ant->count();
+            }
+        }
+
+        // Sales This Month and Last Month
+        $sales_tm = $priceSaleSumT[Carbon::now()->format('n') - 1];
+        if (Carbon::now()->format('n') == 1) {
+            $sales_lm = 0;
+        } else {
+            $sales_lm = $priceSaleSumT[Carbon::now()->format('n') - 2];
+        }
+        // Get the Profit since last month
+        if ($sales_lm != 0) {
+            if($sales_tm != 0) {
+                $profit_sales = (($sales_tm * 100) / $sales_lm) - 100;
+            } else {
+                $profit_sales = 0;
+            }
+        } else {
+            $profit_sales = 100;
+        }
+
+        // Categories Sales for Pie Chart
+        $category_sales_cant = [];
+        $category_sales = Sale::join('products', 'sales.product_id', '=', 'products.id')->join('main_categories', 'products.main_category_id', '=', 'main_categories.id')->join('sub_categories', 'main_categories.sub_category_id', '=', 'sub_categories.id')->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act)->whereMonth('sales.updated_at', '=', Carbon::now()->format('m'))->orderBy('category_id','ASC')->distinct()->get('category_id');
+
+        foreach ($category_sales as $category_sale) {
+            $category_sales_cant[] = Sale::join('products', 'sales.product_id', '=', 'products.id')->join('main_categories', 'products.main_category_id', '=', 'main_categories.id')->join('sub_categories', 'main_categories.sub_category_id', '=', 'sub_categories.id')->where('category_id',$category_sale->category_id)->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act)->whereMonth('sales.updated_at', '=', Carbon::now()->format('m'))->count();
+        }
 
         $user_count = User::count();
-        return view('admin', compact('products','user_count','prod_cant','comments_count','answers_count','purchases_count','notifications','direct_m','sales_count','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count'));
+        return view('admin', compact('products','user_count','prod_cant','comments_count','answers_count','purchases_count','notifications','direct_m','sales_count','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count','priceSaleSumT','priceSaleSumT_ant','saleCanT','saleCanT_ant','category_sales','category_sales_cant','profit_sales'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
 })->name('admin')->middleware('auth','isseller');
@@ -201,15 +270,20 @@ Route::get('/user', function () {
         // Messages
         $direct_m = $controller->direct_m(Auth::user()->id);
 
-        $sales_canceled_count = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('state', 'Cancelada')->where('product_user.user_id',Auth::user()->id)->count();
-
-        // Total Sales
-        $total_sales_count = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->count();
-        $total_sale = 0;
-        $sales = Sale::where('state', 'Finalizada')->get();
-        foreach ($sales as $sale) {
-            $total_sale = $total_sale + ($sale->price_sale * $sale->cantidad);
+        $products = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->get();
+        $prod_cant = 0;
+        foreach ($products as $product) {
+            $prod_cant = $prod_cant + $product->cantidad;
         }
+
+        $comments_count = Comment::join('product_user', 'comments.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('parent_id', null)->count();
+        $answers_count = Comment::join('product_user', 'comments.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('parent_id', '!=', null)->count();
+
+        $purchases_count = Purchase::where('user_id',Auth::user()->id)->count();
+
+        $sales_count = Sale::select('state', 'sales.updated_at', 'sales.created_at')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('state', 'Finalizada')->orderBy('sales.created_at', 'desc')->count();
+
+        $sales_canceled_count = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('state', 'Cancelada')->where('product_user.user_id',Auth::user()->id)->count();
 
         // Visits
         $visits = Visit::select('ip_client','visits.created_at')->join('product_user', 'visits.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->orderBy('visits.created_at', 'desc')->get();
@@ -227,8 +301,86 @@ Route::get('/user', function () {
             $profit_visits = 100;
         }
 
+        // Total Sales
+        $total_sales_count = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->count();
+        $total_sale = 0;
+        $sales = Sale::where('state', 'Finalizada')->get();
+        foreach ($sales as $sale) {
+            $total_sale = $total_sale + ($sale->price_sale * $sale->cantidad);
+        }
+
+        // Sales Grafic Chart
+        $priceSaleSumT = [];
+        $priceSaleSumT_ant = [];
+        $saleCanT = [];
+        $saleCanT_ant = [];
+        $year_act = Carbon::now()->format('Y');
+        if (Carbon::now()->format('m') <= '07') {
+            for ($i=1; $i < 8; $i++) { 
+                $priceSalesSum = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act)->whereMonth('sales.updated_at', '=', $i)->get();
+                $priceSalesSumD = 0;
+                foreach ($priceSalesSum as $priceSaleSum) {
+                    $priceSalesSumD = $priceSalesSumD + ($priceSaleSum['price_sale'] * $priceSaleSum['cantidad']);
+                }
+                $priceSaleSumT[] = $priceSalesSumD;
+                $saleCanT[] = $priceSalesSum->count();
+
+                $priceSalesSum_ant = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act-1)->whereMonth('sales.updated_at', '=', $i)->get();
+                $priceSalesSumD_ant = 0;
+                foreach ($priceSalesSum_ant as $priceSaleSum_ant) {
+                    $priceSalesSumD_ant = $priceSalesSumD_ant + ($priceSaleSum_ant['price_sale'] * $priceSaleSum_ant['cantidad']);
+                }
+                $priceSaleSumT_ant[] = $priceSalesSumD_ant;
+                $saleCanT_ant[] = $priceSalesSum_ant->count();
+            }
+        } else {
+            for ($i=6; $i <= 12; $i++) { 
+                $priceSalesSum = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act)->whereMonth('sales.updated_at', '=', $i)->get();
+                $priceSalesSumD = 0;
+                foreach ($priceSalesSum as $priceSaleSum) {
+                    $priceSalesSumD = $priceSalesSumD + ($priceSaleSum['price_sale'] * $priceSaleSum['cantidad']);
+                }
+                $priceSaleSumT[] = $priceSalesSumD;
+                $saleCanT[] = $priceSalesSum->count();
+
+                $priceSalesSum_ant = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act-1)->whereMonth('sales.updated_at', '=', $i)->get();
+                $priceSalesSumD_ant = 0;
+                foreach ($priceSalesSum_ant as $priceSaleSum_ant) {
+                    $priceSalesSumD_ant = $priceSalesSumD_ant + ($priceSaleSum_ant['price_sale'] * $priceSaleSum_ant['cantidad']);
+                }
+                $priceSaleSumT_ant[] = $priceSalesSumD_ant;
+                $saleCanT_ant[] = $priceSalesSum_ant->count();
+            }
+        }
+
+        // Sales This Month and Last Month
+        $sales_tm = $priceSaleSumT[Carbon::now()->format('n') - 1];
+        if (Carbon::now()->format('n') == 1) {
+            $sales_lm = 0;
+        } else {
+            $sales_lm = $priceSaleSumT[Carbon::now()->format('n') - 2];
+        }
+        // Get the Profit since last month
+        if ($sales_lm != 0) {
+            if($sales_tm != 0) {
+                $profit_sales = (($sales_tm * 100) / $sales_lm) - 100;
+            } else {
+                $profit_sales = 0;
+            }
+        } else {
+            $profit_sales = 100;
+        }
+
+        // Categories Sales for Pie Chart
+        $category_sales_cant = [];
+        $category_sales = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->join('products', 'sales.product_id', '=', 'products.id')->join('main_categories', 'products.main_category_id', '=', 'main_categories.id')->join('sub_categories', 'main_categories.sub_category_id', '=', 'sub_categories.id')->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act)->whereMonth('sales.updated_at', '=', Carbon::now()->format('m'))->orderBy('category_id','ASC')->distinct()->get('category_id');
+
+        foreach ($category_sales as $category_sale) {
+            $category_sales_cant[] = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->join('products', 'sales.product_id', '=', 'products.id')->join('main_categories', 'products.main_category_id', '=', 'main_categories.id')->join('sub_categories', 'main_categories.sub_category_id', '=', 'sub_categories.id')->where('category_id',$category_sale->category_id)->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act)->whereMonth('sales.updated_at', '=', Carbon::now()->format('m'))->count();
+        }
+
         //return $comments = Comment::with('products','products.users')->join('product_user', 'comments.product_id', '=', 'product_user.product_id')->where('product_user.user_id', 6)->get();
-        return view('user.user', compact('notifications','direct_m','sales_canceled_count','total_sales_count','visits','profit_visits'));
+        return view('user.user', compact('notifications','direct_m','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count','priceSaleSumT','priceSaleSumT_ant','saleCanT','saleCanT_ant','category_sales','category_sales_cant','profit_sales','products','prod_cant','comments_count','answers_count','purchases_count','sales_count'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
 })->name('user')->middleware('auth','verified','isseller');

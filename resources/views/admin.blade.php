@@ -2,261 +2,11 @@
 
 @section('titulo','Admin')
 
-@section('scripts')
-<script>
-    /* Chart.js Charts */
-    // Sales chart
-    var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d');
-    //$('#revenue-chart').get(0).getContext('2d');
-
-    var salesChartData = {
-        labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-        {
-            label               : 'Digital Goods',
-            backgroundColor     : 'rgba(60,141,188,0.9)',
-            borderColor         : 'rgba(60,141,188,0.8)',
-            pointRadius          : false,
-            pointColor          : '#3b8bba',
-            pointStrokeColor    : 'rgba(60,141,188,1)',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(60,141,188,1)',
-            data                : [28, 48, 40, 19, 86, 27, 90]
-        },
-        {
-            label               : 'Electronics',
-            backgroundColor     : 'rgba(210, 214, 222, 1)',
-            borderColor         : 'rgba(210, 214, 222, 1)',
-            pointRadius         : false,
-            pointColor          : 'rgba(210, 214, 222, 1)',
-            pointStrokeColor    : '#c1c7d1',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(220,220,220,1)',
-            data                : [65, 59, 80, 81, 56, 55, 40]
-        },
-        ]
-    }
-
-    var salesChartOptions = {
-        maintainAspectRatio : false,
-        responsive : true,
-        legend: {
-        display: false
-        },
-        scales: {
-        xAxes: [{
-            gridLines : {
-            display : false,
-            }
-        }],
-        yAxes: [{
-            gridLines : {
-            display : false,
-            }
-        }]
-        }
-    }
-
-    // This will get the first returned node in the jQuery collection.
-    var salesChart = new Chart(salesChartCanvas, { 
-        type: 'line', 
-        data: salesChartData, 
-        options: salesChartOptions
-        }
-    )
-
-    // Donut Chart
-    var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
-    var pieData        = {
-        labels: [
-            'Instore Sales', 
-            'Download Sales',
-            'Mail-Order Sales', 
-        ],
-        datasets: [
-        {
-            data: [30,12,20],
-            backgroundColor : ['#f56954', '#00a65a', '#f39c12'],
-        }
-        ]
-    }
-    var pieOptions = {
-        legend: {
-        display: false
-        },
-        maintainAspectRatio : false,
-        responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var pieChart = new Chart(pieChartCanvas, {
-        type: 'doughnut',
-        data: pieData,
-        options: pieOptions      
-    });
-
-    $(function () {
-        'use strict'
-
-        var ticksStyle = {
-            fontColor: '#495057',
-            fontStyle: 'bold'
-        }
-
-        var mode      = 'index'
-        var intersect = true
-
-        var $salesChart = $('#sales-chart2')
-        var salesChart  = new Chart($salesChart, {
-            type   : 'bar',
-            data   : {
-            labels  : ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-            datasets: [
-                {
-                backgroundColor: '#007bff',
-                borderColor    : '#007bff',
-                data           : [1000, 2000, 3000, 2500, 2700, 2500, 3000]
-                },
-                {
-                backgroundColor: '#ced4da',
-                borderColor    : '#ced4da',
-                data           : [700, 1700, 2700, 2000, 1800, 1500, 2000]
-                }
-            ]
-            },
-            options: {
-            maintainAspectRatio: false,
-            tooltips           : {
-                mode     : mode,
-                intersect: intersect
-            },
-            hover              : {
-                mode     : mode,
-                intersect: intersect
-            },
-            legend             : {
-                display: false
-            },
-            scales             : {
-                yAxes: [{
-                // display: false,
-                gridLines: {
-                    display      : true,
-                    lineWidth    : '4px',
-                    color        : 'rgba(0, 0, 0, .2)',
-                    zeroLineColor: 'transparent'
-                },
-                ticks    : $.extend({
-                    beginAtZero: true,
-
-                    // Include a dollar sign in the ticks
-                    callback: function (value, index, values) {
-                    if (value >= 1000) {
-                        value /= 1000
-                        value += 'k'
-                    }
-                    return '$' + value
-                    }
-                }, ticksStyle)
-                }],
-                xAxes: [{
-                display  : true,
-                gridLines: {
-                    display: false
-                },
-                ticks    : ticksStyle
-                }]
-            }
-            }
-        })
-
-        var $visitorsChart = $('#visits-chart')
-        var visitorsChart  = new Chart($visitorsChart, {
-            data   : {
-            labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
-            datasets: [{
-                type                : 'line',
-                data                : [
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(6)->toDateString())->get()->count()) !!},  
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(5)->toDateString())->get()->count()) !!},  
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(4)->toDateString())->get()->count()) !!},  
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(3)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(2)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDay()->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->toDateString())->get()->count()) !!}
-                ],
-                backgroundColor     : 'transparent',
-                borderColor         : '#007bff',
-                pointBorderColor    : '#007bff',
-                pointBackgroundColor: '#007bff',
-                fill                : false
-                // pointHoverBackgroundColor: '#007bff',
-                // pointHoverBorderColor    : '#007bff'
-            },
-                {
-                type                : 'line',
-                data                : [
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(13)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(12)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(11)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(10)->toDateString())->get()->count()) !!},
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(9)->toDateString())->get()->count()) !!},
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(8)->toDateString())->get()->count()) !!}, 
-                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(7)->toDateString())->get()->count()) !!}
-                    ],
-                backgroundColor     : 'tansparent',
-                borderColor         : '#ced4da',
-                pointBorderColor    : '#ced4da',
-                pointBackgroundColor: '#ced4da',
-                fill                : false
-                // pointHoverBackgroundColor: '#ced4da',
-                // pointHoverBorderColor    : '#ced4da'
-                }]
-            },
-            options: {
-            maintainAspectRatio: false,
-            tooltips           : {
-                mode     : mode,
-                intersect: intersect
-            },
-            hover              : {
-                mode     : mode,
-                intersect: intersect
-            },
-            legend             : {
-                display: false
-            },
-            scales             : {
-                yAxes: [{
-                // display: false,
-                gridLines: {
-                    display      : true,
-                    lineWidth    : '4px',
-                    color        : 'rgba(0, 0, 0, .2)',
-                    zeroLineColor: 'transparent'
-                },
-                ticks    : $.extend({
-                    beginAtZero : true,
-                    //suggestedMax: 200
-                }, ticksStyle)
-                }],
-                xAxes: [{
-                display  : true,
-                gridLines: {
-                    display: false
-                },
-                ticks    : ticksStyle
-                }]
-            }
-            }
-        })
-    });
-</script>
-@endsection
-
 @section('contenido')
 
 <div class="content">
+    <input type="text" value="{{config('app.locale')}}" id="lang" hidden>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
@@ -350,7 +100,7 @@
                                                     data-toggle="tab">Area</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
+                                                <a class="nav-link" href="#sales-chart" data-toggle="tab">{{__('Donut')}}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -504,9 +254,22 @@
                                                 <span>{{__('Sales Over Time')}}</span>
                                             </p>
                                             <p class="ml-auto d-flex flex-column text-right">
-                                                <span class="text-success">
-                                                    <i class="fas fa-arrow-up"></i> 33.1%
-                                                </span>
+
+                                                @if ($profit_sales < 0)
+                                                    <span class="text-danger">
+                                                        <i class="fas fa-arrow-down"></i> {{number_format($profit_sales,2)}}%
+                                                    </span>
+                                                @endif
+                                                @if ($profit_sales == 0)
+                                                    <span class="text-secondary">
+                                                        <i class="fas fa-minus"></i> {{number_format($profit_sales,2)}}%
+                                                    </span>
+                                                @endif
+                                                @if ($profit_sales > 0)
+                                                    <span class="text-success">
+                                                        <i class="fas fa-arrow-up"></i> {{number_format($profit_sales,2)}}%
+                                                    </span>
+                                                @endif
                                                 <span class="text-muted">{{__('Since last month')}}</span>
                                             </p>
                                         </div>
@@ -540,4 +303,368 @@
 </div>
 <!-- /.content -->
 
+@endsection
+
+@section('scripts')
+<script>
+    // Color Random
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    /* Chart.js Charts */
+    // Sales chart
+
+    var months = []
+    if (new Date().getMonth() < 7) {
+        months = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL']
+        if ($("#lang").val() == 'en') {
+            months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL']
+        }
+    } else {
+        months = ['JUN','JUL','AGO','SEP','OCT','NOV','DIC']
+        if ($("#lang").val() == 'en') {
+            months = ['JUN','JUL','AUG','SEP','OCT','NOV','DEC']
+        }
+    }
+
+    var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d');
+    //$('#revenue-chart').get(0).getContext('2d');
+
+    var salesChartData = {
+        labels  : [
+            months[0], 
+            months[1], 
+            months[2], 
+            months[3], 
+            months[4], 
+            months[5], 
+            months[6]],
+        datasets: [
+        {
+            label               : new Date().getFullYear(),
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius         : 4,
+            pointHoverRadius    : 12,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(60,141,188,1)',
+            data                : [
+                {!! json_encode($saleCanT[0]) !!}, 
+                {!! json_encode($saleCanT[1]) !!}, 
+                {!! json_encode($saleCanT[2]) !!}, 
+                {!! json_encode($saleCanT[3]) !!}, 
+                {!! json_encode($saleCanT[4]) !!}, 
+                {!! json_encode($saleCanT[5]) !!}, 
+                {!! json_encode($saleCanT[6]) !!}]
+        },
+        {
+            label               : new Date().getFullYear() -1,
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : 4,
+            pointHoverRadius    : 12,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data                : [
+                {!! json_encode($saleCanT_ant[0]) !!}, 
+                {!! json_encode($saleCanT_ant[1]) !!}, 
+                {!! json_encode($saleCanT_ant[2]) !!}, 
+                {!! json_encode($saleCanT_ant[3]) !!}, 
+                {!! json_encode($saleCanT_ant[4]) !!}, 
+                {!! json_encode($saleCanT_ant[5]) !!}, 
+                {!! json_encode($saleCanT_ant[6]) !!}]
+        },
+        ]
+    }
+
+    var salesChartOptions = {
+        maintainAspectRatio : false,
+        responsive : true,
+        legend: {
+            display: true,
+            onHover: function(e) {
+                e.target.style.cursor = 'pointer';
+            }
+        },
+        hover: {
+            onHover: function(e) {
+                var point = this.getElementAtEvent(e);
+                if (point.length) e.target.style.cursor = 'pointer';
+                else e.target.style.cursor = 'default';
+            }
+        },
+        scales: {
+        xAxes: [{
+            gridLines : {
+            display : false,
+            }
+        }],
+        yAxes: [{
+            gridLines : {
+            display : false,
+            }
+        }]
+        }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    var salesChart = new Chart(salesChartCanvas, { 
+        type: 'line', 
+        data: salesChartData, 
+        options: salesChartOptions
+        }
+    )
+
+    // Donut Chart
+    var category_sales = {!! json_encode($category_sales) !!}
+    var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
+    var pieData        = {
+        labels: [
+            <?php foreach($category_sales as $category_sale) { ?>
+                {!! json_encode(\App\Category::findOrFail($category_sale->category_id)->nombre) !!},
+            <?php } ?>
+        ],
+        datasets: [
+        {
+            data: [
+                <?php for($i=0; $i< $category_sales->count(); $i++) { ?>
+                    {!! json_encode($category_sales_cant[$i]) !!},
+                <?php } ?>
+            ],
+            backgroundColor : [
+                <?php foreach($category_sales as $category_sale) { ?>
+                    getRandomColor(),
+                <?php } ?>
+            ],
+        }
+        ],
+    }
+    var pieOptions = {
+        legend: {
+        display: false
+        },
+        hover: {
+            onHover: function(e) {
+                var point = this.getElementAtEvent(e);
+                if (point.length) e.target.style.cursor = 'pointer';
+                else e.target.style.cursor = 'default';
+            }
+        },
+        maintainAspectRatio : false,
+        responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    var pieChart = new Chart(pieChartCanvas, {
+        type: 'doughnut',
+        data: pieData,
+        options: pieOptions      
+    });
+
+    $(function () {
+        'use strict'
+
+        var ticksStyle = {
+            fontColor: '#495057',
+            fontStyle: 'bold'
+        }
+
+        var mode      = 'index'
+        var intersect = true
+
+        var $salesChart = $('#sales-chart2')
+        var salesChart  = new Chart($salesChart, {
+            type   : 'bar',
+            data   : {
+            labels  : [
+                months[0],
+                months[1], 
+                months[2], 
+                months[3], 
+                months[4], 
+                months[5], 
+                months[6]],
+            datasets: [
+                {
+                backgroundColor: '#007bff',
+                borderColor    : '#007bff',
+                data           : [
+                    {!! json_encode($priceSaleSumT[0]) !!}, 
+                    {!! json_encode($priceSaleSumT[1]) !!}, 
+                    {!! json_encode($priceSaleSumT[2]) !!}, 
+                    {!! json_encode($priceSaleSumT[3]) !!}, 
+                    {!! json_encode($priceSaleSumT[4]) !!}, 
+                    {!! json_encode($priceSaleSumT[5]) !!}, 
+                    {!! json_encode($priceSaleSumT[6]) !!}
+                ]
+                },
+                {
+                backgroundColor: '#ced4da',
+                borderColor    : '#ced4da',
+                data           : [
+                    {!! json_encode($priceSaleSumT_ant[0]) !!}, 
+                    {!! json_encode($priceSaleSumT_ant[1]) !!}, 
+                    {!! json_encode($priceSaleSumT_ant[2]) !!}, 
+                    {!! json_encode($priceSaleSumT_ant[3]) !!}, 
+                    {!! json_encode($priceSaleSumT_ant[4]) !!}, 
+                    {!! json_encode($priceSaleSumT_ant[5]) !!}, 
+                    {!! json_encode($priceSaleSumT_ant[6]) !!} 
+                ]
+                }
+            ]
+            },
+            options: {
+            maintainAspectRatio: false,
+            tooltips           : {
+                mode     : mode,
+                intersect: intersect
+            },
+            hover              : {
+                mode     : mode,
+                intersect: intersect
+            },
+            legend: {
+                display: false,
+            },
+            hover: {
+                onHover: function(e) {
+                    var point = this.getElementAtEvent(e);
+                    if (point.length) e.target.style.cursor = 'pointer';
+                    else e.target.style.cursor = 'default';
+                }
+            },
+            scales             : {
+                yAxes: [{
+                // display: false,
+                gridLines: {
+                    display      : true,
+                    lineWidth    : '4px',
+                    color        : 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+                ticks    : $.extend({
+                    beginAtZero: true,
+
+                    // Include a dollar sign in the ticks
+                    callback: function (value, index, values) {
+                    if (value >= 1000) {
+                        value /= 1000
+                        value += 'k'
+                    }
+                    return '$' + value
+                    }
+                }, ticksStyle)
+                }],
+                xAxes: [{
+                display  : true,
+                gridLines: {
+                    display: false
+                },
+                ticks    : ticksStyle
+                }]
+            }
+            }
+        })
+
+        var $visitorsChart = $('#visits-chart')
+        var visitorsChart  = new Chart($visitorsChart, {
+            data   : {
+            labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
+            datasets: [{
+                type                : 'line',
+                data                : [
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(6)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(5)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(4)->toDateString())->get()->count()) !!},  
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(3)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(2)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDay()->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->toDateString())->get()->count()) !!}
+                ],
+                pointRadius         : 5,
+                pointHoverRadius    : 8,
+                backgroundColor     : 'transparent',
+                borderColor         : '#007bff',
+                pointBorderColor    : '#007bff',
+                pointBackgroundColor: '#007bff',
+                fill                : false
+                // pointHoverBackgroundColor: '#007bff',
+                // pointHoverBorderColor    : '#007bff'
+            },
+                {
+                type                : 'line',
+                data                : [
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(13)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(12)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(11)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(10)->toDateString())->get()->count()) !!},
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(9)->toDateString())->get()->count()) !!},
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(8)->toDateString())->get()->count()) !!}, 
+                    {!! json_encode(\App\Visit::whereDate('created_at', \Carbon\Carbon::now()->subDays(7)->toDateString())->get()->count()) !!}
+                    ],
+                pointRadius         : 5,
+                pointHoverRadius    : 8,
+                backgroundColor     : 'tansparent',
+                borderColor         : '#ced4da',
+                pointBorderColor    : '#ced4da',
+                pointBackgroundColor: '#ced4da',
+                fill                : false
+                // pointHoverBackgroundColor: '#ced4da',
+                // pointHoverBorderColor    : '#ced4da'
+                }]
+            },
+            options: {
+            maintainAspectRatio: false,
+            tooltips           : {
+                //mode     : mode,
+                //intersect: intersect
+            },
+            legend             : {
+                display: false
+            },
+            hover: {
+                mode     : mode,
+                intersect: intersect,
+                onHover: function(e) {
+                    var point = this.getElementAtEvent(e);
+                    if (point.length) e.target.style.cursor = 'pointer';
+                    else e.target.style.cursor = 'default';
+                }
+            },
+            scales             : {
+                yAxes: [{
+                // display: false,
+                gridLines: {
+                    display      : true,
+                    lineWidth    : '4px',
+                    color        : 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+                ticks    : $.extend({
+                    beginAtZero : true,
+                    //suggestedMax: 200
+                }, ticksStyle)
+                }],
+                xAxes: [{
+                display  : true,
+                gridLines: {
+                    display: false
+                },
+                ticks    : ticksStyle
+                }]
+            }
+            }
+        })
+    });
+</script>
 @endsection
