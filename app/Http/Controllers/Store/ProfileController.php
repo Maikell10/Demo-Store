@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Store;
 
 use App\Comment;
 use App\Http\Controllers\Controller;
+use App\Image;
 use App\RatingStore;
 use App\Sale;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+
+use Intervention\Image\Facades\Image as Imagen;
 
 DEFINE('DS', DIRECTORY_SEPARATOR);
 
@@ -67,28 +71,54 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'imagenes.*' => 'image|mimes:jpeg,jpg,png,gif,svg|max:2048',
+            'imagenes' => 'required|image|mimes:jpeg,jpg,png,gif,svg|max:15048',
         ]);
 
         $urlimagen = '';
 
         if ($request->hasFile('imagenes')) {
+            // Deleting Previous Image
+            $image_prev = Image::where('imageable_id', Auth::user()->id)->where('imageable_type', 'App\User')->first();
+
+            if ($image_prev) {
+                $archivo = substr($image_prev->url, 1);
+                File::delete($archivo);
+            }
+
             $imagen = $request->file('imagenes');
 
-            $nombre = time() . '_' . $imagen->getClientOriginalName();
+            if(pathinfo($imagen->getClientOriginalName(), PATHINFO_EXTENSION) == 'jfif') {
+                $solo_nombre = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME);
+                $nombre = time() . '_' . $solo_nombre . '.jpg';
 
-            $ruta = public_path() . DS . 'imagenes';
+                $ruta = public_path() . DS . 'imagenes';
 
-            $imagen->move($ruta, $nombre);
+                $path = $ruta . DS . $nombre;
+                Imagen::make($imagen)->save($path,10);
 
-            $urlimagen = DS . 'imagenes' . DS  . $nombre;
-            
+                $urlimagen = DS . 'imagenes' . DS  . $nombre;
+            } else {
+                $nombre = time() . '_' . $imagen->getClientOriginalName();
+
+                $ruta = public_path() . DS . 'imagenes';
+                
+                $path = $ruta . DS . $nombre;
+                Imagen::make($imagen)->save($path,10);
+
+                $urlimagen = DS . 'imagenes' . DS  . $nombre;
+            }
+
+            // Creating or Updating Image in BD
+            if ($image_prev) {
+                $image_prev->url = $urlimagen;
+                $image_prev->save();
+            } else {
+                $user = User::where('id', Auth::user()->id)->firstOrFail();
+                $user->image()->create([
+                    'url' => $urlimagen,
+                ]);
+            }
         }
-
-        $user = User::where('id', Auth::user()->id)->firstOrFail();
-        $user->image()->create([
-            'url' => $urlimagen,
-        ]);
 
         return redirect()->route('profile')->with('datos', __('Register Created Successfully'));
     }

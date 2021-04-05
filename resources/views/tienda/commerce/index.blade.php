@@ -79,66 +79,117 @@
         <div class="container-fluid">
             <img class="home__image" src="{{asset('asset/images/banner.jpg')}}" alt="" />
 
-            <div class="container">
+            <div class="container-fluid">
                 <h1 class="home_subtitle font-weight-bold mb-5"><i class="nav-icon fas fa-store text-success"></i> Tienda de
                     {{$user->name}}
                 </h1>
+                
+                <div class="row">
+                    <div class="col-md-4 col-xl-3">
+                        <div class="card card-success card-outline">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    @if ($user->social_image() != 'no hay img')
+                                    <img src="{{$user->social_image()}}" class="profile-user-img img-fluid img-circle elevation-2" alt="User Image"
+                                    style="height: 100px; width: 100px; object-fit: cover" data-toggle="tooltip" data-placement="bottom" title="{{$user->name}}">
+                                    @else
+                                    @if (isset($user->image->url))
+                                    <img src="{{ $user->image->url }}" class="profile-user-img img-fluid img-circle elevation-2" alt="User Image"
+                                        style="height: 100px; width: 100px; object-fit: cover" data-toggle="tooltip" data-placement="bottom" title="{{$user->name}}">
+                                    @else
+                                    <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
+                                        class="profile-user-img img-fluid img-circle elevation-2" alt="User Image" data-toggle="tooltip" data-placement="bottom" title="{{$user->name}}">
+                                    @endif
+                                    @endif
+                                </div>
 
-                <div class="row row-cols-2 row-cols-md-4">
-                    @foreach ($productos as $producto)
-                    <div class="col mb-4">
-                        <a href="{{ url('store/show-product/'.$producto->slug.'') }}">
-                            <div class="card border-success h-100">
+                                <h3 class="profile-username text-center">{{ $user->name }}</h3>
 
-                                @if ($producto->images->count() <= 0) <div class="product_image" style="height: 200px">
-                                    <img class="card-img-top img-thumbnail" src="/imagenes/boxed-bg.jpg" alt=""
-                                        style="object-fit: contain; height: 100%">
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    <li class="list-group-item">
+                                        <b>{{ __('Sales') }}</b> <a class="float-right">20</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>{{ __('Positive Ratings') }}</b> <a class="float-right">19</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">0</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>{{ __('Negative Ratings') }}</b> <a class="float-right">1</a>
+                                    </li>
+                                </ul>
+
+                                <h5 class="profile-username text-center h6">{{__('Joined to TuMiniMercado On:')}} <font class="font-weight-bold">{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</font></h5>
                             </div>
-
-                            @else
-                            <div class="product_image" style="height: 200px">
-                                <img class="card-img-top img-thumbnail" src="{{$producto->images->random()->url}}"
-                                    alt="" style="object-fit: contain; height: 100%">
-                            </div>
-                            @endif
-                        </a>
-                        <div class="card-header h5 bg-transparent">{{$producto->nombre}}</div>
-                        <div class="card-body text-success p-2 ml-2">
-                            <h5 class="card-title"></h5>
-
-
-                            @if ($producto->estado == 'En Oferta')
-                            <div class="product_price text-right">
-                                <p class="card-text">
-                                    <del class="text-muted text-black-50">
-                                        US${{number_format($producto->precio_anterior,2)}}
-                                    </del>US${{number_format($producto->precio_actual,2)}}
-                                </p>
-                            </div>
-                            @else
-                            <div class="product_price text-right">
-                                <p class="card-text">
-                                    US${{number_format($producto->precio_actual,2)}}
-                                </p>
-                            </div>
-                            @endif
-
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Ver todo en <a
-                                    href="{{url('store/show-category/'.$producto->main_category->sub_category->category->slug.'')}}"
-                                    class="text-success">{{$producto->main_category->sub_category->category->nombre}}</a></small>
                         </div>
                     </div>
-                </div>
-                @endforeach
-            </div>
+                    
+                    <div class="col-md-8 col-xl-9">
+                        
+                        <div class="row row-cols-2 row-cols-md-2 row-cols-xl-4">
+                            @foreach ($productos as $producto)
+                            <div class="col mb-4">
+                                <a href="{{ url('store/show-product/'.$producto->slug.'') }}">
+                                    <div class="card border-success h-100">
+        
+                                        @if ($producto->images->count() <= 0) <div class="product_image" style="height: 200px">
+                                            <img class="card-img-top img-thumbnail" src="/imagenes/boxed-bg.jpg" alt=""
+                                                style="object-fit: contain; height: 100%">
+                                    </div>
+        
+                                    @else
+                                    <div class="product_image" style="height: 200px">
+                                        <img class="card-img-top img-thumbnail" src="{{$producto->images->random()->url}}"
+                                            alt="" style="object-fit: contain; height: 100%">
+                                    </div>
+                                    @endif
+                                </a>
+                                <div class="card-header h5 bg-transparent">{{$producto->nombre}}</div>
+                                <div class="card-body text-success p-2 ml-2">
+                                    <h5 class="card-title"></h5>
+        
+        
+                                    @if ($producto->estado == 'En Oferta')
+                                    <div class="product_price text-right">
+                                        <p class="card-text">
+                                            <del class="text-muted text-black-50">
+                                                US${{number_format($producto->precio_anterior,2)}}
+                                            </del>US${{number_format($producto->precio_actual,2)}}
+                                        </p>
+                                    </div>
+                                    @else
+                                    <div class="product_price text-right">
+                                        <p class="card-text">
+                                            US${{number_format($producto->precio_actual,2)}}
+                                        </p>
+                                    </div>
+                                    @endif
+        
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">Ver todo en <a
+                                            href="{{url('store/show-category/'.$producto->main_category->sub_category->category->slug.'')}}"
+                                            class="text-success">{{$producto->main_category->sub_category->category->nombre}}</a></small>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
 
+                    </div>
+                </div>
+            </div>
 
         </div>
 
-        <div class="float-right m-2">
-            {{$productos->appends($_GET)->links()}}
+        <div class="d-flex flex-row-reverse">
+            <div class="float-right">
+                {{$productos->appends($_GET)->links()}}
+            </div>
+        </div>
+
+        <div class="row">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.31040601601!2d-66.94890528538025!3d10.476178092525684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c2a5f6be5d626e1%3A0x5251fda263f1cfe5!2sComercial%20BAETA%20C.A.!5e0!3m2!1ses!2sve!4v1617428070122!5m2!1ses!2sve" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
 
     </div>

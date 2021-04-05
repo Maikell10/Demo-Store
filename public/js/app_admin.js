@@ -15746,22 +15746,46 @@ var apiproduct = new Vue({
     },
     generarDescuento: function generarDescuento() {
       if (this.porcentaje_descuento > 100) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "No puedes poner un valor mayor a 100"
-        });
+        if ($('#lang').val() == 'es') {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "No puedes poner un valor mayor a 100"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "You cannot put a value greater than 100"
+          });
+        }
+
         this.porcentaje_descuento = 100;
         this.descuento = this.precioanterior * this.porcentaje_descuento / 100;
         this.precioactual = this.precioanterior - this.descuento;
-        this.descuento_mensaje = "Este producto tiene el 100% de descuento, es gratis";
+
+        if ($('#lang').val() == 'es') {
+          this.descuento_mensaje = "Este producto tiene el 100% de descuento, es gratis";
+        } else {
+          this.descuento_mensaje = "This product is 100% off, It's free";
+        }
+
         return this.descuento_mensaje;
       } else if (this.porcentaje_descuento < 0) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "No puedes poner un valor menor a 0"
-        });
+        if ($('#lang').val() == 'es') {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "No puedes poner un valor menor a 0"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "You cannot put a value less than 0"
+          });
+        }
+
         this.porcentaje_descuento = 0;
         this.descuento = this.precioanterior * this.porcentaje_descuento / 100;
         this.precioactual = this.precioanterior - this.descuento;
@@ -15773,9 +15797,17 @@ var apiproduct = new Vue({
           this.precioactual = this.precioanterior - this.descuento;
 
           if (this.porcentaje_descuento == 100) {
-            this.descuento_mensaje = "Este producto tiene el 100% de descuento, es gratis";
+            if ($('#lang').val() == 'es') {
+              this.descuento_mensaje = "Este producto tiene el 100% de descuento, es gratis";
+            } else {
+              this.descuento_mensaje = "This product is 100% off, It's free";
+            }
           } else {
-            this.descuento_mensaje = "Hay un descuento de $US " + this.descuento;
+            if ($('#lang').val() == 'es') {
+              this.descuento_mensaje = "Hay un descuento de $US " + this.descuento;
+            } else {
+              this.descuento_mensaje = "There is a discount of $US " + this.descuento;
+            }
           }
 
           return this.descuento_mensaje;
@@ -15830,27 +15862,51 @@ var apiproduct = new Vue({
       });
     },
     eliminarImagen: function eliminarImagen(imagen) {
-      Swal.fire({
-        title: "Estas seguro de eliminar la imágen " + imagen.id + "?",
-        text: "¡No podrás revertir esto!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, eliminar!",
-        cancelButtonText: "Cancelar"
-      }).then(function (result) {
-        if (result.value) {
-          var url = "/api/eliminarImagen/" + imagen.id;
-          axios["delete"](url).then(function (response) {
-            console.log(response.data);
-          }); //eliminar el elemento
+      if ($('#lang').val() == 'es') {
+        Swal.fire({
+          title: "Estas seguro de eliminar la imágen?",
+          text: "¡No podrás revertir esto!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, eliminar!",
+          cancelButtonText: "No"
+        }).then(function (result) {
+          if (result.value) {
+            var url = "/api/eliminarImagen/" + imagen.id;
+            axios["delete"](url).then(function (response) {
+              console.log(response.data);
+            }); //eliminar el elemento
 
-          var elemento = document.getElementById("idimagen-" + imagen.id);
-          elemento.parentNode.removeChild(elemento);
-          Swal.fire("Eliminada!", "Tu imágen ha sido eliminada!", "success");
-        }
-      });
+            var elemento = document.getElementById("idimagen-" + imagen.id);
+            elemento.parentNode.removeChild(elemento);
+            Swal.fire("Eliminada!", "Tu imágen ha sido eliminada!", "success");
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Are You sure to delete this image?",
+          text: "You will not be able to reverse this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete!",
+          cancelButtonText: "No"
+        }).then(function (result) {
+          if (result.value) {
+            var url = "/api/eliminarImagen/" + imagen.id;
+            axios["delete"](url).then(function (response) {
+              console.log(response.data);
+            }); //eliminar el elemento
+
+            var elemento = document.getElementById("idimagen-" + imagen.id);
+            elemento.parentNode.removeChild(elemento);
+            Swal.fire("Deleted!", "Your image has been deleted!", "success");
+          }
+        });
+      }
     },
     getProduct: function getProduct() {
       var _this4 = this;

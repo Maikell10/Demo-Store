@@ -21,7 +21,15 @@
 @endsection
 
 @section('contenido')
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 <div class="super_container_inner">
     <div class="container-fluid mt-3">
@@ -35,7 +43,7 @@
                 <section class="content">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4 col-xl-3">
 
                                 <!-- Profile Image -->
                                 <div class="card card-success card-outline">
@@ -67,17 +75,17 @@
                                                 <b>{{ __('Positive Ratings') }}</b> <a class="float-right">{{$positive_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">{{$negative_rating}}</a>
+                                                <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">{{$neutral_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Negative Ratings') }}</b> <a class="float-right">{{$neutral_rating}}</a>
+                                                <b>{{ __('Negative Ratings') }}</b> <a class="float-right">{{$negative_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
                                                 <b>{{ __('Comments') }}</b> <a class="float-right">{{$comments}}</a>
                                             </li>
                                         </ul>
 
-                                        <h3 class="profile-username text-center h5">{{__('Since:')}} {{ \Carbon\Carbon::parse(Auth::user()->created_at)->format('d/m/Y') }}</h3>
+                                        <h5 class="profile-username text-center h6">{{__('Joined to TuMiniMercado On:')}} <font class="font-weight-bold">{{ \Carbon\Carbon::parse(Auth::user()->created_at)->format('d/m/Y') }}</font></h5>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -95,7 +103,7 @@
 
                             </div>
                             <!-- /.col -->
-                            <div class="col-md-9" id="apiProfileUser">
+                            <div class="col-md-8 col-xl-9" id="apiProfileUser">
                                 <div class="card">
                                     <div class="card-header p-2">
                                         <ul class="nav nav-pills">
@@ -277,7 +285,7 @@
                     </div>
                     <br>
                     <div class="description mt-3">
-                        Límite de 2048 MB permitido.
+                        Límite de 15,048 MB permitido.
                         <br>
                         Tipos permitidos: jpeg, jpg, png, gif, svg.
                         <br>

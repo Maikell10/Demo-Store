@@ -72,11 +72,12 @@
                     </div>
                 </form>
 
-                <div class="panel-footer" v-if="resultados.length" style="position: absolute;z-index: 3;left: 15px;">
+                <div class="panel-footer" v-if="resultados.length" style="position: absolute;z-index: 3;left: 15px;width: -webkit-fill-available;margin-right: 15px;">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="resultado in resultados">
                             <a href="#" class="drompdown-item text-dark" v-on:click.prevent="select(resultado)">
                                 <span v-html="resultado.name_negrita"></span>
+                                <p class="small" v-html="resultado.category_negrita"></p>
                             </a>
                         </li>
                     </ul>

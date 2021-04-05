@@ -1,6 +1,6 @@
 @extends('plantilla.admin')
 
-@section('titulo','Administración de Productos')
+@section('titulo',__('Products Administration'))
 
 @section('breadcrumb')
 <li class="breadcrumb-item active">@yield('titulo')</li>
@@ -43,12 +43,12 @@
 
         <div class="card card-success card-outline">
             <div class="card-header">
-                <h3 class="card-title">Sección de Productos</h3>
+                <h3 class="card-title">{{__('Products Section')}}</h3>
 
                 <div class="card-tools">
                     <form>
                         <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="nombre" class="form-control float-right" placeholder="Buscar"
+                            <input type="text" name="nombre" class="form-control float-right" placeholder="{{__('Search')}}"
                                 value="{{request()->get('nombre')}}">
 
                             <div class="input-group-append">
@@ -61,15 +61,15 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-                <a class="m-2 float-right btn btn-primary" href="{{route('admin.product.create')}}">Crear <i
+                <a class="m-2 float-right btn btn-primary" href="{{route('admin.product.create')}}">{{__('Create')}} <i
                         class="fas fa-plus"></i></a>
                 <table class="table1 table-head-fixed table-hover">
                     <thead>
                         <tr>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Cantidad</th>
-                            <th>Estado</th>
+                            <th>{{__('Image')}}</th>
+                            <th>{{__('Name')}}</th>
+                            <th>{{__('Quantity')}}</th>
+                            <th>{{__('Status')}}</th>
                             <th>Activo</th>
                             <th>Slider Principal</th>
                             <th></th>

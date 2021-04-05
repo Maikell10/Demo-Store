@@ -1,10 +1,10 @@
 @extends('plantilla.admin')
 
 
-@section('titulo', 'Editar Producto')
+@section('titulo', __('Edit Product'))
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{route('admin.product.index')}}">Productos</a></li>
+<li class="breadcrumb-item"><a href="{{route('admin.product.index')}}">{{__('Products')}}</a></li>
 <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
@@ -68,7 +68,8 @@
 @section('contenido')
 
 <div id="apiproduct">
-
+    <input type="text" value="{{config('app.locale')}}" id="lang" hidden>
+    
     <form action="{{ route('admin.product.update',$producto->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -80,7 +81,7 @@
 
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Datos generados automáticamente</h3>
+                        <h3 class="card-title">{{__('Automatically generated data')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -89,7 +90,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
 
-                                    <label>Visitas</label>
+                                    <label>{{__('Visits')}}</label>
                                     <input class="form-control" type="number" id="visitas" name="visitas" readonly
                                         value="{{$producto->visitas}}">
 
@@ -101,7 +102,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
 
-                                    <label>Ventas</label>
+                                    <label>{{__('Sales')}}</label>
                                     <input class="form-control" type="number" id="ventas" name="ventas" readonly
                                         value="{{$producto->ventas}}">
                                 </div>
@@ -123,7 +124,7 @@
 
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Datos del producto</h3>
+                        <h3 class="card-title">{{__('Product data')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -131,7 +132,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
 
-                                    <label for="nombre">Nombre</label>
+                                    <label for="nombre">{{__('Name')}}</label>
                                     <input v-model="nombre" @blur="getProduct" @focus='div_aparecer=false'
                                         class="form-control" type="text" name="nombre" id="nombre">
 
@@ -151,7 +152,7 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Categoria</label>
+                                        <label>{{__('Category')}}</label>
                                         <select name="category_id" id="category_id" v-model="selected_category"
                                             v-on:change="loadSubCategories" class="form-control select2"
                                             style="width: 100%;">
@@ -170,10 +171,10 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Sub-Categoria</label>
+                                        <label>{{__('Sub-Category')}}</label>
                                         <select name="sub_category_id" id="sub_category_id" class="form-control select2"
                                             style="width: 100%;">
-                                            <option value="">Selecciona una</option>
+                                            <option value="">{{__('Select an option')}}</option>
 
                                             <template v-for="(subcategory, index) in subcategories">
                                                 <option v-bind:value="index" v-if="index == {{$producto->main_category->sub_category_id}}" selected>
@@ -191,10 +192,10 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Categoría Principal</label>
+                                        <label>{{__('Main-Category')}}</label>
                                         <select name="main_category_id" id="main_category_id" class="form-control select2"
                                             style="width: 100%;" required>
-                                            <option value="">Selecciona una</option>
+                                            <option value="">{{__('Select an option')}}</option>
 
                                             <template v-for="(maincategory, index) in maincategories">
                                                 <option v-bind:value="index" v-if="index == {{$producto->main_category->id}}" selected>
@@ -208,7 +209,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Cantidad</label>
+                                        <label>{{__('Quantity')}}</label>
                                         <input class="form-control" type="number" id="cantidad" name="cantidad"
                                             value="{{$producto->cantidad}}">
                                     </div>
@@ -232,7 +233,7 @@
 
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Sección de Precios</h3>
+                        <h3 class="card-title">{{__('Prices Section')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -241,7 +242,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
 
-                                    <label>Precio anterior</label>
+                                    <label>{{__('Previous price')}}</label>
 
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -258,7 +259,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Precio actual</label>
+                                    <label>{{__('Actual price')}}</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -280,7 +281,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Porcentaje de descuento</label>
+                                    <label>{{__('Discount rate')}}</label>
                                     <div class="input-group">
                                         <input v-model="porcentaje_descuento" class="form-control" type="number"
                                             id="porcentaje_descuento" name="porcentaje_descuento" step="any" min="0"
@@ -318,12 +319,12 @@
 
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Descripciones del producto</h3>
+                                <h3 class="card-title">{{__('Product descriptions')}}</h3>
                             </div>
                             <div class="card-body">
                                 <!-- Date dd/mm/yyyy -->
                                 <div class="form-group">
-                                    <label>Descripción corta:</label>
+                                    <label>{{__('Short description')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="descripcion_corta"
                                         id="descripcion_corta" rows="3">
@@ -333,7 +334,7 @@
                                 <!-- /.form group -->
 
                                 <div class="form-group">
-                                    <label>Descripción larga:</label>
+                                    <label>{{__('Long description')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="descripcion_larga"
                                         id="descripcion_larga" rows="5">
@@ -354,12 +355,12 @@
 
                         <div class="card card-info">
                             <div class="card-header">
-                                <h3 class="card-title">Especificaciones y otros datos</h3>
+                                <h3 class="card-title">{{__('Specifications and other data')}}</h3>
                             </div>
                             <div class="card-body">
                                 <!-- Date dd/mm/yyyy -->
                                 <div class="form-group">
-                                    <label>Especificaciones:</label>
+                                    <label>{{__('Specifications')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="especificaciones"
                                         id="especificaciones" rows="3">
@@ -369,7 +370,7 @@
                                 <!-- /.form group -->
 
                                 <div class="form-group">
-                                    <label>Datos de interes:</label>
+                                    <label>{{__('Data of interest')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="datos_de_interes"
                                         id="datos_de_interes" rows="5">
@@ -391,23 +392,23 @@
 
                 <div class="card card-warning">
                     <div class="card-header">
-                        <h3 class="card-title">Imágenes</h3>
+                        <h3 class="card-title">{{__('Images')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="imagenes">Añadir imágenes</label>
+                            <label for="imagenes">{{__('Add Images')}}</label>
 
                             <input type="file" class="form-control-file" name="imagenes[]" id="imagenes[]" multiple
                                 accept="image/*">
 
                             <div class="description">
-                                Un número ilimitado de archivos pueden ser cargados en este campo.
+                                {{__('An unlimited number of files can be uploaded in this field.')}}
                                 <br>
-                                Límite de 2048 MB por imagen.
+                                {{__('Limit per image of')}} <font class="font-weight-bold">15,048 MB</font>
                                 <br>
-                                Tipos permitidos: jpeg, jpg, png, gif, svg.
+                                {{__('Allowed types: jpeg, jpg, png, gif, svg.')}}
                                 <br>
                             </div>
                         </div>
@@ -428,7 +429,7 @@
                 <div class="card card-primary">
                     <div class="card-header">
                         <div class="card-title">
-                            Galería de Imágenes
+                            {{__('Image gallery')}}
                         </div>
                     </div>
                     <div class="card-body">
@@ -436,7 +437,7 @@
 
                             @foreach ($producto->images as $image)
                             <div id="idimagen-{{$image->id}}" class="col-sm-2">
-                                <a href="{{$image->url}}" data-toggle="lightbox" data-title="Id:{{$image->id}}"
+                                <a href="{{$image->url}}" data-toggle="lightbox" data-title="{{$producto->nombre}}"
                                     data-gallery="gallery">
                                     <img style="width: 150px;height: 150px;" src="{{$image->url}}"
                                         class="img-fluid mb-2" />
@@ -464,7 +465,7 @@
 
                 <div class="card card-danger">
                     <div class="card-header">
-                        <h3 class="card-title">Administración</h3>
+                        <h3 class="card-title">{{__('Administration')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -473,7 +474,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
 
-                                    <label>Estado</label>
+                                    <label>{{__('Status')}}</label>
                                     <select name="estado" id="estado" class="form-control select2" style="width: 100%;">
                                         @foreach($estados_productos as $estado)
 
@@ -500,7 +501,7 @@
                                             @if ($producto->activo=='Si')
                                         checked
                                         @endif>
-                                        <label class="custom-control-label" for="activo">Activo</label>
+                                        <label class="custom-control-label" for="activo">{{__('Active')}}</label>
                                     </div>
                                 </div>
 
@@ -510,8 +511,7 @@
                                             name="sliderprincipal" @if ($producto->sliderprincipal=='Si')
                                         checked
                                         @endif>
-                                        <label class="custom-control-label" for="sliderprincipal">Aparece en el Slider
-                                            principal</label>
+                                        <label class="custom-control-label" for="sliderprincipal">{{__('Appears on the main Slider')}}</label>
                                     </div>
                                 </div>
                             </div>
@@ -523,9 +523,9 @@
 
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <a class="btn btn-danger" href="{{ route('cancelar','admin.product.index') }}">Cancelar</a>
+                        <a class="btn btn-danger" href="{{ route('cancelar','admin.product.index') }}">{{__('Cancel')}}</a>
 
-                        <input :disabled="deshabilitar_boton==1" type="submit" value="Guardar"
+                        <input :disabled="deshabilitar_boton==1" type="submit" value="{{__('Save')}}"
                             class="btn btn-primary float-right">
                     </div>
                 </div>

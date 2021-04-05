@@ -98,7 +98,7 @@ class AdminProductController extends Controller
     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,50);
+                    Image::make($imagen)->save($path,30);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 } else {
@@ -108,7 +108,7 @@ class AdminProductController extends Controller
     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,50);
+                    Image::make($imagen)->save($path,30);
 
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 }
@@ -250,7 +250,7 @@ class AdminProductController extends Controller
     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,50);
+                    Image::make($imagen)->save($path,30);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 } else {
@@ -260,7 +260,7 @@ class AdminProductController extends Controller
                     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,50);
+                    Image::make($imagen)->save($path,30);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 }
