@@ -5,14 +5,20 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AutocompleteController extends Controller
 {
     public function autocomplete(Request $request)
     {
         $palabraabuscar = $request->get('palabraabuscar');
+        $user_id = $request->get('user_id_autocomplete');
 
-        $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->orderBy('nombre')->get();
+        if ($user_id == 1) {
+            $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->orderBy('nombre')->get();
+        } else {
+            $productos = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', $user_id)->with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->orderBy('nombre')->get();
+        }
 
         $resultados = [];
         foreach ($productos as $prod) {

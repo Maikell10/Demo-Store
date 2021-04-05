@@ -15361,7 +15361,8 @@ var api_search_autocomplete = new Vue({
   el: "#api_search_autocomplete",
   data: {
     palabra_a_buscar: "",
-    resultados: []
+    resultados: [],
+    user_id_autocomplete: $('#user_id_autocomplete').val()
   },
   methods: {
     autoComplete: function autoComplete() {
@@ -15372,7 +15373,8 @@ var api_search_autocomplete = new Vue({
       if (this.palabra_a_buscar.length > 1) {
         axios.get("/api/autocomplete/", {
           params: {
-            palabraabuscar: this.palabra_a_buscar
+            palabraabuscar: this.palabra_a_buscar,
+            user_id_autocomplete: this.user_id_autocomplete
           }
         }).then(function (response) {
           _this.resultados = response.data;
@@ -15400,8 +15402,8 @@ var api_search_autocomplete = new Vue({
                 return _this2.$nextTick();
 
               case 3:
-                _this2.SubmitForm(); //$nextTick() sirve para esperar que luego q se actualice el DOM se ejecute una funcion
-
+                window.location.href = 'http://tiendademo1.test/admin/product?nombre=' + _this2.palabra_a_buscar; //this.SubmitForm();
+                //$nextTick() sirve para esperar que luego q se actualice el DOM se ejecute una funcion
 
               case 4:
               case "end":
@@ -15415,8 +15417,7 @@ var api_search_autocomplete = new Vue({
       this.$refs.SubmitButonSearch.click();
     }
   },
-  mounted: function mounted() {
-    console.log("datos cargados correctamente");
+  mounted: function mounted() {//console.log("datos cargados correctamente");
   }
 });
 
