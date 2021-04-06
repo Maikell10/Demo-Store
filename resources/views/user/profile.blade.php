@@ -31,6 +31,24 @@
     </div>
 @endif
 
+@if (session('datos'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{session('datos')}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
+@if (session('fail'))
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{session('fail')}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
 <div class="super_container_inner">
     <div class="container-fluid mt-3">
         <div class="card">
@@ -209,13 +227,20 @@
                                             <!-- /.tab-pane -->
 
                                             <div class="tab-pane" id="settings">
-                                                <form class="form-horizontal">
+                                                <form class="form-horizontal" action="{{ route('profile.updateUser') }}" method="POST" id="updateUserForm">
+                                                    @csrf
                                                     <div class="form-group row">
                                                         <label for="inputName" class="col-sm-2 col-form-label">{{__('Name')}}</label>
                                                         <div class="col-sm-10">
                                                             <input type="hidden" id="inputNameH" value="{{ Auth::user()->name }}">
-                                                            <input type="text" class="form-control" id="inputName"
-                                                                placeholder="{{__('Name')}}"  v-model="inputName">
+                                                            <input type="text" class="form-control @error('inputName') is-invalid @enderror" id="inputName" name="inputName" placeholder="{{__('Name')}}"  v-model="inputName">
+                                                            
+                                                            
+                                                            @error('inputName')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     
@@ -224,8 +249,16 @@
                                                         <label for="inputPassword"
                                                             class="col-sm-2 col-form-label">{{__('Password')}}</label>
                                                         <div class="col-sm-10">
-                                                            <input type="password" class="form-control" id="inputPassword"
+                                                            <input type="password" class="form-control @error('inputPassword') is-invalid @enderror" id="inputPassword" name="inputPassword"
                                                                 placeholder="{{__('Password')}}" v-model="inputPassword">
+                                                            
+                                                            @error('inputPassword')
+                                                                @foreach ($errors->all() as $error)
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $error }}</strong>
+                                                                </span>
+                                                                @endforeach
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -239,7 +272,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="offset-sm-2 col-sm-10">
-                                                            <button type="submit" disabled  id="btnConfig" class="btn btn-outline-success" @click='updateUser({{$user->id}})'>{{__('Edit')}}</button>
+                                                            <button type="submit" disabled @click='updateUser()'  id="btnConfig" class="btn btn-outline-success" >{{__('Edit')}}</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -277,7 +310,7 @@
             </div>
             <div class="modal-body">
 
-                <form action="{{ route('profile.upload.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="imagenes" id="imagenes" accept="image/*" style="cursor: pointer">

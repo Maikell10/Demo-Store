@@ -134,7 +134,7 @@
                 <span class="h5">
                     {{__('Visit to:')}} <a href="{{ url('commerce/'.$producto->users[0]->name.'') }}" class="text-success"
                         data-toggle="tooltip" data-placement="top" title="Vendedor">{{$producto->users[0]->name}}</a>
-                    <img src="https://img.icons8.com/fluent/48/000000/verified-account.png" style="width: 30px"
+                    <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px"
                         data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" />
                 </span>
 

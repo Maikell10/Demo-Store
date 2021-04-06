@@ -339,7 +339,7 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="{{ url('profile') }}" class="nav-link" id="menuProfile">
+                                        <a href="{{ url('profile/auth') }}" class="nav-link" id="menuProfile">
                                             <i class="fas fa-id-card nav-icon"></i>
                                             {{ __('See Profile') }}
                                         </a>
@@ -372,6 +372,18 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+
+                        @can('haveaccess', 'product.index')
+                        <li class="nav-item mt-2" id="slidSale">
+                            <a href="{{route('admin.business-profile.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-user-cog"></i>
+                                <p>
+                                    {{__('Configuration')}}
+                                </p>
+                            </a>
+                        </li>
+                        <div class="user-panel mt-2"></div>
+                        @endcan
 
                         <!-- Categorías -->
                         @can('haveaccess', 'category.index')
@@ -488,8 +500,6 @@
                             </a>
                         </li>
                         @endcan
-                        
-
 
 
                         @can('haveaccess', 'user.index')

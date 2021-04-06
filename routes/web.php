@@ -119,8 +119,9 @@ Route::get('login/{driver}', 'Auth\LoginController@redirectToProvider');
 Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback');
 
 // Profile
-Route::get('/profile', 'Store\ProfileController@index')->name('profile')->middleware('auth','verified');
-Route::resource('profile/upload', 'Store\ProfileController')->names('profile.upload')->middleware('auth','verified');
+Route::get('/profile/auth', 'Store\ProfileController@index')->name('profile.auth')->middleware('auth','verified');
+Route::resource('profile', 'Store\ProfileController')->names('profile')->middleware('auth','verified');
+Route::post('/profile/updateUser', 'Store\ProfileController@updateUser')->name('profile.updateUser')->middleware('auth','verified');
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
@@ -540,3 +541,7 @@ Route::get('store/rating_seller','Store\PurchasesRatingController@store');
 
 // Direct Messages
 Route::get('direct_message/new','Store\DirectMessageController@store');
+
+
+// Business Profile
+Route::resource('/admin/business-profile/configuration', 'Admin\BusinessProfileController')->names('admin.business-profile')->middleware('auth');

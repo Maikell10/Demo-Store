@@ -14,7 +14,7 @@ const apiProfileUser = new Vue({
                 $('#btnConfig').prop('disabled', false);
             }
         },
-        updateUser(id,e) {
+        updateUser() {
             if (this.inputName.length > 0) {
                 Swal.fire({
                     title: "Estas seguro de Editar tus Datos?",
@@ -26,36 +26,7 @@ const apiProfileUser = new Vue({
                     cancelButtonText: "No"
                 }).then(result => {
                     if (result.value) {
-                        axios
-                        .get("http://tiendademo1.test/api/profile/edit", {
-                            params: { id: id, inputName: this.inputName, inputPassword: this.inputPassword }
-                        })
-                        .then(response => {
-                            if (response.data == 'positivo') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Editado!',
-                                    showConfirmButton: false,
-                                    timer: 1200
-                                })
-                                location.reload()
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Fallo al Editar!',
-                                    showConfirmButton: false,
-                                    timer: 1200
-                                })
-                            }
-                        }).catch(err => {
-                            alert(response)
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Fallo al Editar!',
-                                showConfirmButton: false,
-                                timer: 1200
-                            })
-                        })
+                        document.getElementById("updateUserForm").submit();
                     } else {
                         Swal.fire(
                             "Cancelado!",
@@ -64,7 +35,6 @@ const apiProfileUser = new Vue({
                         );
                     }
                 })
-                
             }else {
                 Swal.fire({
                     icon: 'error',

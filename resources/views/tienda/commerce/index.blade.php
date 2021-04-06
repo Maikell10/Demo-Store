@@ -91,34 +91,48 @@
                                 <div class="text-center">
                                     @if ($user->social_image() != 'no hay img')
                                     <img src="{{$user->social_image()}}" class="profile-user-img img-fluid img-circle elevation-2" alt="User Image"
-                                    style="height: 100px; width: 100px; object-fit: cover" data-toggle="tooltip" data-placement="bottom" title="{{$user->name}}">
+                                    style="height: 100px; width: 100px; object-fit: cover">
                                     @else
                                     @if (isset($user->image->url))
                                     <img src="{{ $user->image->url }}" class="profile-user-img img-fluid img-circle elevation-2" alt="User Image"
-                                        style="height: 100px; width: 100px; object-fit: cover" data-toggle="tooltip" data-placement="bottom" title="{{$user->name}}">
+                                        style="height: 100px; width: 100px; object-fit: cover">
                                     @else
                                     <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
-                                        class="profile-user-img img-fluid img-circle elevation-2" alt="User Image" data-toggle="tooltip" data-placement="bottom" title="{{$user->name}}">
+                                        class="profile-user-img img-fluid img-circle elevation-2" alt="User Image">
                                     @endif
                                     @endif
                                 </div>
 
-                                <h3 class="profile-username text-center">{{ $user->name }}</h3>
+                                <h3 class="profile-username text-center">{{ $user->name }} <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px" data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" /></h3>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
-                                        <b>{{ __('Sales') }}</b> <a class="float-right">20</a>
+                                        <b>{{ __('Sales') }}</b> <a class="float-right">{{$sales_count}}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>{{ __('Positive Ratings') }}</b> <a class="float-right">19</a>
+                                        <b>{{ __('Positive Ratings') }}</b> <a class="float-right">{{$positive_rating}}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">0</a>
+                                        <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">{{$neutral_rating}}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>{{ __('Negative Ratings') }}</b> <a class="float-right">1</a>
+                                        <b>{{ __('Negative Ratings') }}</b> <a class="float-right">{{$negative_rating}}</a>
                                     </li>
                                 </ul>
+
+                                <h5 class="text-center h6">{{__('Contact')}}: <a href="tel:+58212471114" class="btn btn-link">+58212471114</a></h5>
+
+                                <div class="menu_social">
+                                    <ul
+                                        class="menu_social_list d-flex flex-row align-items-center justify-content-center">
+                                        <li><a href="https://www.facebook.com/tuminimercado.fb" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                        <li><a href="https://twitter.com/TuMiniMercado1" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                        <li><a href="https://www.instagram.com/tu_minimercado/" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                    <h5 class="text-center h6 text-success font-weight-bold">Siguenos!!</h5>
+                                </div>
+
+                                <hr>
 
                                 <h5 class="profile-username text-center h6">{{__('Joined to TuMiniMercado On:')}} <font class="font-weight-bold">{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</font></h5>
                             </div>
@@ -177,17 +191,22 @@
                         @endforeach
 
                     </div>
+
+                    <div class="d-flex flex-row-reverse">
+                        <div class="float-right">
+                            {{$productos->appends($_GET)->links()}}
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
 
-        <div class="d-flex flex-row-reverse">
-            <div class="float-right">
-                {{$productos->appends($_GET)->links()}}
-            </div>
-        </div>
+        <hr>
 
+        <div class="d-flex flex-row align-items-center justify-content-center">
+            <h5 class="h2 font-weight-bold">Ubícanos <img src="{{asset('asset/images/maps.png')}}" style="width: 30px" /></h5>
+        </div>
         <div class="row">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.31040601601!2d-66.94890528538025!3d10.476178092525684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c2a5f6be5d626e1%3A0x5251fda263f1cfe5!2sComercial%20BAETA%20C.A.!5e0!3m2!1ses!2sve!4v1617428070122!5m2!1ses!2sve" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>

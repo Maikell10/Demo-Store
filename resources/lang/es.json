@@ -112,6 +112,8 @@
     "Allowed types: jpeg, jpg, png, gif, svg.": "Tipos permitidos: jpeg, jpg, png, gif, svg.",
     "Image gallery": "Galería de Imágenes",
 
+    "Configuration": "Configuración",
+    
     "Client": "Cliente",
     "Search": "Búsqueda",
     "Product": "Producto",
@@ -301,6 +303,8 @@
 
     "Updated": "Actualizado",
     "Created": "Creado",
+
+    "Update failed": "Actualización fallida",
 
     "Register Created Successfully": "Registro Creado Correctamente",
     "Register Updated Successfully": "Registro Actualizado Correctamente",

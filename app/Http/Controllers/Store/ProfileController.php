@@ -170,6 +170,7 @@ class ProfileController extends Controller
 
     public function updateUser(Request $request)
     {
+        
         if($request->inputPassword != '') {
             $request->validate([
                 'inputName' => 'required|max:255|string',
@@ -181,7 +182,7 @@ class ProfileController extends Controller
             ]);
         }
 
-        $user = User::findOrFail($request->id);
+        $user = User::findOrFail(Auth::user()->id);
         
         $user->name = $request->inputName;
         //$user->user_id = $request->user_id;
@@ -189,9 +190,9 @@ class ProfileController extends Controller
                     
 
         if (isset($user->id)) {
-            return response()->json('positivo');
+            return redirect()->route('profile.auth')->with('datos', __('Register Updated Successfully'));
         } else {
-            return response()->json('negativo');
+            return redirect()->route('profile.auth')->with('fail', __('Update failed'));
         }
     }
 }

@@ -51719,9 +51719,7 @@ var apiProfileUser = new Vue({
         $('#btnConfig').prop('disabled', false);
       }
     },
-    updateUser: function updateUser(id, e) {
-      var _this = this;
-
+    updateUser: function updateUser() {
       if (this.inputName.length > 0) {
         Swal.fire({
           title: "Estas seguro de Editar tus Datos?",
@@ -51733,38 +51731,7 @@ var apiProfileUser = new Vue({
           cancelButtonText: "No"
         }).then(function (result) {
           if (result.value) {
-            axios.get("http://tiendademo1.test/api/profile/edit", {
-              params: {
-                id: id,
-                inputName: _this.inputName,
-                inputPassword: _this.inputPassword
-              }
-            }).then(function (response) {
-              if (response.data == 'positivo') {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Editado!',
-                  showConfirmButton: false,
-                  timer: 1200
-                });
-                location.reload();
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Fallo al Editar!',
-                  showConfirmButton: false,
-                  timer: 1200
-                });
-              }
-            })["catch"](function (err) {
-              alert(response);
-              Swal.fire({
-                icon: 'error',
-                title: 'Fallo al Editar!',
-                showConfirmButton: false,
-                timer: 1200
-              });
-            });
+            document.getElementById("updateUserForm").submit();
           } else {
             Swal.fire("Cancelado!", "Cancelado!", "error");
           }

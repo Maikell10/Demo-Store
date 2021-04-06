@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
 use App\Product;
+use App\RatingStore;
+use App\Sale;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,8 +98,14 @@ return $data;*/
             ['products.id', 'products.nombre', 'products.slug', 'products.main_category_id', 'products.cantidad', 'products.precio_actual', 'products.precio_anterior', 'products.porcentaje_descuento', 'products.visitas', 'products.ventas', 'products.estado', 'products.activo']
         );
 
+        $sales_count = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',$user->id)->where('state', 'Finalizada')->count();
 
-        return view('tienda.commerce.index', compact('user', 'productos', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
+        $positive_rating = RatingStore::where('store_user_id',$user->id)->where('status', 'USER')->where('rating', '+')->count();
+        $negative_rating = RatingStore::where('store_user_id',$user->id)->where('status', 'USER')->where('rating', '-')->count();
+        $neutral_rating = RatingStore::where('store_user_id',$user->id)->where('status', 'USER')->where('rating', 'N')->count();
+
+
+        return view('tienda.commerce.index', compact('user', 'productos', 'arr_conex_client_t', 'cant_dm_new', 'direct_m','sales_count','positive_rating','negative_rating','neutral_rating'));
     }
 
     /**
