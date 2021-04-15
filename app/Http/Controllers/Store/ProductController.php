@@ -175,8 +175,10 @@ class ProductController extends Controller
         }
 
         $comments = Comment::with('answers', 'users')->where('product_id', $producto->id)->latest()->get();
+        
+        $productos_store = Product::select('products.id','porcentaje_descuento','estado','main_category_id','nombre','slug')->join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', $producto->users[0]->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->inRandomOrder()->get();
 
-        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old'));
+        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old', 'productos_store'));
     }
 
     /**

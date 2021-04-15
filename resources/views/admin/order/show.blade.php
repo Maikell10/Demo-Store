@@ -275,10 +275,10 @@
                         <form>
                             <div class="input-group">
                                 <input type="hidden" value="{{strftime("%j%d%G-%H%M%S", strtotime($sales[0]->created_at) . $sales[0]->user_id )}}" id="order_id_dm" name="order_id_dm">
-                                <input type="hidden" value="{{Auth::user()->id}}" id="user_id_dm" name="user_id_dm">
+                                <input type="hidden" value="{{$user[0]->id}}" id="user_id_dm" name="user_id_dm">
                                 <input type="hidden" value="{{Auth::user()->id}}" id="store_user_id_dm" name="store_user_id_dm">
                                 <input type="hidden" value="STORE" id="type_dm" name="type_dm">
-                                <input type="hidden" value="{{$sales[0]->updated_at}}" id="date_order" name="date_order">
+                                <input type="hidden" value="{{$sales[0]->created_at}}" id="date_order" name="date_order">
 
                                 <textarea class="form-control" placeholder="{{__('Type Message...')}}" id="direct_m" rows="2" v-model="direct_m"></textarea>
                                 <span class="input-group-append">

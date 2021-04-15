@@ -22,13 +22,13 @@
 
 @section('contenido')
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
 
 @if (session('datos'))
@@ -67,17 +67,28 @@
                                 <div class="card card-success card-outline">
                                     <div class="card-body box-profile">
                                         <div class="text-center">
-                                            <a class="" href="#" role="button" data-toggle="modal" data-target="#profilePictureModal">
+                                            <a class="" href="#" role="button" data-toggle="modal"
+                                                data-target="#profilePictureModal">
                                                 @if (auth()->user()->social_image() != 'no hay img')
-                                                <img src="{{auth()->user()->social_image()}}" class="profile-user-img img-fluid img-circle elevation-2" alt="User Image"
-                                                style="height: 100px; width: 100px; object-fit: cover" data-toggle="tooltip" data-placement="bottom" title="{{ __('Change your profile picture') }}">
+                                                <img src="{{auth()->user()->social_image()}}"
+                                                    class="profile-user-img img-fluid img-circle elevation-2"
+                                                    alt="User Image"
+                                                    style="height: 100px; width: 100px; object-fit: cover"
+                                                    data-toggle="tooltip" data-placement="bottom"
+                                                    title="{{ __('Change your profile picture') }}">
                                                 @else
                                                 @if (isset(Auth::user()->image->url))
-                                                <img src="{{ Auth::user()->image->url }}" class="profile-user-img img-fluid img-circle elevation-2" alt="User Image"
-                                                    style="height: 100px; width: 100px; object-fit: cover" data-toggle="tooltip" data-placement="bottom" title="{{ __('Change your profile picture') }}">
+                                                <img src="{{ Auth::user()->image->url }}"
+                                                    class="profile-user-img img-fluid img-circle elevation-2"
+                                                    alt="User Image"
+                                                    style="height: 100px; width: 100px; object-fit: cover"
+                                                    data-toggle="tooltip" data-placement="bottom"
+                                                    title="{{ __('Change your profile picture') }}">
                                                 @else
                                                 <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
-                                                    class="profile-user-img img-fluid img-circle elevation-2" alt="User Image" data-toggle="tooltip" data-placement="bottom" title="{{ __('Change your profile picture') }}">
+                                                    class="profile-user-img img-fluid img-circle elevation-2"
+                                                    alt="User Image" data-toggle="tooltip" data-placement="bottom"
+                                                    title="{{ __('Change your profile picture') }}">
                                                 @endif
                                                 @endif
                                             </a>
@@ -90,20 +101,28 @@
                                                 <b>{{ __('Shopping') }}</b> <a class="float-right">{{$sales_count}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Positive Ratings') }}</b> <a class="float-right">{{$positive_rating}}</a>
+                                                <b>{{ __('Positive Ratings') }}</b> <a
+                                                    class="float-right">{{$positive_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Neutral Ratings') }}</b> <a class="float-right">{{$neutral_rating}}</a>
+                                                <b>{{ __('Neutral Ratings') }}</b> <a
+                                                    class="float-right">{{$neutral_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Negative Ratings') }}</b> <a class="float-right">{{$negative_rating}}</a>
+                                                <b>{{ __('Negative Ratings') }}</b> <a
+                                                    class="float-right">{{$negative_rating}}</a>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>{{ __('Comments') }}</b> <a class="float-right">{{$comments}}</a>
+                                                <b>{{ __('Comments') }}</b> <a
+                                                    class="float-right">{{$comments->count()}}</a>
                                             </li>
                                         </ul>
 
-                                        <h5 class="profile-username text-center h6">{{__('Joined to TuMiniMercado On:')}} <font class="font-weight-bold">{{ \Carbon\Carbon::parse(Auth::user()->created_at)->format('d/m/Y') }}</font></h5>
+                                        <h5 class="profile-username text-center h6">
+                                            {{__('Joined to TuMiniMercado On:')}} <font class="font-weight-bold">
+                                                {{ \Carbon\Carbon::parse(Auth::user()->created_at)->format('d/m/Y') }}
+                                            </font>
+                                        </h5>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -113,7 +132,8 @@
                                 @if (Auth::user()->sale == 1)
                                 <div class="card card-warning card-outline">
                                     <div class="card-body box-profile">
-                                        <a href="{{route('user')}}" class="btn btn-warning btn-lg btn-block">Ver Tienda</a>
+                                        <a href="{{ url('commerce/'.Auth::user()->name.'') }}"
+                                            class="btn btn-warning btn-lg btn-block">{{__('See Store')}}</a>
                                     </div>
                                 </div>
                                 @endif
@@ -127,8 +147,8 @@
                                         <ul class="nav nav-pills">
                                             <li class="nav-item"><a class="nav-link active" href="#activity"
                                                     data-toggle="tab">{{ __('Activity') }}</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#timeline"
-                                                    data-toggle="tab">{{ __('Timeline') }}</a></li>
+                                            <!-- <li class="nav-item"><a class="nav-link" href="#timeline"
+                                                    data-toggle="tab">{{ __('Timeline') }}</a></li> -->
                                             <li class="nav-item"><a class="nav-link" href="#settings"
                                                     data-toggle="tab">{{ __('Settings') }}</a></li>
                                         </ul>
@@ -136,69 +156,143 @@
                                     <div class="card-body">
                                         <div class="tab-content">
                                             <div class="active tab-pane" id="activity">
-
-                                                <!-- Post -->
-                                                <div class="post">
-                                                    <div class="user-block">
-                                                        @if (auth()->user()->social_image() != 'no hay img')
-                                                        <img src="{{auth()->user()->social_image()}}" class="img-circle img-bordered-sm elevation-2" alt="User Image"
-                                                        style="max-height: 40px; width: 40px; object-fit: cover">
-                                                        @else
-                                                        @if (isset(Auth::user()->image->url))
-                                                        <img src="{{ Auth::user()->image->url }}" class="img-circle img-bordered-sm elevation-2" alt="User Image"
-                                                            style="max-height: 40px; width: 40px; object-fit: cover">
-                                                        @else
-                                                        <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
-                                                            class="img-circle img-bordered-sm elevation-2" alt="User Image">
-                                                        @endif
-                                                        @endif
-
-                                                        <span class="username">
-                                                            <a href="#">{{ Auth::user()->name }}</a>
-                                                        </span>
-                                                        <span class="description">Calificación Vendedor - 5:35 PM hoy</span>
-                                                    </div>
-                                                    <!-- /.user-block -->
-                                                    <p>
-                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a> calificó <font class="text-primary">positivo</font> al vendedor <a href="#" class="alert-link">Test</a>
-                                                    </p>
-                                                </div>
-                                                <!-- /.post -->
-
-                                                <!-- Post -->
-                                                <div class="post">
-                                                    <div class="user-block">
-                                                        @if (auth()->user()->social_image() != 'no hay img')
-                                                        <img src="{{auth()->user()->social_image()}}" class="img-circle img-bordered-sm elevation-2" alt="User Image"
-                                                        style="max-height: 40px; width: 40px; object-fit: cover">
-                                                        @else
-                                                        @if (isset(Auth::user()->image->url))
-                                                        <img src="{{ Auth::user()->image->url }}" class="img-circle img-bordered-sm elevation-2" alt="User Image"
-                                                            style="max-height: 40px; width: 40px; object-fit: cover">
-                                                        @else
-                                                        <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
-                                                            class="img-circle img-bordered-sm elevation-2" alt="User Image">
-                                                        @endif
-                                                        @endif
-
-                                                        <span class="username">
-                                                            <a href="#">{{ Auth::user()->name }}</a>
-                                                        </span>
-                                                        <span class="description">Calificación Producto - 5:31 PM hoy</span>
-                                                    </div>
-                                                    <!-- /.user-block -->
-                                                    <p>
-                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a> calificó <font class="text-primary">positivo</font> el producto: <a href="#" class="alert-link">iPhone 11 128 GB</a> del vendedor <a href="#" class="alert-link">Test</a>
-                                                    </p>
-                                                </div>
-                                                <!-- /.post -->
                                                 
+                                                @if ($activities != '[]')
+                                                @foreach ($activities as $activity)
+
+                                                <!-- Post Ratings -->
+                                                @if ($activity['type'] == 'rating')
+                                                <div class="post">
+                                                    <div class="user-block">
+                                                        @if (auth()->user()->social_image() != 'no hay img')
+                                                        <img src="{{auth()->user()->social_image()}}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image"
+                                                            style="max-height: 40px; width: 40px; object-fit: cover">
+                                                        @else
+                                                        @if (isset(Auth::user()->image->url))
+                                                        <img src="{{ Auth::user()->image->url }}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image"
+                                                            style="max-height: 40px; width: 40px; object-fit: cover">
+                                                        @else
+                                                        <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image">
+                                                        @endif
+                                                        @endif
+
+                                                        <span class="username">
+                                                            <a href="#">{{ Auth::user()->name }}</a>
+                                                        </span>
+                                                        <span class="description text-purple">{{__('Product Rating')}} -
+                                                            {{ \Carbon\Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
+                                                    </div>
+                                                    <!-- /.user-block -->
+                                                    <p>
+                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a>
+                                                        {{__('rated the product:')}} <a
+                                                            href="{{ url('store/show-product/'.$activity['body']->products->slug.'') }}"
+                                                            class="alert-link">{{$activity['body']->products->nombre}}</a> {{__('with')}}
+                                                        <font class="font-weight-bold">{{$activity['body']->rating}} <i class="fa fa-star"></i></font>
+                                                    </p>
+                                                </div>
+                                                @endif
+
+                                                <!-- Post Comments -->
+                                                @if ($activity['type'] == 'comment')
+                                                <div class="post">
+                                                    <div class="user-block">
+                                                        @if (auth()->user()->social_image() != 'no hay img')
+                                                        <img src="{{auth()->user()->social_image()}}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image"
+                                                            style="max-height: 40px; width: 40px; object-fit: cover">
+                                                        @else
+                                                        @if (isset(Auth::user()->image->url))
+                                                        <img src="{{ Auth::user()->image->url }}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image"
+                                                            style="max-height: 40px; width: 40px; object-fit: cover">
+                                                        @else
+                                                        <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image">
+                                                        @endif
+                                                        @endif
+
+                                                        <span class="username">
+                                                            <a href="#">{{ Auth::user()->name }}</a>
+                                                        </span>
+                                                        <span class="description text-orange">{{__('Question')}} -
+                                                            {{ \Carbon\Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
+                                                    </div>
+                                                    <!-- /.user-block -->
+                                                    <p>
+                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a> {{__('asked a question about the product:')}} <a
+                                                            href="{{ url('store/show-product/'.$activity['body']->products->slug.'') }}"
+                                                            class="alert-link">{{$activity['body']->products->nombre}}</a>
+                                                    </p>
+                                                </div>
+                                                @endif
+
+                                                <!-- Post Rating Stores -->
+                                                @if ($activity['type'] == 'rating_store')
+                                                <div class="post">
+                                                    <div class="user-block">
+                                                        @if (auth()->user()->social_image() != 'no hay img')
+                                                        <img src="{{auth()->user()->social_image()}}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image"
+                                                            style="max-height: 40px; width: 40px; object-fit: cover">
+                                                        @else
+                                                        @if (isset(Auth::user()->image->url))
+                                                        <img src="{{ Auth::user()->image->url }}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image"
+                                                            style="max-height: 40px; width: 40px; object-fit: cover">
+                                                        @else
+                                                        <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
+                                                            class="img-circle img-bordered-sm elevation-2"
+                                                            alt="User Image">
+                                                        @endif
+                                                        @endif
+
+                                                        <span class="username">
+                                                            <a href="#">{{ Auth::user()->name }}</a>
+                                                        </span>
+                                                        <span class="description text-success">{{__('Seller Rating')}} -
+                                                            {{ \Carbon\Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
+                                                    </div>
+                                                    <!-- /.user-block -->
+                                                    <p>
+                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a> {{__('rated the seller:')}} <a
+                                                            href="{{ url('commerce/'.$activity['body']->store->name.'') }}"
+                                                            class="alert-link">{{$activity['body']->store->name}}</a>
+                                                            {{__('with')}} 
+                                                            @if ($activity['body']->rating == '+')
+                                                            <font class="font-weight-bold text-primary">{{__('Positive')}}</font>
+                                                            @endif
+                                                            @if ($activity['body']->rating == '-')
+                                                            <font class="font-weight-bold text-danger">{{__('Negative')}}</font>
+                                                            @endif
+                                                            @if ($activity['body']->rating == 'N')
+                                                            <font class="font-weight-bold text-yellow">Neutral</font>
+                                                            @endif
+                                                    </p>
+                                                </div>
+                                                @endif
+
+                                                @endforeach
+                                                @endif
+                                                <!-- /.post -->
+
                                             </div>
                                             <!-- /.tab-pane -->
                                             <div class="tab-pane" id="timeline">
                                                 <!-- The timeline -->
                                                 <div class="timeline timeline-inverse">
-                                                    
+
                                                     <!-- timeline time label -->
                                                     <div class="time-label">
                                                         <span class="bg-warning">
@@ -211,9 +305,11 @@
                                                         <i class="fas fa-user bg-success"></i>
 
                                                         <div class="timeline-item">
-                                                            <span class="time"><i class="far fa-clock"></i>{{ \Carbon\Carbon::parse(Auth::user()->created_at)->diffForHumans() }}</span>
+                                                            <span class="time"><i
+                                                                    class="far fa-clock"></i>{{ \Carbon\Carbon::parse(Auth::user()->created_at)->diffForHumans() }}</span>
 
-                                                            <h3 class="timeline-header"><a href="#">{{ Auth::user()->name }}</a>
+                                                            <h3 class="timeline-header"><a
+                                                                    href="#">{{ Auth::user()->name }}</a>
                                                                 {{ __('Created the Account') }}</h3>
                                                         </div>
                                                     </div>
@@ -227,15 +323,26 @@
                                             <!-- /.tab-pane -->
 
                                             <div class="tab-pane" id="settings">
-                                                <form class="form-horizontal" action="{{ route('profile.updateUser') }}" method="POST" id="updateUserForm">
+                                                <form class="form-horizontal" action="{{ route('profile.updateUser') }}"
+                                                    method="POST" id="updateUserForm">
                                                     @csrf
                                                     <div class="form-group row">
-                                                        <label for="inputName" class="col-sm-2 col-form-label">{{__('Name')}}</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="hidden" id="inputNameH" value="{{ Auth::user()->name }}">
-                                                            <input type="text" class="form-control @error('inputName') is-invalid @enderror" id="inputName" name="inputName" placeholder="{{__('Name')}}"  v-model="inputName">
-                                                            
-                                                            
+                                                        <label for="inputName"
+                                                            class="col-md-12 col-form-label">{{__('Name')}}</label>
+
+                                                        <div class="input-group col-md-12">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text" id="basic-addon1"><i
+                                                                        class="fa fa-user"></i></span>
+                                                            </div>
+                                                            <input type="hidden" id="inputNameH"
+                                                                value="{{ Auth::user()->name }}">
+                                                            <input type="text"
+                                                                class="form-control @error('inputName') is-invalid @enderror"
+                                                                id="inputName" name="inputName"
+                                                                placeholder="{{__('Name')}}" v-model="inputName">
+
+
                                                             @error('inputName')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -243,36 +350,65 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    
-                                                    
+
+
                                                     <div class="form-group row">
-                                                        <label for="inputPassword"
-                                                            class="col-sm-2 col-form-label">{{__('Password')}}</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="password" class="form-control @error('inputPassword') is-invalid @enderror" id="inputPassword" name="inputPassword"
-                                                                placeholder="{{__('Password')}}" v-model="inputPassword">
-                                                            
-                                                            @error('inputPassword')
-                                                                @foreach ($errors->all() as $error)
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $error }}</strong>
-                                                                </span>
-                                                                @endforeach
+                                                        <label for="password"
+                                                            class="col-md-12 col-form-label">{{__('Password')}}</label>
+
+                                                        <div class="input-group  col-md-12">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text" id="basic-addon1"><i
+                                                                        class="fa fa-lock"></i></span>
+                                                            </div>
+                                                            <input type="password"
+                                                                class="form-control @error('password') is-invalid @enderror"
+                                                                id="password" name="password"
+                                                                placeholder="{{__('Password')}}">
+
+                                                            @error('password')
+                                                            @foreach ($errors->all() as $error)
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $error }}</strong>
+                                                            </span>
+                                                            @endforeach
                                                             @enderror
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group row">
-                                                        <div class="offset-sm-2 col-sm-10">
+                                                        <label for="password-confirm"
+                                                            class="col-md-12 col-form-label">{{ __('Confirm Password') }}</label>
+
+                                                        <div class="input-group col-md-12">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text" id="basic-addon1"><i
+                                                                        class="fa fa-lock"></i></span>
+                                                            </div>
+                                                            <input id="password-confirm" type="password"
+                                                                class="form-control @error('password-confirm') is-invalid @enderror"
+                                                                name="password_confirmation" autocomplete="new-password"
+                                                                placeholder="{{ __('Confirm Password') }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <div class="col-md-12">
                                                             <div class="checkbox">
                                                                 <label>
-                                                                    <input type="checkbox" v-model="inputCheckbox" id="inputCheckbox" @click='setCheck()'> {{__('I agree to the')}} <a href="{{url('terminos')}}">{{__('Terms and Conditions')}}</a>
+                                                                    <input type="checkbox" v-model="inputCheckbox"
+                                                                        id="inputCheckbox" @click='setCheck()'>
+                                                                    {{__('I agree to the')}} <a
+                                                                        href="{{url('terminos')}}">{{__('Terms and Conditions')}}</a>
                                                                 </label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <div class="offset-sm-2 col-sm-10">
-                                                            <button type="submit" disabled @click='updateUser()'  id="btnConfig" class="btn btn-outline-success" >{{__('Edit')}}</button>
+                                                        <div class="col-md-12">
+                                                            <button type="submit" disabled @click='updateUser()'
+                                                                id="btnConfig"
+                                                                class="btn btn-success btn-block">{{__('Edit')}}</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -297,9 +433,9 @@
 </div>
 
 
-
 <!-- Modal Picture -->
-<div class="modal fade" id="profilePictureModal" tabindex="-1" aria-labelledby="profilePictureModalLabel" aria-hidden="true">
+<div class="modal fade" id="profilePictureModal" tabindex="-1" aria-labelledby="profilePictureModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -313,7 +449,8 @@
                 <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="imagenes" id="imagenes" accept="image/*" style="cursor: pointer">
+                        <input type="file" class="custom-file-input" name="imagenes" id="imagenes" accept="image/*"
+                            style="cursor: pointer">
                         <label class="custom-file-label" for="imagenes">{{__('Choose file')}}</label>
                     </div>
                     <br>

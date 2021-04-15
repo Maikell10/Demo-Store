@@ -11,12 +11,18 @@ class Rating extends Model
     //Relacion con usuarios
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
+
+    //Relacion con productos
+    /*public function products()
+    {
+        return $this->belongsTo(Cart::class);
+    }*/
 
     //Relacion con productos
     public function products()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

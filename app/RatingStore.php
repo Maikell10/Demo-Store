@@ -11,6 +11,12 @@ class RatingStore extends Model
     //Relacion con usuarios
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    //Relacion con usuarios store
+    public function store()
+    {
+        return $this->belongsTo(User::class, 'store_user_id');
     }
 }

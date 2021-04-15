@@ -95,7 +95,7 @@
                     </a>
 
                     <div class="card-header h5 bg-transparent">{{$producto->nombre}}</div>
-                    <div class="card-body text-success p-2 ml-2">
+                    <div class="card-body text-success p-0 ml-2 mr-2">
                         <h5 class="card-title"></h5>
 
 

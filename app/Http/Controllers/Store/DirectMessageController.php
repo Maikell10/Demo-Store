@@ -46,7 +46,7 @@ class DirectMessageController extends Controller
                 $direct_m->body = $request->direct_m;
                 $direct_m->date_order = $request->date_order;
                 $direct_m->type = 'STORE';
-                $direct_m->status = 'STORE';
+                $direct_m->status = 'NO-VIEW';
                 $direct_m->save();
 
                 $d_messages = DirectMessages::where('order_id', $request->order_id)->where('type', 'CLIENT')->get();

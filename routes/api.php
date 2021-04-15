@@ -28,6 +28,7 @@ Route::apiResource('product','API\ProductController')->names('api.product');
 Route::delete('/eliminarImagen/{id}','API\ProductController@eliminarImagen')->name('api.eliminarImagen');
 
 Route::get('/autocomplete', 'API\AutocompleteController@autocomplete')->name('autocomplete');
+Route::get('/autocomplete_index', 'API\AutocompleteController@autocomplete_index')->name('autocomplete_index');
 
 // Rating
 Route::get('rating/new','API\ProductController@setRating')->name('api.setRating');

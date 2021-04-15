@@ -194,6 +194,101 @@
 
         </div>
 
+        @if ($producto->especificaciones != '' || $producto->datos_de_interes != '' || $producto->descripcion_larga != '')
+        <div class="card border-success mt-2">
+            <div class="card-body">
+                <h4>{{__('Specifications')}}</h4>
+                <hr>
+                <div class="overflow-auto">
+                    <p>{!!$producto->especificaciones!!}</p>
+
+                    @if ($producto->datos_de_interes != '')
+                    <h5 class="font-weight-bold">{{__('Data of interest')}}</h5>
+                    <p>{!!$producto->datos_de_interes!!}</p>
+                    <hr>
+                    @endif
+
+                    @if ($producto->descripcion_larga != '')
+                    <h5 class="font-weight-bold">{{__('Long description')}}</h5>
+                    <p>{!!$producto->descripcion_larga!!}</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <h3 class="mt-4">{{__('More Products of')}} {{$producto->users[0]->name}}</h3>
+        <div class="lomasvendido owl-carousel owl-theme mb-3">
+
+            <!-- item-->
+            @if (count($productos_store) >= 4)
+            @php
+            $contador = 4;
+            @endphp
+            @else
+            @php
+            $contador = count($productos_store);
+            @endphp
+            @endif
+    
+            @for ($i = 0; $i < $contador; $i++) 
+            <div class="item">
+                <div class="product">
+    
+                    @if ($productos_store[$i]->estado == 'En Oferta')
+                    <span class="badge-offer"><b> - {{$productos_store[$i]->porcentaje_descuento}}%</b></span>
+                    <span class="badge-new"><b> {{$productos_store[$i]->estado}} </b></span>
+                    @else
+                    <span class="badge-new"><b> {{$productos_store[$i]->estado}} </b></span>
+                    @endif
+    
+                    @if ($productos_store[$i]->images->count() <= 0) 
+                    <div class="product_image" style="height: 300px">
+                        <a href="{{ url('store/show-product/'.$productos_store[$i]->slug.'') }}">
+                            <img class="img-thumbnail" src="/imagenes/boxed-bg.jpg" alt=""
+                                style="object-fit: contain; height: 100%">
+                        </a>
+                    </div>
+                    @else
+                    <div class="product_image" style="height: 300px">
+                        <a href="{{ url('store/show-product/'.$productos_store[$i]->slug.'') }}">
+                            <img class="img-thumbnail" src="{{$productos_store[$i]->images->random()->url}}" alt=""
+                                style="object-fit: contain; height: 100%">
+                        </a>
+                    </div>
+                    @endif
+    
+                <div class="product_content">
+                    <div class="product_info  align-items-start justify-content-start">
+                        <div>
+                            <div>
+                                <div class="h6" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="{{$productos_store[$i]->nombre}}">
+                                    <a class="text-black-50" href="{{ url('store/show-product/'.$productos_store[$i]->slug.'') }}">{{\Illuminate\Support\Str::limit($productos_store[$i]->nombre ?? '',20,' ...')}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-auto text-left">
+                            <div class="product_price text-right">${{number_format($productos_store[$i]->precio_actual,2)}}</div>
+                        </div>
+                    </div>
+    
+                </div>
+                </div>
+            </div>
+            @endfor
+
+            <div class="">
+                <div class="row load_more_row">
+                    <div class="col">
+                        <div class="button load_more ml-auto mr-auto" style="margin-top: 50%"><a
+                                href="{{ url('commerce/'.$producto->users[0]->name.'') }}">{{__('See All')}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card border-success mt-2">
             <div class="card-body">
 
@@ -412,7 +507,7 @@
                 </a>
 
                 <div class="card-header h5 bg-transparent">{{$producto->nombre}}</div>
-                <div class="card-body text-success p-2 ml-2">
+                <div class="card-body text-success p-0 ml-2 mr-2">
                     <h5 class="card-title"></h5>
 
 

@@ -38,7 +38,7 @@ class HomeController extends Controller
             //return view('plantilla.admin');
         } 
         elseif ($user->sale == 0) {
-            return redirect()->route('profile');
+            return redirect()->route('profile.auth');
         }
         else {
             return redirect()->route('user');

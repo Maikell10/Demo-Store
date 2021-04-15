@@ -26,7 +26,15 @@
         var $visitorsChart = $('#visits-chart')
         var visitorsChart  = new Chart($visitorsChart, {
             data   : {
-            labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
+            labels  : [
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(6)->format('d')) !!})+'th',
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(5)->format('d')) !!})+'th',
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(4)->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(3)->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(2)->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->subDay()->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->format('d')) !!})+'th'
+            ],
             datasets: [{
                 type                : 'line',
                 data                : [
@@ -124,7 +132,15 @@
             var $visitorsChart = $('#visits-chart')
             var visitorsChart  = new Chart($visitorsChart, {
                 data   : {
-                labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
+                labels  : [
+                    ({!! json_encode(\Carbon\Carbon::now()->subDays(6)->format('d')) !!})+'th',
+                    ({!! json_encode(\Carbon\Carbon::now()->subDays(5)->format('d')) !!})+'th',
+                    ({!! json_encode(\Carbon\Carbon::now()->subDays(4)->format('d')) !!})+'th', 
+                    ({!! json_encode(\Carbon\Carbon::now()->subDays(3)->format('d')) !!})+'th', 
+                    ({!! json_encode(\Carbon\Carbon::now()->subDays(2)->format('d')) !!})+'th', 
+                    ({!! json_encode(\Carbon\Carbon::now()->subDay()->format('d')) !!})+'th', 
+                    ({!! json_encode(\Carbon\Carbon::now()->format('d')) !!})+'th'
+                ],
                 datasets: [{
                     type                : 'line',
                     data                : [

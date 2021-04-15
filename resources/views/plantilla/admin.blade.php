@@ -315,7 +315,7 @@
                     <nav class="">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
-                            <li class="nav-item has-treeview">
+                            <li class="nav-item has-treeview menu-open">
                                 <a href="#" class="nav-link">
                                     <div class="image p-0 mr-1" style="margin-left: -5px">
                     

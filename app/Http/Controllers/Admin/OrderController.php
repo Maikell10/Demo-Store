@@ -105,13 +105,13 @@ class OrderController extends Controller
                 $rating_store = RatingStore::where('created_sale', $sale->created_at)->where('store_user_id', Auth::user()->id)->where('user_id', $sale->user_id)->where('status', 'STORE')->get();
             }
         }
-
+        
         $order_id = strftime("%j%d%G-%H%M%S", strtotime($sales[0]->created_at) . $sales[0]->user_id );
         $d_messages = DirectMessages::where('order_id', $order_id)->orderBy('created_at', 'asc')->get();
 
         $cant_dm_new = 0;
         foreach ($d_messages as $d_messages) {
-            if ($d_messages->status == 'NO-VIEW') {
+            if ($d_messages->status == 'NO-VIEW' && $d_messages->type != 'STORE') {
                 $cant_dm_new = $cant_dm_new +1;
             }
         }

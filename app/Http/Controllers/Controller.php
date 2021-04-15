@@ -123,4 +123,9 @@ class Controller extends BaseController
             return $direct_m = DirectMessages::where('status', 'NO-VIEW')->where('store_user_id', $user_id)->with('users')->orderBy('created_at', 'desc')->get();
         }
     }
+
+    public function direct_m_user($user_id)
+    {
+        return $direct_m = DirectMessages::where('type', 'STORE')->where('status', 'NO-VIEW')->where('user_id', $user_id)->with('users')->orderBy('created_at', 'desc')->get();
+    }
 }

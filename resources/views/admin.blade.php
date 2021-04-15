@@ -115,8 +115,11 @@
                                         </div>
                                         <div class="chart tab-pane" id="sales-chart"
                                             style="position: relative; height: 300px;">
-                                            <canvas id="sales-chart-canvas" height="300"
-                                                style="height: 300px;"></canvas>
+                                            @if ($category_sales == '[]')
+                                                <h1 class="text-center mt-5">{{__('No Sales Yet This Month')}} <i class="fas fa-frown-open text-warning"></i></h1>
+                                            @else
+                                                <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
+                                            @endif
                                         </div>
                                     </div>
                                 </div><!-- /.card-body -->
@@ -126,17 +129,19 @@
                                 <!-- Info Boxes Style 2 -->
                                 <a href="{{url('admin/product')}}">
                                     <div class="info-box mb-3 bg-warning hover_zoom_home">
-                                        <span class="info-box-icon"><i class="fas fa-tags"></i></span>
+                                        <div class="row">
+                                            <span class="info-box-icon"><i class="fas fa-tags"></i></span>
 
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">{{__('Inventory')}}</span>
-                                            <span class="info-box-number">{{number_format($prod_cant,0)}}
-                                                <small>'{{__('Total Units')}}'</small> </span>
-                                        </div>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">{{__('Inventory')}}</span>
+                                                <span class="info-box-number">{{number_format($prod_cant,0)}}
+                                                    <small>'{{__('Total Units')}}'</small> </span>
+                                            </div>
 
-                                        <div class="info-box-content">
-                                            <span class="info-box-number">{{number_format(count($products),0)}}
-                                                <small>'{{__('Products')}}'</small> </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-number">{{number_format(count($products),0)}}
+                                                    <small>'{{__('Products')}}'</small> </span>
+                                            </div>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -168,15 +173,17 @@
                                 <!-- /.info-box -->
                                 <a href="{{url('admin/comment')}}">
                                     <div class="info-box mb-3 bg-info hover_zoom_home">
-                                        <span class="info-box-icon"><i class="far fa-comment"></i></span>
+                                        <div class="row">
+                                            <span class="info-box-icon"><i class="far fa-comment"></i></span>
 
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">{{__('Questions')}}</span>
-                                            <span class="info-box-number">{{number_format($comments_count,0)}}</span>
-                                        </div>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">{{__('Answers')}}</span>
-                                            <span class="info-box-number">{{number_format($answers_count,0)}}</span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">{{__('Questions')}}</span>
+                                                <span class="info-box-number">{{number_format($comments_count,0)}}</span>
+                                            </div>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">{{__('Answers')}}</span>
+                                                <span class="info-box-number">{{number_format($answers_count,0)}}</span>
+                                            </div>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -427,49 +434,51 @@
 
     // Donut Chart
     var category_sales = {!! json_encode($category_sales) !!}
-    var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
-    var pieData        = {
-        labels: [
-            <?php foreach($category_sales as $category_sale) { ?>
-                {!! json_encode(\App\Category::findOrFail($category_sale->category_id)->nombre) !!},
-            <?php } ?>
-        ],
-        datasets: [
-        {
-            data: [
-                <?php for($i=0; $i< $category_sales->count(); $i++) { ?>
-                    {!! json_encode($category_sales_cant[$i]) !!},
+    if (category_sales != '') {
+        var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
+        var pieData        = {
+            labels: [
+                <?php foreach($category_sales as $category_sale) { ?>
+                    {!! json_encode(\App\Category::findOrFail($category_sale->category_id)->nombre) !!},
                 <?php } ?>
             ],
-            backgroundColor : [
-                <?php foreach($category_sales as $category_sale) { ?>
-                    getRandomColor(),
-                <?php } ?>
+            datasets: [
+            {
+                data: [
+                    <?php for($i=0; $i< $category_sales->count(); $i++) { ?>
+                        {!! json_encode($category_sales_cant[$i]) !!},
+                    <?php } ?>
+                ],
+                backgroundColor : [
+                    <?php foreach($category_sales as $category_sale) { ?>
+                        getRandomColor(),
+                    <?php } ?>
+                ],
+            }
             ],
         }
-        ],
+        var pieOptions = {
+            legend: {
+            display: false
+            },
+            hover: {
+                onHover: function(e) {
+                    var point = this.getElementAtEvent(e);
+                    if (point.length) e.target.style.cursor = 'pointer';
+                    else e.target.style.cursor = 'default';
+                }
+            },
+            maintainAspectRatio : false,
+            responsive : true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        var pieChart = new Chart(pieChartCanvas, {
+            type: 'doughnut',
+            data: pieData,
+            options: pieOptions      
+        });
     }
-    var pieOptions = {
-        legend: {
-        display: false
-        },
-        hover: {
-            onHover: function(e) {
-                var point = this.getElementAtEvent(e);
-                if (point.length) e.target.style.cursor = 'pointer';
-                else e.target.style.cursor = 'default';
-            }
-        },
-        maintainAspectRatio : false,
-        responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var pieChart = new Chart(pieChartCanvas, {
-        type: 'doughnut',
-        data: pieData,
-        options: pieOptions      
-    });
 
     $(function () {
         'use strict'
@@ -579,7 +588,15 @@
         var $visitorsChart = $('#visits-chart')
         var visitorsChart  = new Chart($visitorsChart, {
             data   : {
-            labels  : [(new Date().getDate()-6)+'th', (new Date().getDate()-5)+'th', (new Date().getDate()-4)+'th', (new Date().getDate()-3)+'th', (new Date().getDate()-2)+'th', (new Date().getDate()-1)+'th', new Date().getDate()+'th'],
+            labels  : [
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(6)->format('d')) !!})+'th',
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(5)->format('d')) !!})+'th',
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(4)->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(3)->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->subDays(2)->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->subDay()->format('d')) !!})+'th', 
+                ({!! json_encode(\Carbon\Carbon::now()->format('d')) !!})+'th'
+            ],
             datasets: [{
                 type                : 'line',
                 data                : [

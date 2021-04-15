@@ -10,7 +10,7 @@ const api_search_autocomplete_store = new Vue({
 
             if (this.palabra_a_buscar.length > 1) {
                 axios
-                    .get("/api/autocomplete/", {
+                    .get("/api/autocomplete_index/", {
                         params: { palabraabuscar: this.palabra_a_buscar }
                     })
                     .then(response => {

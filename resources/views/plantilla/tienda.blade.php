@@ -313,6 +313,15 @@
                                         <i class="right fas fa-angle-left" style="margin-top: 10px"></i>
                                     </a>
                                     <ul class="nav nav-treeview">
+                                        @if (App\User::select('role_id')->where('users.id', Auth::user()->id)->join('role_user', 'users.id', '=', 'role_user.user_id')->where('role_user.user_id', Auth::user()->id)->first()->role_id == '3')
+                                        <li class="nav-item">
+                                            <a href="{{ url('user') }}" class="nav-link">
+                                                <i class="fas fa-cogs nav-icon"></i>
+                                                {{ __('Administration') }}
+                                            </a>
+                                        </li>
+                                        @endif
+
                                         <li class="nav-item">
                                             <a href="{{ url('profile') }}" class="nav-link" id="menuProfile">
                                                 <i class="fas fa-id-card nav-icon"></i>

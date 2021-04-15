@@ -105,7 +105,7 @@
                                 </div>
                                 
                                 <div class="col-6 text-right">
-                                <a href="{{route('tienda.purchases.show',$distinct_sale[$a]->updated_at)}}" class="btn btn-outline-success mt-3 mr-3" style="white-space: break-spaces; width: min-content" data-toggle="tooltip" data-placement="bottom" title="{{ __('See Detail') }}"><i class="fas fa-eye"></i></a>
+                                <a href="{{route('tienda.purchases.show',$distinct_sale[$a]->created_at)}}" class="btn btn-outline-success mt-3 mr-3" style="white-space: break-spaces; width: min-content" data-toggle="tooltip" data-placement="bottom" title="{{ __('See Detail') }}"><i class="fas fa-eye"></i></a>
                                 </div>
                             </div>
                             
@@ -165,7 +165,7 @@
                                             <a href="{{ url('commerce/'.$products[$c]->users[0]->name.'') }}" class="text-break">{{$products[$c]->users[0]->name}}</a>
 
                                             @if (\App\RatingStore::where('created_sale', $distinct_sale[$a]->created_at)->where('store_user_id', $products[$c]->users[0]->id)->get() != '[]')
-                                                <h5 class="text-success">Calificado <i class="fas fa-check-square"></i></h5>
+                                                <h5 class="text-success">{{__('Rated')}} <i class="fas fa-check-square"></i></h5>
                                             @endif
 
                                         </div>

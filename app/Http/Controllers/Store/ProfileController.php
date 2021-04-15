@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Store;
 use App\Comment;
 use App\Http\Controllers\Controller;
 use App\Image;
+use App\Rating;
 use App\RatingStore;
 use App\Sale;
+use App\StorePermission\Models\Role;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 use Intervention\Image\Facades\Image as Imagen;
@@ -29,6 +32,7 @@ class ProfileController extends Controller
     {
         $controller = new Controller();
         $arr_conex_client_t = $controller->arr_ip();
+
         $user = Auth::user();
 
         $cant_dm_new = 0;
@@ -46,10 +50,40 @@ class ProfileController extends Controller
         $positive_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', '+')->count();
         $negative_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', '-')->count();
         $neutral_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', 'N')->count();
+        
+        $array = [];
+        $comments = Comment::where('user_id',$user->id)->with('products')->where('parent_id', null)->get();
+        
+        $ratings = Rating::where('user_id',$user->id)->with('products')->get();
 
-        $comments = Comment::where('user_id',$user->id)->where('parent_id', null)->count();
+        $rating_stores = RatingStore::where('user_id',$user->id)->where('status', 'USER')->with('store')->get();
 
-        return view('user.profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'comments'));
+        foreach ($comments as $comment) {
+            $array[] = [
+                'created_at' => $comment->created_at,
+                'type' => 'comment',
+                'body' => $comment
+            ];
+        }
+        foreach ($ratings as $rating) {
+            $array[] = [
+                'created_at' => $rating->created_at,
+                'type' => 'rating',
+                'body' => $rating
+            ];
+        }
+        foreach ($rating_stores as $rating_store) {
+            $array[] = [
+                'created_at' => $rating_store->created_at,
+                'type' => 'rating_store',
+                'body' => $rating_store
+            ];
+        }
+
+        $activities = collect($array)->sortByDesc('created_at')->values();
+
+
+        return view('user.profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'activities', 'comments', 'ratings'));
     }
 
     /**
@@ -120,7 +154,7 @@ class ProfileController extends Controller
             }
         }
 
-        return redirect()->route('profile')->with('datos', __('Register Created Successfully'));
+        return redirect()->route('profile.auth')->with('datos', __('Profile Picture Updated Successfully'));
     }
 
     /**
@@ -171,22 +205,26 @@ class ProfileController extends Controller
     public function updateUser(Request $request)
     {
         
-        if($request->inputPassword != '') {
+        if($request->password != '') {
             $request->validate([
                 'inputName' => 'required|max:255|string',
-                'inputPassword' => 'string|min:8|confirmed',
+                'password' => 'string|min:8|confirmed',
             ]);
+
+            $user = User::findOrFail(Auth::user()->id);
+            $user->name = $request->inputName;
+            $user->password = Hash::make($request->password);
+            $user->save();
+
         } else {
             $request->validate([
                 'inputName' => 'required|max:255|string',
             ]);
-        }
 
-        $user = User::findOrFail(Auth::user()->id);
-        
-        $user->name = $request->inputName;
-        //$user->user_id = $request->user_id;
-        $user->save();
+            $user = User::findOrFail(Auth::user()->id);
+            $user->name = $request->inputName;
+            $user->save();
+        }
                     
 
         if (isset($user->id)) {

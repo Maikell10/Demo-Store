@@ -16690,7 +16690,7 @@ var api_search_autocomplete_store = new Vue({
       this.resultados = [];
 
       if (this.palabra_a_buscar.length > 1) {
-        axios.get("/api/autocomplete/", {
+        axios.get("/api/autocomplete_index/", {
           params: {
             palabraabuscar: this.palabra_a_buscar
           }

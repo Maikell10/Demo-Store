@@ -101,9 +101,9 @@
     "Previous price": "Precio anterior",
     "Actual price": "Precio actual",
     "Discount rate": "Porcentaje de descuento",
-    "Product descriptions": "Descripciones del producto",
-    "Short description": "Descripciones corta",
-    "Long description": "Descripciones larga",
+    "Product descriptions": "Descripción del producto",
+    "Short description": "Descripción corta",
+    "Long description": "Descripción larga",
     "Specifications and other data": "Especificaciones y otros datos",
     "Specifications": "Especificaciones",
     "Data of interest": "Datos de interés",
@@ -118,6 +118,7 @@
     "Search": "Búsqueda",
     "Product": "Producto",
     "Products": "Productos",
+    "More Products of": "Más Productos de",
     "Products with questions": "Productos con preguntas",
     "Category": "Categoría",
     "Categories": "Categorías",
@@ -283,6 +284,7 @@
     "Give us your opinion about the buyer": "Danos tu opinión sobre el Comprador",
 
     "Profit": "Ganancia",
+    "Rated": "Calificado",
 
     "Purchases Section": "Sección de Compras",
     "See Purchase": "Ver Compra",
@@ -301,13 +303,24 @@
     "Active": "Activo",
     "Appears on the main Slider": "Aparece en el Slider principal",
 
+    "See Store": "Ver Tienda",
     "Updated": "Actualizado",
     "Created": "Creado",
+    "No Sales Yet This Month": "Aún No Hay Ventas este Mes",
 
     "Update failed": "Actualización fallida",
+    "Profile Picture Updated Successfully": "Foto de Perfil Actualizada Correctamente",
 
     "Register Created Successfully": "Registro Creado Correctamente",
     "Register Updated Successfully": "Registro Actualizado Correctamente",
     "Register Deleted Successfully": "Registro Eliminado Correctamente",
-    "You have already registered this Email for a Provider": "Ya registró el Email previamente para un Proveedor"
+    "You have already registered this Email for a Provider": "Ya registró el Email previamente para un Proveedor",
+
+    "with": "con",
+    "Seller Rating": "Calificación Vendedor",
+    "rated the seller:": "calificó el vendedor:",
+    "Product Rating": "Calificación Producto",
+    "rated the product:": "calificó el producto:",
+    "Question": "Pregunta",
+    "asked a question about the product:": "hizo una pregunta sobre el producto:"
 }
