@@ -281,7 +281,7 @@ $indice = 0;
                                         <h3 class="card-title">{{__('Direct Messages with:')}} <font class="text-success font-weight-bold">{{$distinct_seller[0]->name}}</font></h3>
 
                                         <div class="card-tools">
-                                            @if ($cant_dm_new != 0)
+                                            @if ($cant_d_messages_new != 0)
                                             <span data-toggle="tooltip" title="{{__('New Messages')}}" class="badge bg-danger">!</span>
                                             @endif
                                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
@@ -399,7 +399,7 @@ $indice = 0;
                                     <h3 class="card-title">{{__('Direct Messages whit:')}} <font class="text-success font-weight-bold">{{$distinct_seller[$i]->name}}</font></h3>
 
                                     <div class="card-tools">
-                                        @if ($cant_dm_new != 0)
+                                        @if ($cant_d_messages_new != 0)
                                         <span data-toggle="tooltip" title="{{__('New Messages')}}" class="badge bg-danger">!</span>
                                         @endif
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse"><i

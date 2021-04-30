@@ -85,12 +85,8 @@ return $data;*/
         $cant_dm_new = 0;
         $direct_m = 0;
         if (Auth::user() != null) {
-            $direct_m = $controller->direct_m(Auth::user()->id);
-            foreach ($direct_m as $direct_m1) {
-                if ($direct_m1->status == 'NO-VIEW') {
-                    $cant_dm_new = $cant_dm_new +1;
-                }
-            }
+            $direct_m = $controller->direct_m_user(Auth::user()->id);
+            $cant_dm_new = $controller->cant_dm_new(Auth::user()->id);
         }
 
         $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->join('product_user', 'products.id', '=', 'product_user.product_id')->where('product_user.user_id', $user->id)->orderBy('products.nombre')->paginate(

@@ -126,6 +126,47 @@ class Controller extends BaseController
 
     public function direct_m_user($user_id)
     {
-        return $direct_m = DirectMessages::where('type', 'STORE')->where('status', 'NO-VIEW')->where('user_id', $user_id)->with('users')->orderBy('created_at', 'desc')->get();
+        $array = [];
+        $direct_m = DirectMessages::where('type', 'STORE')->where('status', 'NO-VIEW')->where('user_id', $user_id)->with('users')->orderBy('created_at', 'desc')->get();
+        $coments = Comment::with('answers')->where('user_id',$user_id)->get();
+
+        foreach ($direct_m as $direct_m_und) {
+            $array[] = [
+                'created_at' => $direct_m_und->created_at,
+                'type' => 'direct_m',
+                'body' => $direct_m_und
+            ];
+        }
+        foreach ($coments as $coment) {
+            if ($coment->answers != '[]') {
+                $array[] = [
+                    'created_at' => $coment->answers[0]->created_at,
+                    'type' => 'coment',
+                    'body' => $coment
+                ];
+            }
+        }
+        return $direct_msg = collect($array)->sortByDesc('created_at')->values();
+    }
+
+    public function cant_dm_new($user_id) {
+        $cant_dm_new = 0;
+        $direct_m = $this->direct_m_user($user_id);
+        foreach ($direct_m as $direct_m1) {
+            if ($direct_m1['type'] == 'direct_m') {
+                if ($direct_m1['body']->status == 'NO-VIEW') {
+                    $cant_dm_new = $cant_dm_new +1;
+                }
+            }
+            if ($direct_m1['type'] == 'coment') {
+                if ($direct_m1['body']->answers != '[]') {
+                    if ($direct_m1['body']->answers[0]->status == 'PUBLISHED') {
+                        $cant_dm_new = $cant_dm_new +1;
+                    }
+                }
+            }
+        }
+
+        return $cant_dm_new;
     }
 }

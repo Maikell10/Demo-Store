@@ -17,14 +17,24 @@ class ShoppingCartController extends Controller
      */
     public function index()
     {
-        $arr_conex_client_t = $this->arr_ip();
-        $direct_m = 0;
+        $user = Auth::user();
 
-        if (isset(Auth::user()->name)) {
+        // Direct Messages
+        $controller = new Controller();
+        $direct_m = 0;
+        $cant_dm_new = 0;
+        if ($user != null) {
+            $direct_m = $controller->direct_m_user($user->id);
+            $cant_dm_new = $controller->cant_dm_new($user->id);
+        }
+
+        $arr_conex_client_t = $this->arr_ip();
+
+        if (isset($user->name)) {
             $sessions = session()->get('hjwebajjasxwk8164qds4.as84');
             session()->forget('hjwebajjasxwk8164qds4.as84');
 
-            $carts = Cart::where('user_id', Auth::user()->id)->get();
+            $carts = Cart::where('user_id', $user->id)->get();
             foreach ($carts as $cart) {
                 $products[] = Product::where('id', $cart['product_id'])->firstOrFail();
                 $arreglo[] = [
@@ -44,7 +54,7 @@ class ShoppingCartController extends Controller
 
                         $cart->product_id = $session['id_product'];
                         $cart->cantidad = $session['cantidad'];
-                        $cart->user_id = Auth::user()->id;
+                        $cart->user_id = $user->id;
                         $cart->save();
 
                         $arreglo[] = [
@@ -60,22 +70,7 @@ class ShoppingCartController extends Controller
                 }
             }
 
-
             $sessions = session()->get('hjwebajjasxwk8164qds4.as84');
-
-            $user = Auth::user();
-
-            // Direct Messages
-            $controller = new Controller();
-            $cant_dm_new = 0;
-            if ($user != null) {
-                $direct_m = $controller->direct_m($user->id);
-                foreach ($direct_m as $direct_m1) {
-                    if ($direct_m1->status == 'NO-VIEW') {
-                        $cant_dm_new = $cant_dm_new +1;
-                    }
-                }
-            }
 
             return view('tienda.cart.index', compact('sessions', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
         }
@@ -88,20 +83,6 @@ class ShoppingCartController extends Controller
             }
         } else {
             $products[0] = 0;
-        }
-
-        $user = Auth::user();
-
-        // Direct Messages
-        $controller = new Controller();
-        $cant_dm_new = 0;
-        if ($user != null) {
-            $direct_m = $controller->direct_m($user->id);
-            foreach ($direct_m as $direct_m1) {
-                if ($direct_m1->status == 'NO-VIEW') {
-                    $cant_dm_new = $cant_dm_new +1;
-                }
-            }
         }
 
         return view('tienda.cart.index', compact('sessions', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));

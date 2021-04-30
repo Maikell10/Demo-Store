@@ -21,9 +21,17 @@ class PurchasesController extends Controller
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
+        
+        // Messages
+        $controller = new Controller();
+        if ($user != null) {
+            $direct_m = $controller->direct_m_user($user->id);
+            $cant_dm_new = $controller->cant_dm_new($user->id);
+        }
+
         $arr_conex_client_t = $this->arr_ip();
 
-        $user = Auth::user();
         $today = date('Y-m-d H:i:s');
 
         // Verificar si existe usuario logueado
@@ -78,18 +86,6 @@ class PurchasesController extends Controller
 
                 $sales = Sale::where('user_id', Auth::user()->id)->with('products')->orderBy('updated_at', 'desc')->get();
 
-                // Direct Messages
-                $controller = new Controller();
-                $cant_dm_new = 0;
-                if ($user != null) {
-                    $direct_m = $controller->direct_m($user->id);
-                    foreach ($direct_m as $direct_m1) {
-                        if ($direct_m1->status == 'NO-VIEW') {
-                            $cant_dm_new = $cant_dm_new +1;
-                        }
-                    }
-                }
-
                 if ($sales == '[]') {
                     $products = '0';
                     return view('tienda.purchases.index', compact('distinct_sale','sales', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
@@ -104,18 +100,6 @@ class PurchasesController extends Controller
                 $distinct_sale = Sale::select('state', 'updated_at', 'created_at')->distinct('updated_at')->where('user_id', Auth::user()->id)->orderBy('updated_at', 'desc')->get();
 
                 $sales = Sale::where('user_id', Auth::user()->id)->with('products')->orderBy('updated_at', 'desc')->get();
-
-                // Direct Messages
-                $controller = new Controller();
-                $cant_dm_new = 0;
-                if ($user != null) {
-                    $direct_m = $controller->direct_m($user->id);
-                    foreach ($direct_m as $direct_m1) {
-                        if ($direct_m1->status == 'NO-VIEW') {
-                            $cant_dm_new = $cant_dm_new +1;
-                        }
-                    }
-                }
 
                 if ($sales == '[]') {
                     $products = '0';
@@ -161,12 +145,9 @@ class PurchasesController extends Controller
      */
     public function show($id)
     {
-        // Messages
-        $direct_m = $this->direct_m(Auth::user()->id);
-
-        $arr_conex_client_t = $this->arr_ip();
-
         $user = Auth::user();
+        
+        $arr_conex_client_t = $this->arr_ip();
 
         $sales = Sale::select('sales.id','sales.product_id','sales.cantidad','sales.user_id','sales.price_sale','sales.state','sales.created_at','sales.updated_at','sales.status','product_user.user_id as store_id','users.name')->where('sales.user_id', $user->id)->with('products')->where('sales.created_at', $id)->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->join('users', 'users.id', '=', 'product_user.user_id')->orderBy('sales.updated_at', 'desc')->get();
 
@@ -175,15 +156,26 @@ class PurchasesController extends Controller
         $order_id = strftime("%j%d%G-%H%M%S", strtotime($sales[0]->created_at) . $sales[0]->user_id );
         $d_messages = DirectMessages::where('order_id', $order_id)->where('type', 'STORE')->orderBy('created_at', 'asc')->get();
 
-        $cant_dm_new = 0;
-        foreach ($d_messages as $d_messages) {
-            if ($d_messages->status == 'NO-VIEW') {
-                $cant_dm_new = $cant_dm_new +1;
-            }
-        }
         $d_messages = DirectMessages::where('order_id', $order_id)->where('store_user_id',$distinct_seller[0]->id)->orderBy('created_at', 'asc')->get();
 
-        return view('tienda.purchases.show', compact('sales', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new','distinct_seller','d_messages','order_id','direct_m','id'));
+        // Set cant New DM and change status from NO-VIEW to VIEW
+        $d_messages_new = DirectMessages::where('type', 'STORE')->where('status', 'NO-VIEW')->where('order_id', $order_id)->where('store_user_id',$distinct_seller[0]->id)->orderBy('created_at', 'asc')->get();
+        
+        $cant_d_messages_new = $d_messages_new->count();
+
+        foreach ($d_messages_new as $d_message_new) {
+            $d_message_new->status = 'VIEW';
+            $d_message_new->save();
+        }
+
+        // Messages
+        $controller = new Controller();
+        if ($user != null) {
+            $direct_m = $controller->direct_m_user($user->id);
+            $cant_dm_new = $controller->cant_dm_new($user->id);
+        }
+
+        return view('tienda.purchases.show', compact('sales', 'user', 'arr_conex_client_t', 'cant_dm_new','distinct_seller','d_messages','order_id','direct_m','id','cant_d_messages_new'));
 
     }
 

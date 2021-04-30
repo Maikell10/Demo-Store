@@ -54,12 +54,8 @@ class ProductController extends Controller
         $cant_dm_new = 0;
         $direct_m = 0;
         if ($user != null) {
-            $direct_m = $controller->direct_m($user->id);
-            foreach ($direct_m as $direct_m1) {
-                if ($direct_m1->status == 'NO-VIEW') {
-                    $cant_dm_new = $cant_dm_new + 1;
-                }
-            }
+            $direct_m = $controller->direct_m_user($user->id);
+            $cant_dm_new = $controller->cant_dm_new($user->id);
         }
 
         return view('tienda.show-product', compact('productos', 'categories', 'user', 'arr_conex_client_t', 'direct_m', 'cant_dm_new'));
@@ -161,17 +157,26 @@ class ProductController extends Controller
             }
         }
 
+        // Set Comments in VIEW if is the same than the auth user
+        if (auth()->user()) {
+            $comments_to_act = Comment::with('answers')->where('user_id', auth()->user()->id)->where('product_id', $producto->id)->get();
+
+            foreach ($comments_to_act as $comment_to_act) {
+                if ($comment_to_act->answers != '[]') {
+                    $comment_answer = Comment::where('id',$comment_to_act->answers[0]->id)->first();
+                    $comment_answer->status = 'VIEW';
+                    $comment_answer->save();
+                }
+            }
+        }
+
         // Direct Messages
         $controller = new Controller();
         $cant_dm_new = 0;
         $direct_m = 0;
         if ($user != null) {
-            $direct_m = $controller->direct_m($user->id);
-            foreach ($direct_m as $direct_m1) {
-                if ($direct_m1->status == 'NO-VIEW') {
-                    $cant_dm_new = $cant_dm_new + 1;
-                }
-            }
+            $direct_m = $controller->direct_m_user($user->id);
+            $cant_dm_new = $controller->cant_dm_new($user->id);
         }
 
         $comments = Comment::with('answers', 'users')->where('product_id', $producto->id)->latest()->get();

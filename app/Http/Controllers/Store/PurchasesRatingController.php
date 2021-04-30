@@ -19,25 +19,22 @@ class PurchasesRatingController extends Controller
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
+
         // Messages
-        $direct_m = $this->direct_m(Auth::user()->id);
+        $controller = new Controller();
+        if ($user != null) {
+            $direct_m = $controller->direct_m_user($user->id);
+            $cant_dm_new = $controller->cant_dm_new($user->id);
+        }
 
         $arr_conex_client_t = $this->arr_ip();
-
-        $user = Auth::user();
 
         $user_store = User::where('id', $request->store_id)->get();
 
         $order_id = strftime("%j%d%G-%H%M%S", strtotime($request->created) . $user->id );
 
         $d_messages = DirectMessages::where('order_id', $order_id)->where('type', 'STORE')->orderBy('created_at', 'asc')->get();
-
-        $cant_dm_new = 0;
-        foreach ($d_messages as $d_messages) {
-            if ($d_messages->status == 'NO-VIEW') {
-                $cant_dm_new = $cant_dm_new +1;
-            }
-        }
 
         $sale = Sale::where('created_at', $request->created)->where('user_id', $user->id)->get('updated_at');
         

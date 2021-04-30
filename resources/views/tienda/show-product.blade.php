@@ -424,36 +424,108 @@
                 <a href="{{url('login?pag=store/show-product/'. $producto->slug . '')}}" class="btn btn-warning btn-lg btn-block mb-2 mt-2 font-weight-bold" style="white-space: break-spaces">{{__('You must log in to ask')}}</a>
                 <hr>
                 @endif
-                
-                @foreach ($comments as $comment)
-                @if ($comment['parent_id'] == null)
-                <div class="row p-2">
-                    <div class="col-md-12 d-flex">
-                        <img src="https://img.icons8.com/cotton/64/000000/speech-bubble-with-dots.png" width="40px"
-                            height="45px" class="mr-4" />
-                        <div>
-                            <p class="text-justify" style="/*text-indent: 25px*/"><font class="font-weight-bold mr-2">{{$comment['users']->name}}</font>{{$comment['body']}}</p>
-                            <small>{{ \Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}</small>
-                            <small hidden>{{ \Carbon\Carbon::parse($comment['created_at'])->format('d/m/Y h:i:s a') }}</small>
+
+                @if (auth()->user())
+                    <h4 class="">{{ __('Your Questions') }}</h4>
+                    <hr style="border: 3px solid #28a745">
+                    @foreach ($comments as $comment)
+                        @if ($comment['users']->id == auth()->user()->id)
+                        @if ($comment['parent_id'] == null)
+                        <div class="row p-2">
+                            <div class="col-md-12 d-flex">
+                                <img src="{{asset('asset/images/speech-bubble-with-dots.png')}}" width="40px"
+                                    height="45px" class="mr-4" />
+                                <div>
+                                    <p class="text-justify" style="/*text-indent: 25px*/"><font class="font-weight-bold mr-2">{{$comment['users']->name}}</font>{{$comment['body']}}</p>
+                                    <small>{{ \Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}</small>
+                                    <small hidden>{{ \Carbon\Carbon::parse($comment['created_at'])->format('d/m/Y h:i:s a') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        @isset($comment['answers'][0]['body'])
+                        <div class="row p-3 ml-5">
+                            <div class="col-md-12 d-flex">
+                                <img src="{{asset('asset/images/speech-bubble-with-dots-answ.png')}}" width="35px"
+                                    height="40px" class="mr-4" />
+                                <div>
+                                    <p class="text-muted text-justify"><font class="font-weight-bold mr-2 text-success">{{$producto->users[0]->name}}</font>{{$comment['answers'][0]['body']}}
+                                    </p>
+                                    <small>{{ \Carbon\Carbon::parse($comment['answers'][0]['created_at'])->diffForHumans() }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        @endisset
+                        @endif
+                    @endforeach
+                    <hr style="border: 3px solid #28a745">
+
+                    @foreach ($comments as $comment)
+                        @if ($comment['users']->id != auth()->user()->id)
+                        @if ($comment['parent_id'] == null)
+                        <div class="row p-2">
+                            <div class="col-md-12 d-flex">
+                                
+                                <img src="{{asset('asset/images/speech-bubble-with-dots.png')}}" width="40px"
+                                    height="45px" class="mr-4" />
+                                <div>
+                                    <p class="text-justify" style="/*text-indent: 25px*/"><font class="font-weight-bold mr-2">{{$comment['users']->name}}</font>{{$comment['body']}}</p>
+                                    <small>{{ \Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}</small>
+                                    <small hidden>{{ \Carbon\Carbon::parse($comment['created_at'])->format('d/m/Y h:i:s a') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        @isset($comment['answers'][0]['body'])
+                        <div class="row p-3 ml-5">
+                            <div class="col-md-12 d-flex">
+                                <img src="{{asset('asset/images/speech-bubble-with-dots-answ.png')}}" width="35px"
+                                    height="40px" class="mr-4" />
+                                <div>
+                                    <p class="text-muted text-justify"><font class="font-weight-bold mr-2 text-success">{{$producto->users[0]->name}}</font>{{$comment['answers'][0]['body']}}
+                                    </p>
+                                    <small>{{ \Carbon\Carbon::parse($comment['answers'][0]['created_at'])->diffForHumans() }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        @endisset
+                        @endif
+                    @endforeach
+                @else
+                    @foreach ($comments as $comment)
+
+                    @if ($comment['parent_id'] == null)
+                    <div class="row p-2">
+                        <div class="col-md-12 d-flex">
+                            <img src="{{asset('asset/images/speech-bubble-with-dots.png')}}" width="40px"
+                                height="45px" class="mr-4" />
+                            <div>
+                                <p class="text-justify" style="/*text-indent: 25px*/"><font class="font-weight-bold mr-2">{{$comment['users']->name}}</font>{{$comment['body']}}</p>
+                                <small>{{ \Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}</small>
+                                <small hidden>{{ \Carbon\Carbon::parse($comment['created_at'])->format('d/m/Y h:i:s a') }}</small>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    @endif
+                    
+                    @isset($comment['answers'][0]['body'])
+                    <div class="row p-3 ml-5">
+                        <div class="col-md-12 d-flex">
+                            <img src="{{asset('asset/images/speech-bubble-with-dots-answ.png')}}" width="35px"
+                                height="40px" class="mr-4" />
+                            <div>
+                                <p class="text-muted text-justify"><font class="font-weight-bold mr-2 text-success">{{$producto->users[0]->name}}</font>{{$comment['answers'][0]['body']}}
+                                </p>
+                                <small>{{ \Carbon\Carbon::parse($comment['answers'][0]['created_at'])->diffForHumans() }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    @endisset
+                    @endforeach
                 @endif
                 
-                @isset($comment['answers'][0]['body'])
-                <div class="row p-3 ml-5">
-                    <div class="col-md-12 d-flex">
-                        <img src="https://img.icons8.com/plasticine/64/000000/speech-bubble-with-dots.png" width="35px"
-                            height="40px" class="mr-4" />
-                        <div>
-                            <p class="text-muted text-justify"><font class="font-weight-bold mr-2 text-success">{{$producto->users[0]->name}}</font>{{$comment['answers'][0]['body']}}
-                            </p>
-                            <small>{{ \Carbon\Carbon::parse($comment['answers'][0]['created_at'])->diffForHumans() }}</small>
-                        </div>
-                    </div>
-                </div>
-                @endisset
-                @endforeach
             </div>
         </div>
 
@@ -463,10 +535,11 @@
 
 
     @if (isset($productos))
-    <div class="container mt-3">
+    <div class="container-fluid mt-3">
 
         <div class="row row-cols-1 row-cols-md-2">
 
+            <div class="col-md-2"></div>
             <div class="col">
                 <h1 class="font-weight-bold"><i class="nav-icon fas fa-shapes text-success"></i> {{__('All Products')}}
                 </h1>
@@ -484,70 +557,77 @@
                 </form>
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-md-2 border-right">
+                <h1>Filtros</h1>
+            </div>
+            <div class="col-md-10 row">
 
-        <div class="row row-cols-2 row-cols-md-4">
-            @foreach ($productos as $producto)
-
-            <div class="col mb-4">
-                <a href="{{ url('store/show-product/'.$producto->slug.'') }}">
-                    <div class="card border-success h-100">
-
-
-                        @if ($producto->images->count() <= 0) <div class="product_image" style="height: 200px">
-                            <img class="card-img-top img-thumbnail" src="/imagenes/boxed-bg.jpg" alt=""
-                                style="object-fit: contain; height: 100%">
-                    </div>
-
-                    @else
-                    <div class="product_image" style="height: 200px">
-                        <img class="card-img-top img-thumbnail" src="{{$producto->images->random()->url}}" alt=""
-                            style="object-fit: contain; height: 100%">
-                    </div>
-                    @endif
-                </a>
-
-                <div class="card-header h5 bg-transparent">{{$producto->nombre}}</div>
-                <div class="card-body text-success p-0 ml-2 mr-2">
-                    <h5 class="card-title"></h5>
-
-
-                    @if ($producto->estado == 'En Oferta')
-                    <div class="product_price text-right">
-                        <p class="card-text">
-                            <del class="text-muted text-black-50">
-                                US${{number_format($producto->precio_anterior,2)}}
-                            </del>US${{number_format($producto->precio_actual,2)}}
-                        </p>
-                    </div>
-                    @else
-                    <div class="product_price text-right">
-                        <p class="card-text">
-                            US${{number_format($producto->precio_actual,2)}}
-                        </p>
-                    </div>
-                    @endif
-
+                @foreach ($productos as $producto)
+    
+                <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-4">
+                    <a href="{{ url('store/show-product/'.$producto->slug.'') }}">
+                        <div class="card border-success h-100">
+    
+    
+                            @if ($producto->images->count() <= 0) 
+                            <div class="product_image" style="height: 200px">
+                                <img class="card-img-top img-thumbnail" src="/imagenes/boxed-bg.jpg" alt=""
+                                    style="object-fit: contain; height: 100%">
+                            </div>
+    
+                            @else
+                            <div class="product_image" style="height: 200px">
+                                <img class="card-img-top img-thumbnail" src="{{$producto->images->random()->url}}" alt=""
+                                    style="object-fit: contain; height: 100%">
+                            </div>
+                            @endif
+                    </a>
+    
+                            <div class="card-header h5 bg-transparent">
+                                {{$producto->nombre}}
+                            </div>
+                            <div class="card-body text-success p-0 ml-2 mr-2">
+                                <h5 class="card-title"></h5>
+    
+    
+                                @if ($producto->estado == 'En Oferta')
+                                <div class="product_price text-right">
+                                    <p class="card-text">
+                                        <del class="text-muted text-black-50">
+                                            US${{number_format($producto->precio_anterior,2)}}
+                                        </del>US${{number_format($producto->precio_actual,2)}}
+                                    </p>
+                                </div>
+                                @else
+                                <div class="product_price text-right">
+                                    <p class="card-text">
+                                        US${{number_format($producto->precio_actual,2)}}
+                                    </p>
+                                </div>
+                                @endif
+    
+                            </div>
+    
+                            <div class="card-footer">
+                                <small class="text-muted">{{__('See all in')}} <a href="{{url('store/show-category/'.$producto->main_category->sub_category->category->slug.'')}}" class="text-success">{{$producto->main_category->sub_category->category->nombre}}</a></small>
+                            </div>
+    
+                        </div>
                 </div>
-
-                <div class="card-footer">
-                    <small class="text-muted">{{__('See all in')}} <a
-                            href="{{url('store/show-category/'.$producto->main_category->sub_category->category->slug.'')}}"
-                            class="text-success">{{$producto->main_category->sub_category->category->nombre}}</a></small>
-                </div>
-
+                @endforeach
             </div>
         </div>
 
-        @endforeach
+        <div class="float-right m-2">
+            {{$productos->appends($_GET)->links()}}
+        </div>
+
+
     </div>
+    @endif
 
-    <div class="float-right m-2">
-        {{$productos->appends($_GET)->links()}}
-    </div>
-
-
-</div>
-@endif
 </div>
 </div>
 
