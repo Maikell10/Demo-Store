@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NotificationMail;
+use App\StoreProfile;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class BusinessProfileController extends Controller
 {
@@ -16,7 +20,9 @@ class BusinessProfileController extends Controller
      */
     public function index()
     {
-        $this->authorize('haveaccess','product.index');
+        Gate::authorize('haveaccess', 'store.full');
+
+        //$this->authorize('haveaccess','product.index');
 
         // Notifications
         $notifications = $this->notifications(Auth::user()['id']);
@@ -24,9 +30,14 @@ class BusinessProfileController extends Controller
         // Messages
         $direct_m = $this->direct_m(Auth::user()->id);
 
-        $users = User::with('roles','image')->orderBy('id', 'Desc')->paginate(10);
+        $user = User::with('roles','image')->where('id', Auth::user()->id)->firstOrFail();
 
-        return view('admin.business_profile', compact('users', 'notifications','direct_m'));
+        $store_profile_config =  StoreProfile::where('user_id', $user->id)->get();
+
+        Mail::to('maikell.ods10@gmail.com')->queue(new NotificationMail());
+        //return new NotificationMail();
+
+        return view('admin.business_profile', compact('user', 'notifications','direct_m','store_profile_config'));
     }
 
     /**
@@ -47,7 +58,30 @@ class BusinessProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'inputPhone' => 'nullable|max:18',
+            'inputFacebook' => 'nullable|url',
+            'inputTwitter' => 'nullable|url',
+            'inputInstagram' => 'nullable|url',
+            'inputGoogleMaps' => 'nullable|url',
+        ]);
+
+        if (!Auth::user()) {
+            return redirect()->back();
+        }
+
+        $store_profile_config = new StoreProfile();
+
+        $store_profile_config->user_id = Auth::user()->id;
+        $store_profile_config->contact_phone = $request->inputPhone;
+        $store_profile_config->facebook = $request->inputFacebook;
+        $store_profile_config->twitter = $request->inputTwitter;
+        $store_profile_config->instagram = $request->inputInstagram;
+        $store_profile_config->gmaps = $request->inputGoogleMaps;
+
+        $store_profile_config->save();
+
+        return redirect()->back()->with('datos', __('Register Created Successfully'));
     }
 
     /**
@@ -81,7 +115,30 @@ class BusinessProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'inputPhone' => 'nullable|max:18',
+            'inputFacebook' => 'nullable|url',
+            'inputTwitter' => 'nullable|url',
+            'inputInstagram' => 'nullable|url',
+            'inputGoogleMaps' => 'nullable|url',
+        ]);
+
+        if ($id != Auth::user()->id) {
+            return redirect()->back();
+        }
+
+        // Update Store Profile
+        $store_profile_config = StoreProfile::where('user_id', $id)->first();
+
+        $store_profile_config->contact_phone = $request->inputPhone;
+        $store_profile_config->facebook = $request->inputFacebook;
+        $store_profile_config->twitter = $request->inputTwitter;
+        $store_profile_config->instagram = $request->inputInstagram;
+        $store_profile_config->gmaps = $request->inputGoogleMaps;
+
+        $store_profile_config->save();
+
+        return redirect()->back()->with('datos', __('Register Updated Successfully'));
     }
 
     /**
@@ -94,4 +151,5 @@ class BusinessProfileController extends Controller
     {
         //
     }
+
 }

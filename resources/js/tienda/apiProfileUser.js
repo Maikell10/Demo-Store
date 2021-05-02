@@ -38,7 +38,7 @@ const apiProfileUser = new Vue({
             }else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Fallo al Valorar!',
+                    title: 'Fallo al Editar!',
                     showConfirmButton: false,
                     timer: 1200
                 })

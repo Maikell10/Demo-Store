@@ -128,7 +128,9 @@
                         <div class="card-body box-profile text-center">
                             
                             <h3 class="profile-username text-center">{{__('Rate the Seller:')}}</h3>
-                            <h3 class="profile-username text-center text-muted">{{$user_store[0]->name}}</h3>
+                            <a href="{{route('tienda.commerce.show', $user_store[0]->name)}}">
+                                <h3 class="profile-username text-center text-success">{{$user_store[0]->name}}</h3>
+                            </a>
                             <input type="text" id="store_id" value="{{$user_store[0]->id}}" hidden>
                             <input type="text" id="user_id" value="{{$user->id}}" hidden>
                             <input type="text" id="type_rating" value="USER" hidden>
@@ -164,7 +166,12 @@
                                     @endif
 
                                     <span class="username">
-                                        <a href="#">{{ $user_store[0]->name }}</a>
+                                        <a href="#">
+                                            {{ $user_store[0]->name }}
+                                        </a>
+                                        @if ($user_store[0]->verified == 1)
+                                            <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px;height: 30px;" class="float-none" />
+                                        @endif
                                     </span>
                                     <span class="description">{{__('Rate your Purchase for this Seller:')}}</span>
                                 </div>
@@ -240,6 +247,9 @@
 
                                     <span class="username">
                                         <a href="#">{{ $user_store[0]->name }}</a>
+                                        @if ($user_store[0]->verified == 1)
+                                            <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px;height: 30px;" class="float-none" />
+                                        @endif
                                     </span>
                                     <span class="description">{{__('Rate your Purchase for this Seller:')}}</span>
                                 </div>
@@ -303,6 +313,9 @@
 
                                     <span class="username">
                                         <a href="#">{{ $user_store[0]->name }}</a>
+                                        @if ($user_store[0]->verified == 1)
+                                            <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px;height: 30px;" class="float-none" />
+                                        @endif
                                     </span>
                                     <span class="description">{{__('Rate your Purchase for this Seller:')}}</span>
                                 </div>

@@ -278,7 +278,12 @@ $indice = 0;
                             aria-labelledby="v-pills-{{$distinct_seller[0]->id}}-tab">
                                 <div class="card card-success card-outline direct-chat direct-chat-success">
                                     <div class="card-header">
-                                        <h3 class="card-title">{{__('Direct Messages with:')}} <font class="text-success font-weight-bold">{{$distinct_seller[0]->name}}</font></h3>
+
+                                        @if ($distinct_seller[0]->verified == 1)
+                                            <h3 class="card-title">{{__('Direct Messages with:')}} <font class="text-success font-weight-bold">{{$distinct_seller[0]->name}}</font> <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px" data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" /></h3>
+                                        @else
+                                            <h3 class="card-title">{{__('Direct Messages with:')}} <font class="text-success font-weight-bold">{{$distinct_seller[0]->name}}</font></h3>
+                                        @endif
 
                                         <div class="card-tools">
                                             @if ($cant_d_messages_new != 0)

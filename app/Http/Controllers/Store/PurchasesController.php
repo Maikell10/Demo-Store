@@ -151,7 +151,7 @@ class PurchasesController extends Controller
 
         $sales = Sale::select('sales.id','sales.product_id','sales.cantidad','sales.user_id','sales.price_sale','sales.state','sales.created_at','sales.updated_at','sales.status','product_user.user_id as store_id','users.name')->where('sales.user_id', $user->id)->with('products')->where('sales.created_at', $id)->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->join('users', 'users.id', '=', 'product_user.user_id')->orderBy('sales.updated_at', 'desc')->get();
 
-        $distinct_seller = Sale::select('users.id','users.name')->where('sales.user_id', $user->id)->where('sales.created_at', $id)->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->join('users', 'users.id', '=', 'product_user.user_id')->distinct('users.id')->get();
+        $distinct_seller = Sale::select('users.id','users.name','users.verified')->where('sales.user_id', $user->id)->where('sales.created_at', $id)->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->join('users', 'users.id', '=', 'product_user.user_id')->distinct('users.id')->get();
 
         $order_id = strftime("%j%d%G-%H%M%S", strtotime($sales[0]->created_at) . $sales[0]->user_id );
         $d_messages = DirectMessages::where('order_id', $order_id)->where('type', 'STORE')->orderBy('created_at', 'asc')->get();

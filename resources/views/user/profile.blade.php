@@ -94,7 +94,11 @@
                                             </a>
                                         </div>
 
-                                        <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
+                                        @if (Auth::user()->verified == 1)
+                                            <h3 class="profile-username text-center">{{ Auth::user()->name }} <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px" data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" /></h3>
+                                        @else
+                                            <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
+                                        @endif
 
                                         <ul class="list-group list-group-unbordered mb-3">
                                             <li class="list-group-item">
@@ -327,6 +331,8 @@
                                                     method="POST" id="updateUserForm">
                                                     @csrf
                                                     <div class="form-group row">
+                                                        <input type="hidden" name="inputProfile" value="user">
+
                                                         <label for="inputName"
                                                             class="col-md-12 col-form-label">{{__('Name')}}</label>
 

@@ -222,10 +222,15 @@ class ProfileController extends Controller
             $user->save();
         }
                     
-
         if (isset($user->id)) {
+            if ($request->inputProfile == 'store') {
+                return redirect()->route('admin.business-profile.index')->with('datos', __('Register Updated Successfully'));
+            }
             return redirect()->route('profile.auth')->with('datos', __('Register Updated Successfully'));
         } else {
+            if ($request->inputProfile == 'store') {
+                return redirect()->route('admin.business-profile.index')->with('fail', __('Update failed'));
+            }
             return redirect()->route('profile.auth')->with('fail', __('Update failed'));
         }
     }

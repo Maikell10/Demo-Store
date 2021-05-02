@@ -132,10 +132,10 @@
             <div class="col-md-8">
                 <h1>{{$producto->nombre}}</h1>
                 <span class="h5">
-                    {{__('Visit to:')}} <a href="{{ url('commerce/'.$producto->users[0]->name.'') }}" class="text-success"
-                        data-toggle="tooltip" data-placement="top" title="Vendedor">{{$producto->users[0]->name}}</a>
-                    <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px"
-                        data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" />
+                    {{__('Visit to:')}} <a href="{{ url('commerce/'.$producto->users[0]->name.'') }}" class="text-success" data-toggle="tooltip" data-placement="top" title="Vendedor">{{$producto->users[0]->name}}</a>
+                    @if ($producto->users[0]->verified == 1)
+                        <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px" data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" />
+                    @endif
                 </span>
 
                 <!--
@@ -272,7 +272,7 @@
                             <div class="product_price text-right">${{number_format($productos_store[$i]->precio_actual,2)}}</div>
                         </div>
                     </div>
-    
+
                 </div>
                 </div>
             </div>
@@ -425,9 +425,10 @@
                 <hr>
                 @endif
 
-                @if (auth()->user())
+                @if ($coments_auth_user == 1)
                     <h4 class="">{{ __('Your Questions') }}</h4>
                     <hr style="border: 3px solid #28a745">
+                    <div style="background-color: honeydew">
                     @foreach ($comments as $comment)
                         @if ($comment['users']->id == auth()->user()->id)
                         @if ($comment['parent_id'] == null)
@@ -459,6 +460,7 @@
                         @endisset
                         @endif
                     @endforeach
+                    </div>
                     <hr style="border: 3px solid #28a745">
 
                     @foreach ($comments as $comment)
@@ -569,7 +571,6 @@
                 <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-4">
                     <a href="{{ url('store/show-product/'.$producto->slug.'') }}">
                         <div class="card border-success h-100">
-    
     
                             @if ($producto->images->count() <= 0) 
                             <div class="product_image" style="height: 200px">

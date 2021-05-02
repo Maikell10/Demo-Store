@@ -103,7 +103,12 @@
                                     @endif
                                 </div>
 
-                                <h3 class="profile-username text-center">{{ $user->name }} <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px" data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" /></h3>
+                                @if ($user->verified == 1)
+                                    <h3 class="profile-username text-center">{{ $user->name }} <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px" data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" /></h3>
+                                @else
+                                    <h3 class="profile-username text-center">{{ $user->name }}</h3>
+                                @endif
+                                
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
@@ -120,19 +125,36 @@
                                     </li>
                                 </ul>
 
-                                <h5 class="text-center h6">{{__('Contact')}}: <a href="tel:+58212471114" class="btn btn-link">+58212471114</a></h5>
+                                @if ($store_profile_config != '[]')
+                                    @if ($store_profile_config[0]->contact_phone != null)
+                                        <h5 class="text-center h6">{{__('Contact')}}: <a href="tel:{{$store_profile_config[0]->contact_phone}}" class="btn btn-link">{{$store_profile_config[0]->contact_phone}}</a></h5>
+                                    @endif
+                                @endif
 
-                                <div class="menu_social">
-                                    <ul
-                                        class="menu_social_list d-flex flex-row align-items-center justify-content-center">
-                                        <li><a href="https://www.facebook.com/tuminimercado.fb" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                        <li><a href="https://twitter.com/TuMiniMercado1" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                        <li><a href="https://www.instagram.com/tu_minimercado/" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                                    </ul>
-                                    <h5 class="text-center h6 text-success font-weight-bold">Siguenos!!</h5>
-                                </div>
+                                @if ($store_profile_config != '[]')
+                                @if ($store_profile_config[0]->facebook != null || $store_profile_config[0]->instagram != null || $store_profile_config[0]->twitter != null)
+                                    <div class="menu_social">
+                                        <ul
+                                            class="menu_social_list d-flex flex-row align-items-center justify-content-center">
 
-                                <hr>
+                                            @if ($store_profile_config[0]->facebook != null)
+                                                <li><a href="{{$store_profile_config[0]->facebook}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                            @endif
+                                            
+                                            @if ($store_profile_config[0]->twitter != null)
+                                                <li><a href="{{$store_profile_config[0]->twitter}}" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                            @endif
+                                            
+                                            @if ($store_profile_config[0]->instagram != null)
+                                                <li><a href="{{$store_profile_config[0]->instagram}}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                            @endif
+                                        </ul>
+                                        <h5 class="text-center h6 text-success font-weight-bold">Siguenos!!</h5>
+                                    </div>
+                                    <hr>
+                                @endif
+                                @endif
+
 
                                 <h5 class="profile-username text-center h6">{{__('Joined to TuMiniMercado On:')}} <font class="font-weight-bold">{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</font></h5>
                             </div>
@@ -202,14 +224,17 @@
 
         </div>
 
-        <hr>
-
-        <div class="d-flex flex-row align-items-center justify-content-center">
-            <h5 class="h2 font-weight-bold">Ubícanos <img src="{{asset('asset/images/maps.png')}}" style="width: 30px" /></h5>
-        </div>
-        <div class="row">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.31040601601!2d-66.94890528538025!3d10.476178092525684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c2a5f6be5d626e1%3A0x5251fda263f1cfe5!2sComercial%20BAETA%20C.A.!5e0!3m2!1ses!2sve!4v1617428070122!5m2!1ses!2sve" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
+        @if ($store_profile_config != '[]')
+            @if ($store_profile_config[0]->gmaps != null)
+                <hr>
+                <div class="d-flex flex-row align-items-center justify-content-center">
+                    <h5 class="h2 font-weight-bold">Ubícanos <img src="{{asset('asset/images/maps.png')}}" style="width: 30px" /></h5>
+                </div>
+                <div class="row">
+                    <iframe src="{{$store_profile_config[0]->gmaps}}" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            @endif
+        @endif
 
     </div>
 

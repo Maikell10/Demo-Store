@@ -158,6 +158,7 @@ class ProductController extends Controller
         }
 
         // Set Comments in VIEW if is the same than the auth user
+        $coments_auth_user = 0;
         if (auth()->user()) {
             $comments_to_act = Comment::with('answers')->where('user_id', auth()->user()->id)->where('product_id', $producto->id)->get();
 
@@ -167,6 +168,10 @@ class ProductController extends Controller
                     $comment_answer->status = 'VIEW';
                     $comment_answer->save();
                 }
+            }
+
+            if ($comments_to_act != '[]') {
+                $coments_auth_user = 1;
             }
         }
 
@@ -181,9 +186,9 @@ class ProductController extends Controller
 
         $comments = Comment::with('answers', 'users')->where('product_id', $producto->id)->latest()->get();
         
-        $productos_store = Product::select('products.id','porcentaje_descuento','estado','main_category_id','nombre','slug')->join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', $producto->users[0]->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->inRandomOrder()->get();
+        $productos_store = Product::select('products.id','porcentaje_descuento','estado','main_category_id','nombre','slug', 'precio_actual')->join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', $producto->users[0]->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->inRandomOrder()->get();
 
-        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old', 'productos_store'));
+        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old', 'productos_store', 'coments_auth_user'));
     }
 
     /**

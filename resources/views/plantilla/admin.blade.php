@@ -374,7 +374,7 @@
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
                         @can('haveaccess', 'product.index')
-                        <li class="nav-item mt-2" id="slidSale">
+                        <li class="nav-item mt-2" id="slidConfig">
                             <a href="{{route('admin.business-profile.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-user-cog"></i>
                                 <p>
