@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Store;
 use App\Cart;
 use App\DirectMessages;
 use App\Http\Controllers\Controller;
+use App\Mail\PurchaseNotification;
+use App\Mail\PurchaseStoreNotification;
 use App\Product;
 use App\RatingStore;
 use App\Sale;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class PurchasesController extends Controller
 {
@@ -66,21 +70,40 @@ class PurchasesController extends Controller
                             $sale->cantidad = $cart->cantidad;
                             $sale->user_id = Auth::user()->id;
                             $sale->price_sale = $products[$index]['precio_actual'];
+                            $sale->created_at = $today;
+                            $sale->updated_at = $today;
                             $sale->save();
                         }
                     } else {
-                        $sales = new Sale();
-                        $sales->product_id = $cart->product_id;
-                        $sales->cantidad = $cart->cantidad;
-                        $sales->user_id = Auth::user()->id;
-                        $sales->price_sale = $products[$index]['precio_actual'];
-                        $sales->save();
+                        $sale = new Sale();
+                        $sale->product_id = $cart->product_id;
+                        $sale->cantidad = $cart->cantidad;
+                        $sale->user_id = Auth::user()->id;
+                        $sale->price_sale = $products[$index]['precio_actual'];
+                        $sale->created_at = $today;
+                        $sale->updated_at = $today;
+                        $sale->save();
                     }
+                    $sales_all[] = $sale;
 
                     $cart = Cart::where('product_id', $cart->product_id)->where('user_id', Auth::user()->id)->first();
                     $cart->delete();
                     session()->forget('hjwebajjasxwk8164qds4.as84');
                 }
+
+                // Enviar correo al cliente
+                Mail::to(Auth::user()->email)->queue(new PurchaseNotification(Auth::user(),$sale));
+
+                // Buscar la data para enviar correo de notificacion a la tienda
+                foreach ($sales_all as $sale_all) {
+                    $product = Product::with('users')->where('id', $sale_all['product_id'])->firstOrFail();
+                    $store_users[] = User::where('id', $product->users[0]->id)->firstOrFail();;
+                }
+                $store_users = array_unique($store_users);
+                foreach ($store_users as $store_user) {
+                    Mail::to($product->users[0]->email)->send(new PurchaseStoreNotification(Auth::user(),$sale,$product->users[0]));
+                }
+                // -----------------------------------------------------------
 
                 $distinct_sale = Sale::select('state', 'updated_at', 'created_at')->distinct('updated_at')->where('user_id', Auth::user()->id)->orderBy('updated_at', 'desc')->get();
 
@@ -91,7 +114,8 @@ class PurchasesController extends Controller
                     return view('tienda.purchases.index', compact('distinct_sale','sales', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
                 }
                 foreach ($sales as $sale) {
-                    $products[] = Product::with('users')->where('id', $sale['product_id'])->firstOrFail();
+                    $product = Product::with('users')->where('id', $sale['product_id'])->firstOrFail();
+                    $products[] = $product;
                 }
                 
                 return view('tienda.purchases.index', compact('distinct_sale', 'sales', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
@@ -150,6 +174,10 @@ class PurchasesController extends Controller
         $arr_conex_client_t = $this->arr_ip();
 
         $sales = Sale::select('sales.id','sales.product_id','sales.cantidad','sales.user_id','sales.price_sale','sales.state','sales.created_at','sales.updated_at','sales.status','product_user.user_id as store_id','users.name')->where('sales.user_id', $user->id)->with('products')->where('sales.created_at', $id)->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->join('users', 'users.id', '=', 'product_user.user_id')->orderBy('sales.updated_at', 'desc')->get();
+
+        if ($sales == '[]') {
+            abort(403, 'Si esta viendo esto, es posible que su sesión activa no sea la misma del correo con el que abrio este enlace');
+        }
 
         $distinct_seller = Sale::select('users.id','users.name','users.verified')->where('sales.user_id', $user->id)->where('sales.created_at', $id)->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->join('users', 'users.id', '=', 'product_user.user_id')->distinct('users.id')->get();
 

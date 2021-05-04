@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\DirectMessages;
 use App\Http\Controllers\Controller;
+use App\Mail\PurchaseNotification;
 use App\Product;
 use App\RatingStore;
 use App\Sale;
@@ -32,11 +33,11 @@ class OrderController extends Controller
         if (Auth::user()->id == 1) {
             $sales = Sale::with('products','users')->orderBy('updated_at', 'desc')->get();
 
-            $distinct_sale = Sale::select('state', 'sales.updated_at', 'sales.created_at')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->orderBy('sales.created_at', 'desc')->get();
+            $distinct_sale = Sale::select('state', 'sales.updated_at', 'sales.created_at')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->orderBy('sales.created_at', 'desc')->distinct('sales.updated_at')->get();
         } else {
-            $sales = Sale::select('sales.state', 'sales.price_sale', 'sales.cantidad', 'sales.updated_at', 'sales.created_at', 'sales.user_id', 'sales.product_id', 'sales.status')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id', Auth::user()->id)->with('products','users')->orderBy('sales.updated_at', 'desc')->get();
+            $sales = Sale::select('sales.state', 'sales.price_sale', 'sales.cantidad', 'sales.updated_at', 'sales.created_at', 'sales.user_id', 'sales.product_id', 'sales.status')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id', Auth::user()->id)->with('products','users')->orderBy('sales.created_at', 'desc')->get();
 
-            $distinct_sale = Sale::select('state', 'sales.updated_at', 'sales.created_at')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id', Auth::user()->id)->orderBy('sales.created_at', 'desc')->get();
+            $distinct_sale = Sale::select('state', 'sales.updated_at', 'sales.created_at')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id', Auth::user()->id)->orderBy('sales.created_at', 'desc')->distinct('sales.updated_at')->get();
         }
 
         if ($distinct_sale == '[]') {
@@ -94,6 +95,10 @@ class OrderController extends Controller
             }
         } else {
             $sales = Sale::select('sales.id','sales.state', 'sales.price_sale', 'sales.cantidad', 'sales.updated_at', 'sales.created_at', 'sales.user_id', 'sales.product_id', 'sales.status')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id', Auth::user()->id)->where('sales.created_at', $id)->with('products','users')->orderBy('sales.updated_at', 'desc')->get();
+
+            if ($sales == '[]') {
+                abort(403, 'Si esta viendo esto, es posible que su sesión activa no sea la misma del correo con el que abrio este enlace');
+            }
 
             foreach ($sales as $sale) {
                 $salee = Sale::findOrFail($sale->id);

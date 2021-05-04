@@ -51,6 +51,10 @@ Route::get('/politicas', function () {
     return view('politicas', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
 });
 
+Route::get('/delete_user', function () {
+    return 'Próximamente';
+});
+
 Route::get('/', function () {
 
     //$productos = Product::with('images', 'category', 'users')->orderBy('nombre')->paginate(10);
@@ -506,10 +510,10 @@ Route::delete('admin/purchaseDetail/destroy/{id}', 'Admin\AdminShoppingControlle
 
 
 // Orders
-Route::resource('admin/order', 'Admin\OrderController')->names('admin.order');
+Route::resource('admin/order', 'Admin\OrderController')->names('admin.order')->middleware('auth');
 
 // Sales
-Route::resource('admin/sale', 'Admin\SaleController')->names('admin.sale');
+Route::resource('admin/sale', 'Admin\SaleController')->names('admin.sale')->middleware('auth');
 
 
 // Roles y Permisos

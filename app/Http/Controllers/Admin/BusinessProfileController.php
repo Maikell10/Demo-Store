@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\NotificationMail;
 use App\StoreProfile;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Mail;
 
 class BusinessProfileController extends Controller
 {
@@ -33,9 +31,6 @@ class BusinessProfileController extends Controller
         $user = User::with('roles','image')->where('id', Auth::user()->id)->firstOrFail();
 
         $store_profile_config =  StoreProfile::where('user_id', $user->id)->get();
-
-        Mail::to('maikell.ods10@gmail.com')->queue(new NotificationMail());
-        //return new NotificationMail();
 
         return view('admin.business_profile', compact('user', 'notifications','direct_m','store_profile_config'));
     }
