@@ -2,7 +2,8 @@ const api_search_autocomplete_store = new Vue({
     el: "#api_search_autocomplete_store",
     data: {
         palabra_a_buscar: "",
-        resultados: []
+        resultados: [],
+        applocate: $('#applocate').val()
     },
     methods: {
         autoComplete() {
@@ -11,7 +12,7 @@ const api_search_autocomplete_store = new Vue({
             if (this.palabra_a_buscar.length > 1) {
                 axios
                     .get("/api/autocomplete_index/", {
-                        params: { palabraabuscar: this.palabra_a_buscar }
+                        params: { palabraabuscar: this.palabra_a_buscar, applocate: this.applocate }
                     })
                     .then(response => {
                         this.resultados = response.data;
@@ -35,6 +36,9 @@ const api_search_autocomplete_store = new Vue({
         },
         SubmitForm() {
             this.$refs.SubmitButonSearch.click();
+        },
+        changeSubmitSearch(name){
+            $("#header_search_form").attr("action",'http://tiendademo1.test/commerce/'+name);
         }
     },
     mounted() {

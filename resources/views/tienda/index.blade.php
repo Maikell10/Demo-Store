@@ -24,7 +24,14 @@
                         icon: 'error',
                         confirmButtonText: 'Ok',
                     })
-                }else{
+                } else if (res == 'same') {
+                    Swal.fire({
+                        title: 'Alerta!',
+                        text: 'No puede comprar el producto de su tienda',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    })
+                } else{
                     Swal.fire({
                         icon: 'success',
                         title: 'Agregado al Carrito!',

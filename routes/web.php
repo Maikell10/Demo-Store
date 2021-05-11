@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 Route::get('/set_language/{lang}', 'Controller@set_language')->name('set_language');
 
@@ -102,6 +103,8 @@ Route::get('/store/cart/adde/{id}', 'Store\ShoppingCartController@addToCartE');
 // Comments
 Route::get('comment/new','Store\CommentController@store');
 
+//Public Profile
+Route::get('/p/{name}', 'Store\ProfileController@publicProfile')->name('profile.user');
 
 
 Auth::routes(['verify' => true]);

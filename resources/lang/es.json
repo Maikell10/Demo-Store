@@ -346,5 +346,10 @@
     "Product Rating": "Calificación Producto",
     "rated the product:": "calificó el producto:",
     "Question": "Pregunta",
-    "asked a question about the product:": "hizo una pregunta sobre el producto:"
+    "asked a question about the product:": "hizo una pregunta sobre el producto:",
+
+    "Add a product to the Cart to continue": "Añade un producto al Carrito para continuar",
+    "No products were found in the search": "No hay Productos en la búsqueda realizada",
+    "No one has asked anything yet, ask a question": "Nadie ha preguntado nada aún, haz una pregunta",
+    "No one has asked anything yet": "Nadie ha preguntado nada aún"
 }

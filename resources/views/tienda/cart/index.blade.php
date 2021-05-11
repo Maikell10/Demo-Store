@@ -174,7 +174,7 @@
             @else
 
                 <h3 class="font-weight-bold mt-2 mb-5 text-danger text-center"><i class="nav-icon fas fa-warning text-warning"></i>
-                    Añade un producto al Carrito para continuar
+                    {{__('Add a product to the Cart to continue')}}
                 </h3>
 
             @endif

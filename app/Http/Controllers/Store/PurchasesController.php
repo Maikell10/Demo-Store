@@ -101,7 +101,7 @@ class PurchasesController extends Controller
                 }
                 $store_users = array_unique($store_users);
                 foreach ($store_users as $store_user) {
-                    Mail::to($product->users[0]->email)->send(new PurchaseStoreNotification(Auth::user(),$sale,$product->users[0]));
+                    Mail::to($product->users[0]->email)->queue(new PurchaseStoreNotification(Auth::user(),$sale,$product->users[0]));
                 }
                 // -----------------------------------------------------------
 
@@ -113,11 +113,12 @@ class PurchasesController extends Controller
                     $products = '0';
                     return view('tienda.purchases.index', compact('distinct_sale','sales', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
                 }
+                // Reset the Products var
+                unset($products);
                 foreach ($sales as $sale) {
-                    $product = Product::with('users')->where('id', $sale['product_id'])->firstOrFail();
-                    $products[] = $product;
+                    $products[] = Product::with('users')->where('id', $sale['product_id'])->firstOrFail();
                 }
-                
+
                 return view('tienda.purchases.index', compact('distinct_sale', 'sales', 'products', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
 
             } else {

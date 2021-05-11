@@ -79,6 +79,17 @@
             }
         });
     };
+
+    function select_rank(){
+        var URLactual = window.location;
+        var selectVal = $('#select_rank').val()
+
+        if (URLactual == 'http://tiendademo1.test/store/show-product') {
+            window.location.replace(URLactual + '?select_rank=' + selectVal)
+        }else {
+            window.location.replace(URLactual + '&select_rank=' + selectVal)
+        }
+    }
 </script>
 @endsection
 
@@ -130,6 +141,7 @@
 
             </div>
             <div class="col-md-8">
+                <span class="text-muted">{{$producto->estado}}</span>
                 <h1>{{$producto->nombre}}</h1>
                 <span class="h5">
                     {{__('Visit to:')}} <a href="{{ url('commerce/'.$producto->users[0]->name.'') }}" class="text-success" data-toggle="tooltip" data-placement="top" title="Vendedor">{{$producto->users[0]->name}}</a>
@@ -147,33 +159,61 @@
 
                 <hr>
 
+                @if ($producto->estado == 'En Oferta')
                 <H4>${{number_format($producto->precio_actual,2)}}
                     <del>${{number_format($producto->precio_anterior,2)}}</del></H4>
+                @else
+                <H4>${{number_format($producto->precio_actual,2)}}</H4>
+                @endif
 
                 @if ($producto->cantidad > 0)
                 <h4 class="text-success">{{__('Available.')}}</h4>
 
-                <div class="form-group" style="width: 160px;">
-                    <form action="{{ url('/store/cart/adde/'.$producto->id.'') }}" method="POST"
-                        id="formAddToCart{{$producto->id}}">
-                        @csrf
+                @if (isset(Auth::user()->id))
+                    @if (Auth::user()->id != $producto->users[0]->id)
+                    <div class="form-group" style="width: 160px;">
+                        <form action="{{ url('/store/cart/adde/'.$producto->id.'') }}" method="POST"
+                            id="formAddToCart{{$producto->id}}">
+                            @csrf
 
-                        <label>{{__('Quantity')}}</label>
-                        <select name="cantidad" id="cantidad" class="form-control select2">
-                            @for ($i = 1; $i <= $producto->cantidad; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                        </select>
+                            <label>{{__('Quantity')}}</label>
+                            <select name="cantidad" id="cantidad" class="form-control select2">
+                                @for ($i = 1; $i <= $producto->cantidad; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                            </select>
 
-                        <br>
+                            <br>
 
+                            <button onclick="addToCart({{$producto->id}})" type="button" class="btn btn-success">
+                                {{ __('Add to Cart') }}<img class="svg svgP svgCart ml-0"
+                                    src="{{ asset('asset/images/cart.svg') }}" alt="Indent" style="width: 50px">
+                            </button>
+                        </form>
+                    </div>
+                    @endif
+                @else
+                    <div class="form-group" style="width: 160px;">
+                        <form action="{{ url('/store/cart/adde/'.$producto->id.'') }}" method="POST"
+                            id="formAddToCart{{$producto->id}}">
+                            @csrf
 
-                        <button onclick="addToCart({{$producto->id}})" type="button" class="btn btn-success">
-                            {{ __('Add to Cart') }}<img class="svg svgP svgCart ml-0"
-                                src="{{ asset('asset/images/cart.svg') }}" alt="Indent" style="width: 50px">
-                        </button>
-                    </form>
-                </div>
+                            <label>{{__('Quantity')}}</label>
+                            <select name="cantidad" id="cantidad" class="form-control select2">
+                                @for ($i = 1; $i <= $producto->cantidad; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                            </select>
+
+                            <br>
+
+                            <button onclick="addToCart({{$producto->id}})" type="button" class="btn btn-success">
+                                {{ __('Add to Cart') }}<img class="svg svgP svgCart ml-0"
+                                    src="{{ asset('asset/images/cart.svg') }}" alt="Indent" style="width: 50px">
+                            </button>
+                        </form>
+                    </div>
+                @endif
 
 
                 @else
@@ -217,6 +257,7 @@
         </div>
         @endif
 
+        @if (count($productos_store) > 0)
         <h3 class="mt-4">{{__('More Products of')}} {{$producto->users[0]->name}}</h3>
         <div class="lomasvendido owl-carousel owl-theme mb-3">
 
@@ -278,16 +319,21 @@
             </div>
             @endfor
 
-            <div class="">
-                <div class="row load_more_row">
-                    <div class="col">
-                        <div class="button load_more ml-auto mr-auto" style="margin-top: 50%"><a
-                                href="{{ url('commerce/'.$producto->users[0]->name.'') }}">{{__('See All')}}</a>
+            @if (count($productos_store) > 4)
+                <div class="">
+                    <div class="row load_more_row">
+                        <div class="col">
+                            <div class="button load_more ml-auto mr-auto" style="margin-top: 50%"><a
+                                    href="{{ url('commerce/'.$producto->users[0]->name.'') }}">{{__('See All')}}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
+            
         </div>
+        @endif
+        
 
         <div class="card border-success mt-2">
             <div class="card-body">
@@ -413,13 +459,24 @@
                 <hr>
 
                 @if (isset(Auth::user()->id))
-                <form>
-                    <textarea class="form-control" placeholder="{{__('Write a question')}}" id="pregunta_prod" rows="3"
-                        v-model="pregunta_prod"></textarea>
-                    <button v-on:click.prevent="setComment()"
-                        class="btn btn-outline-success btn-lg btn-block mb-2 mt-2 font-weight-bold">{{ __('Ask') }}</button>
-                </form>
-                <hr>
+                    @if (Auth::user()->id != $producto->users[0]->id)
+                    <form>
+                        <textarea class="form-control" placeholder="{{__('Write a question')}}" id="pregunta_prod" rows="3"
+                            v-model="pregunta_prod"></textarea>
+                        <button v-on:click.prevent="setComment()"
+                            class="btn btn-outline-success btn-lg btn-block mb-2 mt-2 font-weight-bold">{{ __('Ask') }}</button>
+                    </form>
+                    <hr>
+
+                    @if ($comments == '[]')
+                        <h5 class="text-muted font-weight-bold font-italic text-center">{{__('No one has asked anything yet, ask a question')}}</h5>
+                    @endif
+
+                    @else
+                        @if ($comments == '[]')
+                            <h5 class="text-muted font-weight-bold font-italic text-center">{{__('No one has asked anything yet')}}</h5>
+                        @endif
+                    @endif
                 @else
                 <a href="{{url('login?pag=store/show-product/'. $producto->slug . '')}}" class="btn btn-warning btn-lg btn-block mb-2 mt-2 font-weight-bold" style="white-space: break-spaces">{{__('You must log in to ask')}}</a>
                 <hr>
@@ -496,6 +553,9 @@
                         @endif
                     @endforeach
                 @else
+                    
+                    
+                
                     @foreach ($comments as $comment)
 
                     @if ($comment['parent_id'] == null)
@@ -542,9 +602,26 @@
         <div class="row row-cols-1 row-cols-md-2">
 
             <div class="col-md-2"></div>
-            <div class="col">
-                <h1 class="font-weight-bold"><i class="nav-icon fas fa-shapes text-success"></i> {{__('All Products')}}
+            <div class="col-md-10 mb-2">
+                <h1 class="font-weight-bold float-left"><i class="nav-icon fas fa-shapes text-success"></i> {{__('Products')}}
                 </h1>
+
+                
+
+                <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3 float-right mt-2">
+                    <select class="form-control form-control-sm" id="select_rank" onchange="select_rank()">
+                        <option hidden>Ordenar</option>
+                        <option @if ($request->select_rank == 'price_asc')
+                            selected
+                        @endif value="price_asc">Precio de más bajo a más alto</option>
+                        <option @if ($request->select_rank == 'price_desc')
+                            selected
+                        @endif value="price_desc">Precio de más alto a más bajo</option>
+                        <option @if ($request->select_rank == 'newest')
+                            selected
+                        @endif value="newest">Lo Más Nuevo</option>
+                    </select>
+                </div>
             </div>
             <div class="col align-content-end" hidden>
                 <form class="">
@@ -562,9 +639,28 @@
         
         <div class="row">
             <div class="col-md-2 border-right">
-                <h1>Filtros</h1>
+                <h3 class="font-weight-bold">{{__('Category')}}</h3>
+
+                @foreach ($categories as $category)
+                    @if ($request->category)
+                        @if ($request->category == $category->id)
+                        <h5 class="font-weight-bold"><u><a href="" class="text-black-50">{{$category->nombre}}</a></u></h5>
+                        @else
+                        <h5><a href="{{url('store/show-product?category='.$category->id.'')}}" class="text-success">{{$category->nombre}}</a></h5>
+                        @endif
+                    @else
+                        <h5><a href="{{url('store/show-product?category='.$category->id.'')}}" class="text-success">{{$category->nombre}}</a></h5>
+                    @endif
+                @endforeach
+
             </div>
-            <div class="col-md-10 row">
+            <div class="col-md-10 row mt-2" style="padding-right: 0px;">
+
+                @if ($productos[0] == '')
+                <h3 class="font-weight-bold mt-2 mb-5 text-danger m-auto"><i class="nav-icon fas fa-warning text-warning"></i>
+                    {{__('No products were found in the search')}}
+                </h3>
+                @endif
 
                 @foreach ($productos as $producto)
     

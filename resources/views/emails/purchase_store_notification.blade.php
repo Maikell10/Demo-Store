@@ -9,7 +9,7 @@
 <h3 style="text-align: center">Tienes una nueva Orden en tu Tienda de <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
 <h3 style="text-align: center">Cliente: <font style="color: darkgreen; font-weight: bold">{{$user->name}}</font></h3>
 
-@component('mail::button', ['url' => 'http://tiendademo1.test/admin/order/'.$sale->created_at, 'color' => 'success'])
+@component('mail::button', ['url' => 'https://tuminimercado.com/admin/order/'.$sale->created_at, 'color' => 'success'])
 Ver Orden
 @endcomponent
 

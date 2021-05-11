@@ -35,6 +35,10 @@
             text-decoration: none;
         }
 
+        .linkhov:hover {
+            background-color: honeydew
+        }
+
         .nav-pills .nav-link.active,
         .nav-pills .show>.nav-link {
             background-color: var(--green);
@@ -43,13 +47,34 @@
         div > .content-wrapper{
             min-height: 10px;
         }
+        .loader {
+            position: fixed;
+            z-index: 999;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 10rem;
+            height: 10rem;
+        }
     </style>
 
-    
 </head>
 
 <body class="hold-transition sidebar-collapse">
-    <div id="" style="overflow-y: scroll">
+    <!-- applocate for use in javascript -->
+    <input type="text" value="{{session('applocate')}}" hidden id="applocate">
+
+    @if (Request::url() == url('/'))
+    <div id="carga" class="loader">
+        <div class="spinner-grow text-success" style="width: 10rem; height: 10rem;"></div>
+        <img width="300px" src="{{ asset('asset/images/LogoEntero3.svg') }}" alt="TuMiniMercado Logo">
+    </div>
+    <div id="pageLoad" style="overflow-y: scroll" hidden>
+    @else
+    <div  style="overflow-y: scroll" >
+    @endif
         <div class="wrapper">
             <nav class="main-header navbar fixed-top navbar-expand navbar-light bg-white shadow-sm" id="main_nav">
                 <!-- Left navbar links -->
@@ -87,11 +112,19 @@
                     
                     <div class="panel-footer" v-if="resultados.length" style="position: absolute;z-index: 3;left: 15px;width: -webkit-fill-available;margin-right: 35px;">
                         <ul class="list-group search_box" style="max-height: 350px;margin-bottom: 10px;overflow-y: auto;">
-                            <li class="list-group-item" v-for="resultado in resultados">
-                                <a href="" class="drompdown-item text-dark d-block" v-on:click.prevent="select(resultado)">
-                                    <span v-html="resultado.name_negrita"></span>
-                                    <p class="small" v-html="resultado.category_negrita"></p>
-                                </a>
+                            <li class="list-group-item linkhov" v-for="resultado in resultados">
+                                <div v-if="resultado.tipo === 'prod'">
+                                    <a href="" class="drompdown-item text-dark d-block" v-on:click.prevent="select(resultado)">
+                                        <span v-html="resultado.name_negrita"></span>
+                                        <p class="small" v-html="resultado.category_negrita"></p>
+                                    </a>
+                                </div>
+                                <div v-if="resultado.tipo === 'store_user'">
+                                    <a href="" class="drompdown-item text-dark d-block" v-on:click.prevent="select(resultado)" v-on:click="changeSubmitSearch(resultado.name)">
+                                        <span v-html="resultado.name_negrita"></span>
+                                        <p class="small text-success" v-html="resultado.category_negrita"></p>
+                                    </a>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -190,7 +223,7 @@
                 <div id="api_search_autocomplete_store_small" class="col-sm" style="position: relative;">
                     <!-- SEARCH FORM -->
                     <form action="{{url('store/show-product')}}" id="header_search_form" method="GET">
-                        <input type="search" class="search_input col-sm" placeholder="Búsqueda" name="main_search" id="main_search" v-model="palabra_a_buscar" v-on:keyup="autoComplete" v-on:keyup.enter="SubmitForm" value="{{request()->main_search}}">
+                        <input type="search" class="search_input col-sm" placeholder="{{__('Search')}}" name="main_search" id="main_search" v-model="palabra_a_buscar" v-on:keyup="autoComplete" v-on:keyup.enter="SubmitForm" value="{{request()->main_search}}">
 
                         <input type="text" value="{{request()->main_search}}" id="value_at" hidden>
 
@@ -198,7 +231,7 @@
                             <img src="{{ asset('asset/images/search.png') }}" alt="">
                         </button>
                     </form>
-                    
+
                     <div class="panel-footer" v-if="resultados.length" style="position: absolute;z-index: 3;left: 15px;width: -webkit-fill-available;margin-right: 35px;">
                         <ul class="list-group search_box" style="max-height: 350px;margin-bottom: 10px;overflow-y: auto;">
                             <li class="list-group-item" v-for="resultado in resultados">
@@ -585,6 +618,16 @@
                     }
                 })
             }
+
+            const pageLoad = document.getElementById("pageLoad");
+            const carga = document.getElementById("carga");
+            if (carga != null) {
+                setTimeout(() => {
+                    carga.className = 'd-none';
+                    pageLoad.removeAttribute("hidden");
+                    window.scroll(0,0)
+                }, 1000);
+            }
         });
 
         function searchNavVisible(){
@@ -614,6 +657,8 @@
                 $('.content-wrapper').css("opacity","1")
             };
         });
+
+        
     </script>
 </body>
 

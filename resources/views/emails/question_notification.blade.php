@@ -6,11 +6,9 @@
 
 <h2 style="text-align: center; font-weight: bold">Hola <font style="color: goldenrod">{{$user->name}}</font></h2>
 
-<h3 style="text-align: center">Haz realizado una nueva Orden en <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
+<h3 style="text-align: center">Tienes una nueva Pregunta en tu Tienda de <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
+<h3 style="text-align: center">Cliente: <font style="color: darkgreen; font-weight: bold">{{$user->name}}</font></h3>
 
-@component('mail::button', ['url' => 'https://tuminimercado.com/store/purchases/'.$sale->created_at, 'color' => 'success'])
-Ver Orden
-@endcomponent
 
 <hr>
 

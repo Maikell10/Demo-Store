@@ -234,4 +234,59 @@ class ProfileController extends Controller
             return redirect()->route('profile.auth')->with('fail', __('Update failed'));
         }
     }
+
+    // Public Profile
+    public function publicProfile($name)
+    {
+        $controller = new Controller();
+        $arr_conex_client_t = $controller->arr_ip();
+
+        $user = User::where('name', $name)->first();
+
+        $cant_dm_new = 0;
+        if ($user != null) {
+            $direct_m = $controller->direct_m_user($user->id);
+            $cant_dm_new = $controller->cant_dm_new($user->id);
+        }
+
+        $sales_count = Sale::where('user_id',$user->id)->where('state', 'Finalizada')->count();
+
+        $positive_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', '+')->count();
+        $negative_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', '-')->count();
+        $neutral_rating = RatingStore::where('user_id',$user->id)->where('status', 'STORE')->where('rating', 'N')->count();
+        
+        $array = [];
+        $comments = Comment::where('user_id',$user->id)->with('products')->where('parent_id', null)->get();
+        
+        $ratings = Rating::where('user_id',$user->id)->with('products')->get();
+
+        $rating_stores = RatingStore::where('user_id',$user->id)->where('status', 'USER')->with('store')->get();
+
+        foreach ($comments as $comment) {
+            $array[] = [
+                'created_at' => $comment->created_at,
+                'type' => 'comment',
+                'body' => $comment
+            ];
+        }
+        foreach ($ratings as $rating) {
+            $array[] = [
+                'created_at' => $rating->created_at,
+                'type' => 'rating',
+                'body' => $rating
+            ];
+        }
+        foreach ($rating_stores as $rating_store) {
+            $array[] = [
+                'created_at' => $rating_store->created_at,
+                'type' => 'rating_store',
+                'body' => $rating_store
+            ];
+        }
+
+        $activities = collect($array)->sortByDesc('created_at')->values();
+
+
+        return view('user.public_profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'activities', 'comments', 'ratings'));
+    }
 }

@@ -7,6 +7,7 @@ use App\Comment;
 use App\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Rating as RatingResources;
+use App\Mail\QuestionNotification;
 use App\Rating;
 use App\Sale;
 use App\Visit;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class ProductController extends Controller
@@ -23,10 +25,13 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $arr_conex_client_t = $this->arr_ip();
-
+        /*$producto = Product::with('users')->where('id', 11)->firstOrFail();
+        Mail::to($producto->users[0]->email)->send(new QuestionNotification($producto->users[0]));
+        return Mail::failures();
+        return new QuestionNotification($producto->users[0]);*/
         /*
         if (isset($_COOKIE['contador'])) {
             setcookie('contador', $_COOKIE['contador'] + 1, time() + 10);
@@ -44,8 +49,34 @@ class ProductController extends Controller
             $search = request()->main_search;
         }
 
-        $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('nombre', 'like', '%' . $search . '%')->inRandomOrder()->paginate(8);
-        $categories = Category::with('subCategories')->inRandomOrder()->get();
+        if ($request->all() == null) {
+            $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('nombre', 'like', '%' . $search . '%')->inRandomOrder()->paginate(8);
+        }else{
+            if ($request->select_rank != null) {
+                if ($request->select_rank == 'price_asc') {
+                    $rank = 'products.precio_actual';
+                    $cond = 'ASC';
+                }
+                if ($request->select_rank == 'price_desc') {
+                    $rank = 'products.precio_actual';
+                    $cond = 'DESC';
+                }
+                if ($request->select_rank == 'newest') {
+                    $rank = 'products.created_at';
+                    $cond = 'DESC';
+                }
+            }
+
+            $productos_query = Product::select('products.id','products.nombre','products.slug','products.main_category_id','products.cantidad','products.precio_actual','products.precio_anterior','products.porcentaje_descuento','products.estado','main_categories.nombre as nombre_main_cat','sub_categories.nombre as nombre_sub_cat','categories.nombre as nombre_cat')->with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('products.nombre', 'like', '%' . $search . '%')->join('main_categories', 'main_categories.id', '=', 'products.main_category_id')->join('sub_categories', 'sub_categories.id', '=', 'main_categories.sub_category_id')->join('categories', 'categories.id', '=', 'sub_categories.category_id');
+
+            ($request->category != null) ? $productos=$productos_query->where('category_id',$request->category) : '';
+            ($request->select_rank != null) ? $productos=$productos_query->orderBy($rank,$cond) : '';
+
+            $productos = $productos_query->paginate(8);
+        }
+
+        //$categories = Category::with('subCategories')->inRandomOrder()->get();
+        $categories = Category::with('subCategories')->orderBy('nombre', 'ASC')->get();
 
         $user = Auth::user();
 
@@ -58,7 +89,7 @@ class ProductController extends Controller
             $cant_dm_new = $controller->cant_dm_new($user->id);
         }
 
-        return view('tienda.show-product', compact('productos', 'categories', 'user', 'arr_conex_client_t', 'direct_m', 'cant_dm_new'));
+        return view('tienda.show-product', compact('productos', 'categories', 'user', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'request'));
     }
 
     /**
@@ -160,7 +191,7 @@ class ProductController extends Controller
         // Set Comments in VIEW if is the same than the auth user
         $coments_auth_user = 0;
         if (auth()->user()) {
-            $comments_to_act = Comment::with('answers')->where('user_id', auth()->user()->id)->where('product_id', $producto->id)->get();
+            $comments_to_act = Comment::with('answers')->where('user_id', auth()->user()->id)->where('product_id', $producto->id)->where('parent_id', null)->get();
 
             foreach ($comments_to_act as $comment_to_act) {
                 if ($comment_to_act->answers != '[]') {
@@ -185,8 +216,13 @@ class ProductController extends Controller
         }
 
         $comments = Comment::with('answers', 'users')->where('product_id', $producto->id)->latest()->get();
-        
-        $productos_store = Product::select('products.id','porcentaje_descuento','estado','main_category_id','nombre','slug', 'precio_actual')->join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', $producto->users[0]->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->inRandomOrder()->get();
+
+        $productos_store = Product::select('products.id','porcentaje_descuento','estado','main_category_id','nombre','slug', 'precio_actual')
+        ->join('product_user', 'products.id', '=', 'product_user.product_id')
+        ->where('user_id', $producto->users[0]->id)
+        ->where('products.id', '!=', $producto->id)
+        ->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')
+        ->inRandomOrder()->get();
 
         return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old', 'productos_store', 'coments_auth_user'));
     }

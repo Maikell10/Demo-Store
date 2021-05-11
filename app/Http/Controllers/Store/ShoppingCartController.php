@@ -190,6 +190,13 @@ class ShoppingCartController extends Controller
 
     public function addToCart(Request $request, $id)
     {
+        // Check if the user is the same that the owner of the product
+        $producto_user = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->where('products.id', $id)->first();
+        if ($producto_user != null) {
+            $res = "same";
+            return response()->json($res);
+        }
+
         if (isset(Auth::user()->name)) {
             session()->forget('hjwebajjasxwk8164qds4.as84');
 
@@ -300,6 +307,13 @@ class ShoppingCartController extends Controller
     public function addToCartE(Request $request, $id)
     {
         if (isset(Auth::user()->name)) {
+            // Check if the user is the same that the owner of the product
+            $producto_user = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->where('products.id', $id)->first();
+            if ($producto_user != null) {
+                $res = "same";
+                return response()->json($res);
+            }
+
             session()->forget('hjwebajjasxwk8164qds4.as84');
 
             $arreglo = $request->session()->get('hjwebajjasxwk8164qds4.as84');
