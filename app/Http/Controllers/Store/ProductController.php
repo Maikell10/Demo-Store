@@ -10,6 +10,7 @@ use App\Http\Resources\Rating as RatingResources;
 use App\Mail\QuestionNotification;
 use App\Rating;
 use App\Sale;
+use App\User;
 use App\Visit;
 use Carbon\Carbon;
 use DateTime;
@@ -28,10 +29,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $arr_conex_client_t = $this->arr_ip();
-        /*$producto = Product::with('users')->where('id', 11)->firstOrFail();
-        Mail::to($producto->users[0]->email)->send(new QuestionNotification($producto->users[0]));
-        return Mail::failures();
-        return new QuestionNotification($producto->users[0]);*/
+
         /*
         if (isset($_COOKIE['contador'])) {
             setcookie('contador', $_COOKIE['contador'] + 1, time() + 10);

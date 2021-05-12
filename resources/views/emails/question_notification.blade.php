@@ -4,16 +4,19 @@
 </center>
 <br>
 
-<h2 style="text-align: center; font-weight: bold">Hola <font style="color: goldenrod">{{$user->name}}</font></h2>
+<h2 style="text-align: center; font-weight: bold">{{__('Hello!')}} <font style="color: goldenrod">{{$user->name}}</font></h2>
 
-<h3 style="text-align: center">Tienes una nueva Pregunta en tu Tienda de <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
-<h3 style="text-align: center">Cliente: <font style="color: darkgreen; font-weight: bold">{{$user->name}}</font></h3>
+<h3 style="text-align: center">{{__('You have a new Question in your Store of')}} <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
+<h3 style="text-align: center">{{__('Client')}}: <font style="color: darkgreen; font-weight: bold">{{$user_client->name}}</font></h3>
 
+@component('mail::button', ['url' => 'https://tuminimercado.com/admin/comment/'.$product->slug, 'color' => 'success'])
+{{__('See Question')}}
+@endcomponent
 
 <hr>
 
 @component('mail::panel')
-Somos tu mejor opción en ecommerce siempre
+{{__('We are your best option in ecommerce always')}}
 @endcomponent
 
 @endcomponent

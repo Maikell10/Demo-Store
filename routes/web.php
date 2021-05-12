@@ -497,7 +497,7 @@ Route::get('cancelar/{ruta}', function ($ruta) {
 
 
 // Comments
-Route::resource('admin/comment', 'Admin\CommentController')->names('admin.comment');
+Route::resource('admin/comment', 'Admin\CommentController')->names('admin.comment')->middleware('auth','verified');
 
 // Compras
 Route::resource('admin/shopping', 'Admin\AdminShoppingController')->names('admin.shopping');
@@ -513,10 +513,10 @@ Route::delete('admin/purchaseDetail/destroy/{id}', 'Admin\AdminShoppingControlle
 
 
 // Orders
-Route::resource('admin/order', 'Admin\OrderController')->names('admin.order')->middleware('auth');
+Route::resource('admin/order', 'Admin\OrderController')->names('admin.order')->middleware('auth','verified');
 
 // Sales
-Route::resource('admin/sale', 'Admin\SaleController')->names('admin.sale')->middleware('auth');
+Route::resource('admin/sale', 'Admin\SaleController')->names('admin.sale')->middleware('auth','verified');
 
 
 // Roles y Permisos
@@ -527,10 +527,10 @@ Route::resource('admin/user', 'Admin\UserController', ['except' => ['create', 's
 
 
 // Client Orders
-Route::resource('/store/purchases', 'Store\PurchasesController')->names('tienda.purchases')->middleware('auth');
+Route::resource('/store/purchases', 'Store\PurchasesController')->names('tienda.purchases')->middleware('auth','verified');
 
 // Client Rating Product
-Route::resource('/store/rating_purchases', 'Store\PurchasesRatingController')->names('tienda.rating_purchases')->middleware('auth');
+Route::resource('/store/rating_purchases', 'Store\PurchasesRatingController')->names('tienda.rating_purchases')->middleware('auth','verified');
 Route::get('store/rating_seller','Store\PurchasesRatingController@store');
 
 

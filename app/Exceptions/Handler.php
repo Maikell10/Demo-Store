@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Http\Middleware\Authenticate;
+use GuzzleHttp\RedirectMiddleware;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 

@@ -151,8 +151,6 @@
                                         <ul class="nav nav-pills">
                                             <li class="nav-item"><a class="nav-link active" href="#activity"
                                                     data-toggle="tab">{{ __('Activity') }}</a></li>
-                                            <!-- <li class="nav-item"><a class="nav-link" href="#timeline"
-                                                    data-toggle="tab">{{ __('Timeline') }}</a></li> -->
                                             <li class="nav-item"><a class="nav-link" href="#settings"
                                                     data-toggle="tab">{{ __('Settings') }}</a></li>
                                         </ul>
@@ -187,14 +185,14 @@
                                                         @endif
 
                                                         <span class="username">
-                                                            <a href="#">{{ Auth::user()->name }}</a>
+                                                            <a href="{{route('profile.user',Auth::user()->name)}}">{{ Auth::user()->name }}</a>
                                                         </span>
                                                         <span class="description text-purple">{{__('Product Rating')}} -
                                                             {{ \Carbon\Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
                                                     </div>
                                                     <!-- /.user-block -->
                                                     <p>
-                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a>
+                                                        <a href="{{route('profile.user',Auth::user()->name)}}" class="alert-link">{{ Auth::user()->name }}</a>
                                                         {{__('rated the product:')}} <a
                                                             href="{{ url('store/show-product/'.$activity['body']->products->slug.'') }}"
                                                             class="alert-link">{{$activity['body']->products->nombre}}</a> {{__('with')}}
@@ -226,14 +224,14 @@
                                                         @endif
 
                                                         <span class="username">
-                                                            <a href="#">{{ Auth::user()->name }}</a>
+                                                            <a href="{{route('profile.user',Auth::user()->name)}}">{{ Auth::user()->name }}</a>
                                                         </span>
                                                         <span class="description text-orange">{{__('Question')}} -
                                                             {{ \Carbon\Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
                                                     </div>
                                                     <!-- /.user-block -->
                                                     <p>
-                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a> {{__('asked a question about the product:')}} <a
+                                                        <a href="{{route('profile.user',Auth::user()->name)}}" class="alert-link">{{ Auth::user()->name }}</a> {{__('asked a question about the product:')}} <a
                                                             href="{{ url('store/show-product/'.$activity['body']->products->slug.'') }}"
                                                             class="alert-link">{{$activity['body']->products->nombre}}</a>
                                                     </p>
@@ -263,14 +261,14 @@
                                                         @endif
 
                                                         <span class="username">
-                                                            <a href="#">{{ Auth::user()->name }}</a>
+                                                            <a href="{{route('profile.user',Auth::user()->name)}}">{{ Auth::user()->name }}</a>
                                                         </span>
                                                         <span class="description text-success">{{__('Seller Rating')}} -
                                                             {{ \Carbon\Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
                                                     </div>
                                                     <!-- /.user-block -->
                                                     <p>
-                                                        <a href="#" class="alert-link">{{ Auth::user()->name }}</a> {{__('rated the seller:')}} <a
+                                                        <a href="{{route('profile.user',Auth::user()->name)}}" class="alert-link">{{ Auth::user()->name }}</a> {{__('rated the seller:')}} <a
                                                             href="{{ url('commerce/'.$activity['body']->store->name.'') }}"
                                                             class="alert-link">{{$activity['body']->store->name}}</a>
                                                             {{__('with')}} 
@@ -291,38 +289,6 @@
                                                 @endif
                                                 <!-- /.post -->
 
-                                            </div>
-                                            <!-- /.tab-pane -->
-                                            <div class="tab-pane" id="timeline">
-                                                <!-- The timeline -->
-                                                <div class="timeline timeline-inverse">
-
-                                                    <!-- timeline time label -->
-                                                    <div class="time-label">
-                                                        <span class="bg-warning">
-                                                            {{ \Carbon\Carbon::parse(Auth::user()->created_at)->format('d/m/Y') }}
-                                                        </span>
-                                                    </div>
-                                                    <!-- /.timeline-label -->
-                                                    <!-- timeline item -->
-                                                    <div>
-                                                        <i class="fas fa-user bg-success"></i>
-
-                                                        <div class="timeline-item">
-                                                            <span class="time"><i
-                                                                    class="far fa-clock"></i>{{ \Carbon\Carbon::parse(Auth::user()->created_at)->diffForHumans() }}</span>
-
-                                                            <h3 class="timeline-header"><a
-                                                                    href="#">{{ Auth::user()->name }}</a>
-                                                                {{ __('Created the Account') }}</h3>
-                                                        </div>
-                                                    </div>
-                                                    <!-- END timeline item -->
-
-                                                    <div>
-                                                        <i class="far fa-clock bg-gray"></i>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <!-- /.tab-pane -->
 

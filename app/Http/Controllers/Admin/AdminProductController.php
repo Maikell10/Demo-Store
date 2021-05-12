@@ -182,7 +182,7 @@ class AdminProductController extends Controller
 
             return view('admin.product.show', compact('producto', 'categorias', 'sub_categorias', 'main_categorias', 'estados_productos','notifications','direct_m'));
         } else {
-            return redirect()->route('admin.product.index')->with('cancelar', 'No tiene permiso para ver el Producto');
+            return redirect()->route('admin.product.index')->with('cancelar', __('You do not have permission to view the Product'));
         }
     }
 
@@ -217,7 +217,7 @@ class AdminProductController extends Controller
 
             return view('admin.product.edit', compact('producto', 'categorias', 'sub_categorias', 'main_categorias', 'estados_productos','notifications','direct_m'));
         } else {
-            return redirect()->route('admin.product.index')->with('cancelar', 'No tiene permiso para ver el Producto');
+            return redirect()->route('admin.product.index')->with('cancelar', __('You do not have permission to view the Product'));
         }
     }
 

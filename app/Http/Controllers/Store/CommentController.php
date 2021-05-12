@@ -6,6 +6,7 @@ use App\Comment;
 use App\Http\Controllers\Controller;
 use App\Mail\QuestionNotification;
 use App\Product;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -42,23 +43,23 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         if ($request->ajax()) {
+            // Preparing the Mail
+            $product = Product::with('users')->where('id', $request->product_id)->firstOrFail();
+            $user_client = User::where('id',$request->user_id)->firstOrFail();
+
+            // Sending the email to client
+            Mail::to($product->users[0]->email)->queue(new QuestionNotification($product->users[0],$user_client,$product));
+
+            // Save Comment
             $comment = new Comment();
 
             $comment->product_id = $request->product_id;
             $comment->user_id = $request->user_id;
             $comment->body = $request->pregunta_prod;
             $comment->save();
-
-            $producto = Product::with('users')->where('id', $request->product_id)->firstOrFail();
-
-            // Enviar correo al cliente
-            Mail::to($producto->users[0]->email)->queue(new QuestionNotification($producto->users[0]));
-
             
             $res = 'positivo';
-    
             
-    
             return response()->json($res);
         }
     }

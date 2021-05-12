@@ -96,20 +96,24 @@ class CommentController extends Controller
 
         $producto = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users', 'comments')->where('slug', $slug)->firstOrFail();
 
-        if (Auth::user()->id != 1) {
-            foreach ($producto->comments as $comment) {
-                $comm = Comment::findOrFail($comment->id);
-                $comm->status = 'VIEW';
-                $comm->save();
+        if ($producto->users[0]->id === Auth::user()->id | Auth::user()->id === 1) {
+            if (Auth::user()->id != 1) {
+                foreach ($producto->comments as $comment) {
+                    $comm = Comment::findOrFail($comment->id);
+                    $comm->status = 'VIEW';
+                    $comm->save();
+                }
             }
+            
+            $cant_coments = Comment::where('parent_id', null)->where('product_id', $producto->id)->count();
+            $cant_answers = Comment::where('parent_id', '!=', null)->where('product_id', $producto->id)->count();
+    
+            $cant_left = $cant_coments - $cant_answers;
+    
+            return view('admin.comment.show', compact('producto', 'cant_left','notifications','direct_m'));
+        } else {
+            return redirect()->route('admin.comment.index')->with('cancelar', __('You do not have permission to view the Question'));
         }
-        
-        $cant_coments = Comment::where('parent_id', null)->where('product_id', $producto->id)->count();
-        $cant_answers = Comment::where('parent_id', '!=', null)->where('product_id', $producto->id)->count();
-
-        $cant_left = $cant_coments - $cant_answers;
-
-        return view('admin.comment.show', compact('producto', 'cant_left','notifications','direct_m'));
     }
 
     /**

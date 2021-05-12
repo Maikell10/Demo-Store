@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Product;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,11 +13,13 @@ class QuestionNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
+    public $user, $user_client, $product;
     
-    public function __construct(User $user)
+    public function __construct(User $user, User $user_client, Product $product)
     {
         $this->user = $user;
+        $this->user_client = $user_client;
+        $this->product = $product;
     }
 
     public function build()

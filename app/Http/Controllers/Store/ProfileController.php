@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 use Intervention\Image\Facades\Image as Imagen;
+use Throwable;
 
 DEFINE('DS', DIRECTORY_SEPARATOR);
 
@@ -109,11 +110,11 @@ class ProfileController extends Controller
         if ($request->hasFile('imagenes')) {
             // Deleting Previous Image
             $image_prev = Image::where('imageable_id', Auth::user()->id)->where('imageable_type', 'App\User')->first();
-
+/*
             if ($image_prev) {
                 $archivo = substr($image_prev->url, 1);
                 File::delete($archivo);
-            }
+            }*/
 
             $imagen = $request->file('imagenes');
 
@@ -133,7 +134,11 @@ class ProfileController extends Controller
                 $ruta = public_path() . DS . 'imagenes';
                 
                 $path = $ruta . DS . $nombre;
-                Imagen::make($imagen)->save($path,10);
+                try {
+                    Imagen::make($imagen)->save($path,10);
+                } catch (Throwable $e) {
+                    return $e;
+                }
 
                 $urlimagen = DS . 'imagenes' . DS  . $nombre;
             }
