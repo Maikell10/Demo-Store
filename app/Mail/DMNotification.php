@@ -2,28 +2,27 @@
 
 namespace App\Mail;
 
-use App\Product;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class QuestionNotification extends Mailable
+class DMNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user, $user_client, $product;
-    
-    public function __construct(User $user, User $user_client, Product $product)
+    public $user, $user_client, $date_order;
+
+    public function __construct(User $user, User $user_client, $date_order)
     {
         $this->user = $user;
         $this->user_client = $user_client;
-        $this->product = $product;
+        $this->date_order = $date_order;
     }
 
     public function build()
     {
-        return $this->markdown('emails.question_notification')->subject(__('You have a new question in TuMiniMercado'));
+        return $this->markdown('emails.dm_notification')->subject(__('You have a new Direct Message'));
     }
 }

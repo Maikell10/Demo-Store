@@ -23,6 +23,72 @@
 
 <div class="content">
     <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-success card-outline">
+                    <div class="card-body">
+                        <h3 class="font-weight-bold text-success">Igrese la Tasa de Cambio Bs x 1 USD $ 💵💰</h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                
+                                <form action="{{route('admin.business-profile.store', $user->id)}}" method="POST">
+                                    @csrf
+                                    @method('POST')
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="tasaDia" class="col-md-12 col-form-label">Tasa del Día</label>
+                
+                                            <div class="input-group col-md-12">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text font-weight-bold" id="basic-addon1">Bs.</span>
+                                                </div>
+                                                <input type="number" class="form-control" id="tasaDia" name="tasaDia" placeholder="Tasa del Día" required>
+
+                                                <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{auth()->user()->id}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-success btn-block">{{__('Save')}}</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            @if ($store_profile_config != '[]')
+                                @if ($store_profile_config[0]->change != null)
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="tasaDia" class="col-md-12 col-form-label">Última Tasa del Día <font class="text-muted text-sm ml-3">{{ \Carbon\Carbon::parse($store_profile_config[0]->created_change)->diffForHumans() }}</font></label>
+                
+                                            <div class="input-group col-md-8">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text font-weight-bold" id="basic-addon1">Bs.</span>
+                                                </div>
+                                                <input type="text" class="form-control" value={{number_format($store_profile_config[0]->change, 2)}} readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <form action="{{route('admin.business-profile.destroy', $user->id)}}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger btn-block">{{__('Delete')}}</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                @endif
+                            @endif
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-success card-outline">

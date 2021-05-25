@@ -77,50 +77,6 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <!-- SELECT2 EXAMPLE -->
-
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">{{__('Automatically generated data')}}</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-
-                                    <label>{{__('Visits')}}</label>
-                                    <input class="form-control" type="number" id="visitas" name="visitas" readonly
-                                        value="{{$producto->visitas}}">
-
-                                </div>
-                                <!-- /.form-group -->
-
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-md-6">
-                                <div class="form-group">
-
-                                    <label>{{__('Sales')}}</label>
-                                    <input class="form-control" type="number" id="ventas" name="ventas" readonly
-                                        value="{{$producto->ventas}}">
-                                </div>
-                                <!-- /.form-group -->
-
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
-
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-
-                    </div>
-                </div>
-                <!-- /.card -->
-
 
                 <div class="card card-info">
                     <div class="card-header">
@@ -221,6 +177,14 @@
                         </div>
                         <!-- /.row -->
 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="nombre">{{__('Brand')}}</label>
+                                    <input class="form-control" type="text" name="marca" id="marca" value="{{$producto->marca}}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -493,6 +457,8 @@
 
                             </div>
                             <!-- /.col -->
+
+                            @if (auth()->user()->id == 1)
                             <div class="col-sm-6">
                                 <!-- checkbox -->
                                 <div class="form-group clearfix">
@@ -515,6 +481,31 @@
                                     </div>
                                 </div>
                             </div>
+                            @else
+                            <div class="col-sm-6" hidden>
+                                <!-- checkbox -->
+                                <div class="form-group clearfix">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="activo" name="activo"
+                                            @if ($producto->activo=='Si')
+                                        checked
+                                        @endif>
+                                        <label class="custom-control-label" for="activo">{{__('Active')}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="sliderprincipal"
+                                            name="sliderprincipal" @if ($producto->sliderprincipal=='Si')
+                                        checked
+                                        @endif>
+                                        <label class="custom-control-label" for="sliderprincipal">{{__('Appears on the main Slider')}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            
 
                         </div>
                         <!-- /.row -->

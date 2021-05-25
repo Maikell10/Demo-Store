@@ -74,49 +74,6 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <!-- SELECT2 EXAMPLE -->
-
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">{{__('Automatically generated data')}}</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-
-                                    <label>{{__('Visits')}}</label>
-                                    <input class="form-control" type="number" id="visitas" name="visitas" readonly
-                                        value="{{$producto->visitas}}">
-
-                                </div>
-                                <!-- /.form-group -->
-
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-md-6">
-                                <div class="form-group">
-
-                                    <label>{{__('Sales')}}</label>
-                                    <input class="form-control" type="number" id="ventas" name="ventas" readonly
-                                        value="{{$producto->ventas}}">
-                                </div>
-                                <!-- /.form-group -->
-
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
-
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-
-                    </div>
-                </div>
-                <!-- /.card -->
-
 
                 <div class="card card-info">
                     <div class="card-header">
@@ -212,9 +169,6 @@
                                                 value="{{$producto->cantidad}}">
                                         </div>
                                     </div>
-
-                                    
-
                                     
                                 </div>
                                 <!-- /.form-group -->
@@ -223,6 +177,15 @@
                             <!-- /.col -->
                         </div>
                         <!-- /.row -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="nombre">{{__('Brand')}}</label>
+                                    <input class="form-control" type="text" name="marca" id="marca" readonly value="{{$producto->marca}}">
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                     <!-- /.card-body -->
@@ -393,10 +356,6 @@
                 <!-- /.row -->
 
 
-
-
-
-
                 <div class="card card-primary">
                     <div class="card-header">
                         <div class="card-title">
@@ -421,11 +380,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
 
 
 

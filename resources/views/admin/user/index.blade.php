@@ -1,6 +1,6 @@
 @extends('plantilla.admin')
 
-@section('titulo','Administración de Usuarios')
+@section('titulo',__('Users Administration'))
 
 @section('breadcrumb')
 <li class="breadcrumb-item active">@yield('titulo')</li>
@@ -49,7 +49,7 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
+                            <th scope="col">{{__('Name')}}</th>
                             <th scope="col">Email</th>
                             <th scope="col">Rol(es)</th>
                             <th scope="col" colspan="3"></th>

@@ -36,7 +36,7 @@ class PurchasesRatingController extends Controller
 
         $d_messages = DirectMessages::where('order_id', $order_id)->where('type', 'STORE')->orderBy('created_at', 'asc')->get();
 
-        $sale = Sale::where('created_at', $request->created)->where('user_id', $user->id)->get('updated_at');
+        $sale = Sale::where('created_at', $request->created)->where('user_id', $user->id)->get('created_at');
         
         return view('tienda.rating_purchases.index', compact('user', 'arr_conex_client_t', 'cant_dm_new','d_messages','order_id','direct_m', 'request', 'user_store', 'sale'));
     }

@@ -258,6 +258,9 @@
                                             @endif
 
                                             @endforeach
+
+                                            @else
+                                            <h2 class="font-weight-bold text-muted">{{__('There is no Activity yet')}}</h2>
                                             @endif
                                             <!-- /.post -->
 

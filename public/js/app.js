@@ -51179,6 +51179,12 @@ var apiproduct = new Vue({
         this.deshabilitar_boton = 1;
         this.div_aparecer = true;
       }
+    },
+    process: function process() {
+      if (this.porcentaje_descuento > 0) {
+        this.precioanterior = 100 * this.precioactual / (100 - this.porcentaje_descuento);
+        this.descuento = this.precioanterior - this.precioactual;
+      }
     }
   },
   mounted: function mounted() {

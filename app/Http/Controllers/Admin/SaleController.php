@@ -40,7 +40,7 @@ class SaleController extends Controller
 
         if ($distinct_sale == '[]') {
             $products = '0';
-            return view('admin.order.index', compact('distinct_sale','sales', 'notifications','direct_m'));
+            return view('admin.sale.index', compact('distinct_sale','sales', 'notifications','direct_m'));
         }
 
         return view('admin.sale.index', compact('distinct_sale','sales','notifications','direct_m'));

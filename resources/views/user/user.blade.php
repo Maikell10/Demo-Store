@@ -36,7 +36,11 @@
                                 <!-- small box -->
                                 <div class="small-box bg-success">
                                     <div class="inner">
+                                        @if ($total_sales_count == 0)
+                                        <h3>0<sup style="font-size: 20px">%</sup></h3>
+                                        @else
                                         <h3>{{number_format(($sales_canceled_count * 100)/$total_sales_count,2)}}<sup style="font-size: 20px">%</sup></h3>
+                                        @endif
 
                                         <p>{{__('Bounce Rate')}}</p>
                                     </div>
@@ -52,14 +56,14 @@
                                 <!-- small box -->
                                 <div class="small-box bg-warning">
                                     <div class="inner">
-                                        <h3>1</h3>
+                                        <h3>{{$clients}}</h3>
 
-                                        <p>{{__('User Registrations')}}</p>
+                                        <p>{{__('Client Registrations')}}</p>
                                     </div>
                                     <div class="icon">
-                                        <i class="ion ion-person-add"></i>
+                                        <i class="ion-ios-people" style="margin-top: -25px;"></i>
                                     </div>
-                                    <a href="{{url('admin/user')}}" class="small-box-footer">{{__('More info ')}}<i
+                                    <a href="{{url('admin/client')}}" class="small-box-footer">{{__('More info ')}}<i
                                             class="fas fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>

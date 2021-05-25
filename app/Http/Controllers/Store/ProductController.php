@@ -10,6 +10,7 @@ use App\Http\Resources\Rating as RatingResources;
 use App\Mail\QuestionNotification;
 use App\Rating;
 use App\Sale;
+use App\StoreProfile;
 use App\User;
 use App\Visit;
 use Carbon\Carbon;
@@ -222,7 +223,9 @@ class ProductController extends Controller
         ->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')
         ->inRandomOrder()->get();
 
-        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old', 'productos_store', 'coments_auth_user'));
+        $store_profile_config =  StoreProfile::where('user_id', $producto->users[0]->id)->get();
+
+        return view('tienda.show-product', compact('producto', 'category', 'categorias', 'user', 'comments', 'arr_conex_client_t', 'direct_m', 'cant_dm_new', 'can_rate', 'rate_old', 'productos_store', 'coments_auth_user', 'store_profile_config'));
     }
 
     /**

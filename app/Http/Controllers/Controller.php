@@ -118,9 +118,9 @@ class Controller extends BaseController
     public function direct_m($user_id)
     {
         if ($user_id == 1) {
-            return $direct_m = DirectMessages::where('status', 'NO-VIEW')->with('users')->orderBy('created_at', 'desc')->get();
+            return $direct_m = DirectMessages::where('type', 'CLIENT')->where('status', 'NO-VIEW')->with('users')->orderBy('created_at', 'desc')->get();
         } else {
-            return $direct_m = DirectMessages::where('status', 'NO-VIEW')->where('store_user_id', $user_id)->with('users')->orderBy('created_at', 'desc')->get();
+            return $direct_m = DirectMessages::where('type', 'CLIENT')->where('status', 'NO-VIEW')->where('store_user_id', $user_id)->with('users')->orderBy('created_at', 'desc')->get();
         }
     }
 

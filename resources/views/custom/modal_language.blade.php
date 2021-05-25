@@ -1,4 +1,4 @@
-<!-- Modal Lnaguage -->
+<!-- Modal Language -->
 <div class="modal fade" id="languageModal" tabindex="-1" aria-labelledby="languageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">

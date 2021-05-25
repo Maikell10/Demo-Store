@@ -62,7 +62,7 @@
                 <form class="form-inline ml-3">
                     <div class="input-group input-group-sm w-100" id="mainSearchButtonAdmin">
                         <input class="form-control form-control-navbar" type="search" placeholder="{{__('Search')}}"
-                            aria-label="Search" name="nombre" v-model="palabra_a_buscar" v-on:keyup="autoComplete"
+                            aria-label="Search" name="nombre" id="nombre" v-model="palabra_a_buscar" v-on:keyup="autoComplete"
                             v-on:keyup.enter="SubmitForm">
                         <div class="input-group-append">
                             <button id="miboton" ref="SubmitButonSearch" class="btn btn-navbar" type="submit">
@@ -152,7 +152,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge">{{$cant_dm}}</span>
+                        @if ($cant_dm > 0)
+                            <span class="badge badge-danger navbar-badge">{{$cant_dm}}</span>
+                        @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 
@@ -283,7 +285,7 @@
                 <form class="form-inline ml-3">
                     <div class="input-group input-group-md col-sm">
                         <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                            aria-label="Search" name="nombre" v-model="palabra_a_buscar" v-on:keyup="autoComplete"
+                            aria-label="Search" name="nombre" id="nombre" v-model="palabra_a_buscar" v-on:keyup="autoComplete"
                             v-on:keyup.enter="SubmitForm">
                         <div class="input-group-append">
                             <button id="miboton" ref="SubmitButonSearch" class="btn btn-navbar" type="submit">
@@ -320,15 +322,13 @@
                                     <div class="image p-0 mr-1" style="margin-left: -5px">
                     
                                         @if (auth()->user()->social_image() != 'no hay img')
-                                        <img src="{{auth()->user()->social_image()}}" class="img-circle elevation-2" alt="User Image"
-                                        style="height: 40px; width: 40px; object-fit: cover">
+                                        <img src="{{auth()->user()->social_image()}}" class="img-circle elevation-2" alt="User Image" style="height: 40px; width: 40px; object-fit: cover">
                                         @else
                                         @if (isset(Auth::user()->image->url))
-                                        <img src="{{ Auth::user()->image->url }}" class="img-circle elevation-2" alt="User Image"
-                                            style="height: 40px; width: 40px; object-fit: cover">
+                                        <img src="{{ Auth::user()->image->url }}" class="img-circle elevation-2" alt="User Image" style="height: 40px; width: 40px; object-fit: cover">
                                         @else
                                         <img src="{{ asset('adminlte/dist/img/avatardefault.png') }}"
-                                            class="img-circle elevation-2" alt="User Image">
+                                            class="img-circle elevation-2" alt="User Image" style="height: 40px; width: 40px; object-fit: cover">
                                         @endif
                                         @endif
                                         
@@ -402,12 +402,15 @@
                                         <p>{{__('List of Categories')}}</p>
                                     </a>
                                 </li>
+
+                                @can('haveaccess', 'category.create')
                                 <li class="nav-item">
                                     <a href="{{route('admin.category.create')}}" class="nav-link" id="menuCat2">
                                         <i class="fas fa-chevron-right nav-icon"></i>
                                         <p>{{__('Create Category')}}</p>
                                     </a>
                                 </li>
+                                @endcan
                             </ul>
                         </li>
                         @endcan
@@ -502,6 +505,19 @@
                         @endcan
 
 
+                        <!-- Clients -->
+                        @can('haveaccess', 'store.full')
+                        <li class="nav-item" id="slidClients">
+                            <a href="{{route('admin.client.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    {{__('Clients')}}
+                                </p>
+                            </a>
+                        </li>
+                        @endcan
+
+
                         @can('haveaccess', 'user.index')
 
                         <div class="user-panel mt-3"></div>
@@ -544,9 +560,10 @@
                             </a>
                         </li>
 
-                        <div class="user-panel mt-3 "></div>
+                        <div class="user-panel mt-3  mb-5"></div>
 
                         @endcan
+
 
 
                     </ul>

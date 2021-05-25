@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Category;
+use App\Mail\RequestCategoryNotification;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class AdminCategoryController extends Controller
 {
@@ -30,7 +33,7 @@ class AdminCategoryController extends Controller
         $direct_m = $this->direct_m(Auth::user()->id);
 
         $nombre = $request->get('nombre');
-        $categorias = Category::where('nombre', 'like', "%$nombre%")->orderBy('nombre')->paginate(10);
+        $categorias = Category::where('nombre', 'like', "%$nombre%")->orderBy('nombre')->with('subCategories', 'subCategories.mainCategories')->get();
         return view('admin.category.index', compact('categorias','notifications','direct_m'));
     }
 
@@ -60,12 +63,13 @@ class AdminCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('haveaccess','category.create');
+
         /*$cat = new Category();
         $cat->nombre = $request->nombre;
         $cat->slug = $request->slug;
         $cat->descripcion = $request->descripcion;
         $cat->save();
-
 
         return $cat;*/
 
@@ -95,7 +99,7 @@ class AdminCategoryController extends Controller
         // Messages
         $direct_m = $this->direct_m(Auth::user()->id);
 
-        $cat = Category::where('slug', $slug)->firstOrFail();
+        $cat = Category::where('slug', $slug)->with('subCategories', 'subCategories.mainCategories')->firstOrFail();
         $editar = 'Si';
 
         return view('admin.category.show', compact('cat', 'editar', 'notifications', 'direct_m'));
@@ -132,6 +136,8 @@ class AdminCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        Gate::authorize('haveaccess','category.edit');
+
         $cat = Category::findOrFail($id);
 
         $request->validate([
@@ -160,5 +166,21 @@ class AdminCategoryController extends Controller
         $cat->delete();
 
         return redirect()->route('admin.category.index')->with('datos', __('Register Deleted Successfully'));
+    }
+
+    public function addCategory(Request $request)
+    {
+        $request->validate([
+            'descripcion' => 'required',
+            'id' => 'required'
+        ]);
+
+        // Preparing the Mail
+        $admin = User::where('id',1)->firstOrFail();
+
+        // Sending the email to client
+        Mail::to('maikell.ods10@gmail.com')->queue(new RequestCategoryNotification($admin,Auth::user(),$request->descripcion));
+
+        return redirect()->route('admin.category.index')->with('datos', __('In a period of 24 hours we will inform you of the creation of the category'));
     }
 }

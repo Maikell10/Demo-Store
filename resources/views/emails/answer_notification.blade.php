@@ -1,0 +1,19 @@
+@component('mail::message', ['user' => $user_client])
+<center>
+<img src='https://www.tuminimercado.com/asset/images/LogoTM3mail.png' alt="TuMiniMercado Logo" class="brand-image" style="max-height: 100px;height: 100px; width: 100px" height="100px" width="100px" />
+</center>
+<br>
+
+<h2 style="text-align: center; font-weight: bold">{{__('Hello!')}} <font style="color: goldenrod">{{$user_client->name}}</font></h2>
+
+<h3 style="text-align: center"><font style="color: darkgreen; font-weight: bold">{{$user->name}}</font>{{__(' has answered your question in')}} <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
+
+@component('mail::button', ['url' => 'https://tuminimercado.com/store/show-product/'.$product->slug, 'color' => 'success'])
+{{__('See Answer')}}
+@endcomponent
+
+@component('mail::panel')
+{{__('We are your best option in ecommerce always')}}
+@endcomponent
+
+@endcomponent

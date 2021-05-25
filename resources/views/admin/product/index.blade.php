@@ -21,6 +21,19 @@
         vertical-align: center;
         border-top: 1px solid #dee2e6
     }
+
+    tbody > tr > td:nth-child(1),
+    tbody > tr > td:nth-child(3),
+    tbody > tr > td:nth-child(4),
+    tbody > tr > td:nth-child(5),
+    tbody > tr > td:nth-child(6) {
+        text-align: center;
+        vertical-align: middle;
+    }
+    tbody > tr > td:nth-child(2) {
+        vertical-align: middle;
+    } 
+    
 </style>
 @endsection
 
@@ -29,6 +42,79 @@
     $('#slidProd').addClass('menu-open');
     $('#slidProd>a').addClass('active');
     $('#slidProd>ul>li>#menuProd1').addClass('active');
+    
+    $(document).ready(function(){
+        var nombre = $("#nombre_get").val()
+        $("#nombre").val($("#nombre_get").val())
+
+        if ($('#applocate').val() == 'es') {
+            $("#productTable").DataTable({
+                "aaSorting": [],
+                "responsive": true,
+                "autoWidth": false,
+                processing: true,
+                serverSide: true,
+                pageLength: 0,
+                "lengthMenu": [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "Todos"]
+                ],
+                ajax: "{{url('admin/getProduct?nombre=')}}"+nombre,
+                columns: [
+                    {data: 'image'},
+                    {data: 'nombre'},
+                    {data: 'cantidad'},
+                    {data: 'estado'},
+                    {data: 'activo'},
+                    {data: 'action'},
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            });
+        } else {
+            $("#productTable").DataTable({
+                "aaSorting": [],
+                "responsive": true,
+                "autoWidth": false,
+                processing: true,
+                serverSide: true,
+                pageLength: 0,
+                "lengthMenu": [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "All"]
+                ],
+                ajax: "{{url('admin/getProduct?nombre=')}}"+nombre,
+                columns: [
+                    {data: 'image'},
+                    {data: 'nombre'},
+                    {data: 'cantidad'},
+                    {data: 'estado'},
+                    {data: 'activo'},
+                    {data: 'action'},
+                ],
+            });
+        }
+        
+    });
+    
 </script>
 @endsection
 
@@ -36,6 +122,14 @@
 
 <!-- /.row -->
 <div id="confirmareliminar" class="row">
+    <!-- applocate for use in javascript -->
+    <input type="text" value="{{session('applocate')}}" hidden id="applocate">
+
+    @if (isset($_GET['nombre']))
+        <input type="text" value="{{$_GET['nombre']}}" hidden id="nombre_get">
+    @else
+        <input type="text" value="" hidden id="nombre_get">
+    @endif
 
     <span id="urlbase" hidden>{{route('admin.product.index')}}</span>
     @include('custom.modal_eliminar')
@@ -43,39 +137,27 @@
 
         <div class="card card-success card-outline">
             <div class="card-header">
-                <h3 class="card-title">{{__('Products Section')}}</h3>
+                <h3 class="card-title mt-3">{{__('Products Section')}}</h3>
 
                 <div class="card-tools">
-                    <form>
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="nombre" class="form-control float-right" placeholder="{{__('Search')}}"
-                                value="{{request()->get('nombre')}}">
-
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
-                            </div>
-                        </div>
-                    </form>
-
+                    <a class="m-2 float-right btn btn-primary" href="{{route('admin.product.create')}}">{{__('Create')}} <i class="fas fa-plus"></i></a>
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-                <a class="m-2 float-right btn btn-primary" href="{{route('admin.product.create')}}">{{__('Create')}} <i
-                        class="fas fa-plus"></i></a>
-                <table class="table1 table-head-fixed table-hover">
+            <div class="card-body table-responsive">
+                
+                <table class="table table-hover dataTable dtr-inline" role="grid" id="productTable">
                     <thead>
-                        <tr>
+                        <tr class="bg-gradient-green text-center">
                             <th>{{__('Image')}}</th>
                             <th>{{__('Name')}}</th>
                             <th>{{__('Quantity')}}</th>
                             <th>{{__('Status')}}</th>
-                            <th>Activo</th>
-                            <th>Slider Principal</th>
+                            <th>{{__('Active')}}</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {{-- <tbody>
                         @foreach ($productos as $producto)
 
                         @if ($producto->users[0]->id === Auth::user()->id || Auth::user()->id === 1)
@@ -93,16 +175,12 @@
                             <td>{{$producto->cantidad}}</td>
                             <td>{{$producto->estado}}</td>
                             <td>{{$producto->activo}}</td>
-                            <td>{{$producto->sliderprincipal}}</td>
 
                             <td class="text-nowrap">
-                                <a class="btn btn-default" href="{{route('admin.product.show',$producto->slug)}}"><i
-                                        class="far fa-eye"></i></a>
-                                <a class="btn btn-info" href="{{route('admin.product.edit',$producto->slug)}}"><i
-                                        class="far fa-edit"></i></a>
-                                <a class="btn btn-danger" href="{{route('admin.product.index')}}"
-                                    v-on:click.prevent="deseas_eliminar({{$producto->id}})"><i
-                                        class="fas fa-trash-alt"></i></a>
+                                <a class="hover_zoom mr-2" href="{{route('admin.product.show',$producto->slug)}}"><i class="far fa-eye fa-2x text-primary"></i></a>
+                                <a class="hover_zoom mr-2" href="{{route('admin.product.edit',$producto->slug)}}"><i class="fas fa-pencil-alt fa-2x text-warning"></i></a>
+                                <a class="hover_zoom mr-2" href="{{route('admin.product.index')}}"
+                                    v-on:click.prevent="deseas_eliminar({{$producto->id}})"><i class="fas fa-times-circle fa-2x text-danger"></i></a>
                             </td>
                         </tr>
 
@@ -110,11 +188,20 @@
 
                         @endforeach
 
-                    </tbody>
+                    </tbody> --}}
+
+                    <tfoot>
+                        <tr class="bg-gradient-secondary text-center">
+                            <th>{{__('Image')}}</th>
+                            <th>{{__('Name')}}</th>
+                            <th>{{__('Quantity')}}</th>
+                            <th>{{__('Status')}}</th>
+                            <th>{{__('Active')}}</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
-                <div class="float-right m-2">
-                    {{$productos->appends($_GET)->links()}}
-                </div>
+
             </div>
             <!-- /.card-body -->
         </div>

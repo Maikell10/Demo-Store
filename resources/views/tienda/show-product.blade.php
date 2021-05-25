@@ -166,6 +166,12 @@
                 <H4>${{number_format($producto->precio_actual,2)}}</H4>
                 @endif
 
+                @if ($store_profile_config != '[]')
+                    @if ($store_profile_config[0]->change != null)
+                        <H5>Bs.{{number_format($producto->precio_actual * $store_profile_config[0]->change,2)}}</H5>
+                    @endif
+                @endif
+
                 @if ($producto->cantidad > 0)
                 <h4 class="text-success">{{__('Available.')}}</h4>
 

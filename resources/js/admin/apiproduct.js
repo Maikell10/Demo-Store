@@ -113,11 +113,12 @@ const apiproduct = new Vue({
                 return this.descuento_mensaje;
             } else {
                 if (this.porcentaje_descuento > 0) {
+                    
                     this.descuento =
                         (this.precioanterior * this.porcentaje_descuento) / 100;
 
                     this.precioactual = this.precioanterior - this.descuento;
-
+                    
                     if (this.porcentaje_descuento == 100) {
                         if ($('#lang').val() == 'es') {
                             this.descuento_mensaje =
@@ -277,6 +278,13 @@ const apiproduct = new Vue({
                 this.div_aparecer = true;
             }
         },
+        process(){
+            if (this.porcentaje_descuento > 0) {
+                this.precioanterior = (100 * this.precioactual) / (100 - this.porcentaje_descuento)
+
+                this.descuento = this.precioanterior - this.precioactual;
+            }
+        }
     },
     mounted() {
         if (data.editar == "Si") {

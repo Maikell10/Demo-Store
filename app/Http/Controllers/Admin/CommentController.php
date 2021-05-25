@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Comment;
 use App\Http\Controllers\Controller;
+use App\Mail\AnswerNotification;
 use App\Product;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class CommentController extends Controller
 {
@@ -73,7 +76,18 @@ class CommentController extends Controller
         $comment->parent_id = $request->parent_id;
         $comment->body = $request->body;
 
-        $comment->save();
+        $res = $comment->save();
+
+        if ($res == 1) {
+            // Preparing the Mail
+            $product = Product::with('users')->where('id', $request->product_id)->firstOrFail();
+            $comment_parent = Comment::where('id', $request->parent_id)->firstOrFail();
+            $user_client = User::where('id',$comment_parent->user_id)->firstOrFail();
+
+            // Sending the email to client
+            Mail::to($user_client->email)->queue(new AnswerNotification($product->users[0],$user_client,$product));
+        }
+        
 
         return redirect()->back()->with('datos', __('Register Created Successfully'));
     }

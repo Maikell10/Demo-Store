@@ -375,8 +375,11 @@ Route::get('/user', function () {
             $category_sales_cant[] = Sale::join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->join('products', 'sales.product_id', '=', 'products.id')->join('main_categories', 'products.main_category_id', '=', 'main_categories.id')->join('sub_categories', 'main_categories.sub_category_id', '=', 'sub_categories.id')->where('category_id',$category_sale->category_id)->where('state', 'Finalizada')->whereYear('sales.updated_at', '=', $year_act)->whereMonth('sales.updated_at', '=', Carbon::now()->format('m'))->count();
         }
 
+        // Count Clients
+        $clients = User::select('users.id','users.name','users.email')->join('sales', 'users.id', '=', 'sales.user_id')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->distinct('users.id')->count();
+
         //return $comments = Comment::with('products','products.users')->join('product_user', 'comments.product_id', '=', 'product_user.product_id')->where('product_user.user_id', 6)->get();
-        return view('user.user', compact('notifications','direct_m','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count','priceSaleSumT','priceSaleSumT_ant','saleCanT','saleCanT_ant','category_sales','category_sales_cant','profit_sales','products','prod_cant','comments_count','answers_count','purchases_count','sales_count'));
+        return view('user.user', compact('notifications','direct_m','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count','priceSaleSumT','priceSaleSumT_ant','saleCanT','saleCanT_ant','category_sales','category_sales_cant','profit_sales','products','prod_cant','comments_count','answers_count','purchases_count','sales_count','clients'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
 })->name('user')->middleware('auth','verified','isseller');
@@ -488,7 +491,9 @@ Route::get('admin/products-visits', function () {
 
 // Admin
 Route::resource('admin/category', 'Admin\AdminCategoryController')->names('admin.category');
+Route::post('admin/category/addCategory', 'Admin\AdminCategoryController@addCategory')->name('admin.category.addCategory');
 Route::resource('admin/product', 'Admin\AdminProductController')->names('admin.product');
+Route::get('admin/getProduct','Admin\AdminProductController@getProduct')->name('admin.getProduct');
 
 Route::get('cancelar/{ruta}', function ($ruta) {
     return redirect()->route($ruta)->with('cancelar', 'Acción Cancelada');
@@ -523,6 +528,9 @@ Route::resource('admin/sale', 'Admin\SaleController')->names('admin.sale')->midd
 Route::resource('admin/role', 'Admin\RoleController')->names('admin.role');
 
 Route::resource('admin/user', 'Admin\UserController', ['except' => ['create', 'store']])->names('admin.user');
+
+// Clients User Store
+Route::resource('admin/client', 'Admin\ClientController')->names('admin.client');
 
 
 

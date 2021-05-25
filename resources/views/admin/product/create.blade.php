@@ -4,7 +4,7 @@
 @section('titulo', 'Crear Producto')
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{route('admin.product.index')}}">Productos</a></li>
+<li class="breadcrumb-item"><a href="{{route('admin.product.index')}}">{{__('Products')}}</a></li>
 <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
@@ -46,6 +46,8 @@
 @section('contenido')
 
 <div id="apiproduct">
+    <!-- applocate for use in javascript -->
+    <input type="text" value="{{session('applocate')}}" hidden id="lang">
 
     <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -53,52 +55,10 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <!-- SELECT2 EXAMPLE -->
-
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Datos generados automáticamente</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-
-                                    <label>Visitas</label>
-                                    <input class="form-control" type="number" id="visitas" name="visitas">
-
-                                </div>
-                                <!-- /.form-group -->
-
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-md-6">
-                                <div class="form-group">
-
-                                    <label>Ventas</label>
-                                    <input class="form-control" type="number" id="ventas" name="ventas">
-                                </div>
-                                <!-- /.form-group -->
-
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
-
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-
-                    </div>
-                </div>
-                <!-- /.card -->
-
 
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Datos del producto</h3>
+                        <h3 class="card-title">{{__('Product data')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -106,7 +66,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
 
-                                    <label for="nombre">Nombre</label>
+                                    <label for="nombre">{{__('Name')}}</label>
                                     <input v-model="nombre" @blur="getProduct" @focus='div_aparecer=false'
                                         class="form-control" type="text" name="nombre" id="nombre">
 
@@ -127,10 +87,10 @@
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label>Categoria</label>
+                                            <label>{{__('Category')}}</label>
                                             <select name="category_id" id="category_id" class="form-control select2"
                                                 style="width: 100%;" required>
-                                                <option value="" selected="selected">Selecciona una</option>
+                                                <option value="" selected="selected">{{__('Select one')}}</option>
                                                 @foreach($categorias as $categoria)
 
                                                 <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
@@ -141,10 +101,10 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label>Sub-Categoria</label>
+                                            <label>{{__('Sub-Category')}}</label>
                                             <select name="sub_category_id" id="sub_category_id"
                                                 class="form-control select2" style="width: 100%;" v-if="subcategories.length != 0" required>
-                                                <option value="">Selecciona una</option>
+                                                <option value="">{{__('Select one')}}</option>
                                                 <option v-for="(subcategory, index) in subcategories"
                                                     v-bind:value="index">
                                                     @{{ subcategory }}
@@ -153,17 +113,17 @@
 
                                             <select name="sub_category_id" id="sub_category_id"
                                                 class="form-control select2" style="width: 100%;" v-else disabled required>
-                                                <option value="">Selecciona una</option>
+                                                <option value="">{{__('Select one')}}</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label>Categoría Principal</label>
+                                            <label>{{__('Main-Category')}}</label>
                                             <select name="main_category_id" id="main_category_id"
                                                 class="form-control select2" style="width: 100%;" v-if="maincategories.length != 0" required>
-                                                <option value="">Selecciona una</option>
+                                                <option value="">{{__('Select one')}}</option>
                                                 <option v-for="(maincategory, index) in maincategories"
                                                     v-bind:value="index">
                                                     @{{ maincategory }}
@@ -172,12 +132,12 @@
 
                                             <select name="main_category_id" id="main_category_id"
                                                 class="form-control select2" style="width: 100%;" v-else disabled required>
-                                                <option value="">Selecciona una</option>
+                                                <option value="">{{__('Select one')}}</option>
                                             </select>
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label>Cantidad</label>
+                                            <label>{{__('Quantity')}}</label>
                                             <input class="form-control" type="number" id="cantidad" name="cantidad"
                                                 value="0">
                                         </div>
@@ -192,6 +152,15 @@
                         </div>
                         <!-- /.row -->
 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="nombre">{{__('Brand')}}</label>
+                                    <input class="form-control" type="text" name="marca" id="marca">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -204,7 +173,7 @@
 
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Sección de Precios</h3>
+                        <h3 class="card-title">{{__('Prices Section')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -213,7 +182,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
 
-                                    <label>Precio anterior</label>
+                                    <label>{{__('Previous price')}}</label>
 
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -230,12 +199,12 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Precio actual</label>
+                                    <label>{{__('Actual price')}}</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input v-model="precioactual" class="form-control" type="number"
+                                        <input v-model="precioactual" v-on:keyup="process()" class="form-control" type="number"
                                             id="precioactual" name="precioactual" min="0" value="0" step=".01">
                                     </div>
                                     <br>
@@ -252,7 +221,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Porcentaje de descuento</label>
+                                    <label>{{__('Discount rate')}}</label>
                                     <div class="input-group">
                                         <input v-model="porcentaje_descuento" class="form-control" type="number"
                                             id="porcentaje_descuento" name="porcentaje_descuento" step="any" min="0"
@@ -290,12 +259,12 @@
 
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Descripciones del producto</h3>
+                                <h3 class="card-title">{{__('Product descriptions')}}</h3>
                             </div>
                             <div class="card-body">
                                 <!-- Date dd/mm/yyyy -->
                                 <div class="form-group">
-                                    <label>Descripción corta:</label>
+                                    <label>{{__('Short description')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="descripcion_corta"
                                         id="descripcion_corta" rows="3"></textarea>
@@ -303,7 +272,7 @@
                                 <!-- /.form group -->
 
                                 <div class="form-group">
-                                    <label>Descripción larga:</label>
+                                    <label>{{__('Long description')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="descripcion_larga"
                                         id="descripcion_larga" rows="5"></textarea>
@@ -322,12 +291,12 @@
 
                         <div class="card card-info">
                             <div class="card-header">
-                                <h3 class="card-title">Especificaciones y otros datos</h3>
+                                <h3 class="card-title">{{__('Specifications and other data')}}</h3>
                             </div>
                             <div class="card-body">
                                 <!-- Date dd/mm/yyyy -->
                                 <div class="form-group">
-                                    <label>Especificaciones:</label>
+                                    <label>{{__('Specifications')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="especificaciones"
                                         id="especificaciones" rows="3"></textarea>
@@ -335,7 +304,7 @@
                                 <!-- /.form group -->
 
                                 <div class="form-group">
-                                    <label>Datos de interes:</label>
+                                    <label>{{__('Data of interest')}}:</label>
 
                                     <textarea class="form-control ckeditor" name="datos_de_interes"
                                         id="datos_de_interes" rows="5"></textarea>
@@ -355,23 +324,23 @@
 
                 <div class="card card-warning">
                     <div class="card-header">
-                        <h3 class="card-title">Imágenes</h3>
+                        <h3 class="card-title">{{__('Images')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="imagenes">Añadir imágenes</label>
+                            <label for="imagenes">{{__('Add images')}}</label>
 
                             <input type="file" class="form-control-file" name="imagenes[]" id="imagenes[]" multiple
                                 accept="image/*">
 
                             <div class="description">
-                                Un número ilimitado de archivos pueden ser cargados en este campo.
+                                {{__('An unlimited number of files can be uploaded in this field.')}}
                                 <br>
-                                Límite de 15,048 MB por imagen.
+                                {{__('Limit per image of')}} 15,048 MB.
                                 <br>
-                                Tipos permitidos: jpeg, jpg, png, gif, svg.
+                                {{__('Allowed types: jpeg, jpg, png, gif, svg.')}}
                                 <br>
                             </div>
                         </div>
@@ -387,7 +356,7 @@
 
                 <div class="card card-danger">
                     <div class="card-header">
-                        <h3 class="card-title">Administración</h3>
+                        <h3 class="card-title">Status</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -415,12 +384,12 @@
 
                             </div>
                             <!-- /.col -->
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" hidden>
                                 <!-- checkbox -->
                                 <div class="form-group clearfix">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="activo" name="activo">
-                                        <label class="custom-control-label" for="activo">Activo</label>
+                                        <input type="checkbox" class="custom-control-input" id="activo" name="activo" checked>
+                                        <label class="custom-control-label" for="activo">{{__('Active')}}</label>
                                     </div>
                                 </div>
 
@@ -428,8 +397,7 @@
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="sliderprincipal"
                                             name="sliderprincipal">
-                                        <label class="custom-control-label" for="sliderprincipal">Aparece en el Slider
-                                            principal</label>
+                                        <label class="custom-control-label" for="sliderprincipal">{{__('Appears on the main Slider')}}</label>
                                     </div>
                                 </div>
                             </div>

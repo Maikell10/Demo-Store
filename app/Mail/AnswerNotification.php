@@ -9,12 +9,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class QuestionNotification extends Mailable
+class AnswerNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $user, $user_client, $product;
-    
+
     public function __construct(User $user, User $user_client, Product $product)
     {
         $this->user = $user;
@@ -24,6 +24,6 @@ class QuestionNotification extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.question_notification')->subject(__('You have a new question in TuMiniMercado'));
+        return $this->markdown('emails.answer_notification')->subject(__('Your question has been answered in TuMiniMercado'));
     }
 }

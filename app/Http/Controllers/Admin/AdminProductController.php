@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 
+use Yajra\DataTables\DataTables;
+
 use Intervention\Image\Facades\Image;
 
-DEFINE('DS', DIRECTORY_SEPARATOR);
+//DEFINE('DS', DIRECTORY_SEPARATOR);
 
 class AdminProductController extends Controller
 {
@@ -39,11 +41,11 @@ class AdminProductController extends Controller
         $direct_m = $this->direct_m(Auth::user()->id);
 
         $nombre = $request->get('nombre');
-
+//->paginate(10);
         if(Auth::user()->id == 1) {
-            $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->paginate(10);
+            $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->get();
         } else {
-            $productos = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->paginate(10);
+            $productos = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->get();
         }
         
 
@@ -128,6 +130,7 @@ class AdminProductController extends Controller
         $prod->descripcion_larga = $request->descripcion_larga;
         $prod->especificaciones = $request->especificaciones;
         $prod->datos_de_interes = $request->datos_de_interes;
+        $prod->marca = $request->marca;
         $prod->estado = $request->estado;
 
         if ($request->activo) {
@@ -280,6 +283,7 @@ class AdminProductController extends Controller
         $prod->descripcion_larga = $request->descripcion_larga;
         $prod->especificaciones = $request->especificaciones;
         $prod->datos_de_interes = $request->datos_de_interes;
+        $prod->marca = $request->marca;
         $prod->estado = $request->estado;
 
         if ($request->activo) {
@@ -337,5 +341,27 @@ class AdminProductController extends Controller
             'Popular',
             'Usado'
         ];
+    }
+
+    public function getProduct(Request $request)
+    {
+        $products = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$request->nombre%")->get();
+        return DataTables::of($products)
+                ->addColumn('image', function($products) {
+                    if ($products->images->count() <= 0) {
+                        return '<img style="height:90px;width:90px"
+                        src="/imagenes/boxed-bg.jpg" class="rounded-circle">';
+                    } else {
+                        return '<img style="height:90px;width:90px" src="'.$products->images->random()->url.'"
+                        class="rounded-circle">';
+                    }
+                })
+                
+                ->addColumn('action', '<a class="hover_zoom mr-2" href="{{route(\'admin.product.show\', $slug)}}" class="btn btn-info btn-sm"><i class="far fa-eye fa-2x text-primary"></i></a>
+                <a class="hover_zoom mr-2" href="{{route(\'admin.product.edit\',$slug)}}"><i class="fas fa-pencil-alt fa-2x text-warning"></i></a>')
+                ->rawColumns(['image','action'])
+                ->toJson();
+
+                //<a class="hover_zoom mr-2" href="{{route(\'admin.product.index\')}}" v-on:click.prevent="deseas_eliminar({{$id}})"><i class="fas fa-times-circle fa-2x text-danger"></i></a>
     }
 }

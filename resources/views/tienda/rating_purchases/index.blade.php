@@ -212,7 +212,7 @@
 
                                     <div class="mt-3">
                                         <button class="btn btn-success btn-lg" v-on:click="FirstPart()">{{__('Continue')}}</button>
-                                        <a href="{{route('tienda.purchases.show',$sale[0]->updated_at)}}" class="btn btn-outline-secondary">{{__('Cancel')}}</a>
+                                        <a href="{{route('tienda.purchases.show',$sale[0]->created_at)}}" class="btn btn-outline-secondary">{{__('Cancel')}}</a>
                                     </div>
                                 </div>
                                 

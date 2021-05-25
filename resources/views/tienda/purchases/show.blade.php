@@ -335,6 +335,9 @@ $indice = 0;
                                             @else
                                             <!-- Message to the right -->
                                             <div class="direct-chat-msg">
+                                                @php
+                                                    $store_user = App\User::where('id',$d_message->store_user_id)->get()[0];
+                                                @endphp
                                                 <div class="direct-chat-infos clearfix">
                                                     <span class="direct-chat-name float-left">{{ $store_user->name }}</span>
                                                     <span
@@ -380,7 +383,7 @@ $indice = 0;
                                                 <input type="hidden" value="{{$distinct_seller[0]->id}}" id="store_user_id_dm"
                                                     name="store_user_id_dm">
                                                 <input type="hidden" value="CLIENT" id="type_dm" name="type_dm">
-                                                <input type="hidden" value="{{$sales[0]->updated_at}}" id="date_order"
+                                                <input type="hidden" value="{{$sales[0]->created_at}}" id="date_order"
                                                     name="date_order">
 
                                                 <textarea class="form-control" placeholder="{{__('Type Message...')}}" id="direct_m"

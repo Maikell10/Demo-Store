@@ -53,6 +53,31 @@ class BusinessProfileController extends Controller
      */
     public function store(Request $request)
     {
+        if (isset($request->tasaDia)) {
+
+            $request->validate([
+                'tasaDia' => 'required|numeric',
+            ]);
+
+            $store_profile_config = StoreProfile::where('user_id', $request->user_id)->get();
+            if ($store_profile_config != '[]') {
+                $store_profile_config[0]->change = $request->tasaDia;
+                $store_profile_config[0]->created_change = date('Y-m-d H:i:s');
+
+                $store_profile_config[0]->save();
+            } else {
+                $store_profile_config = new StoreProfile();
+
+                $store_profile_config->user_id = $request->user_id;
+                $store_profile_config->change = $request->tasaDia;
+                $store_profile_config->created_change = date('Y-m-d H:i:s');
+    
+                $store_profile_config->save();
+            }
+            
+            return redirect()->back()->with('datos', __('Register Created Successfully'));
+        }
+
         $request->validate([
             'inputPhone' => 'nullable|max:18',
             'inputFacebook' => 'nullable|url',
@@ -144,7 +169,14 @@ class BusinessProfileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $b_profile = StoreProfile::where('user_id',$id)->get();
+
+        $b_profile[0]->change = null;
+        $b_profile[0]->created_change = null;
+
+        $b_profile[0]->save();
+
+        return redirect()->route('admin.business-profile.index')->with('datos', __('Register Deleted Successfully'));
     }
 
 }
