@@ -401,6 +401,20 @@
 
             </div>
         </div>
+
+        <div class="card card-success card-outline">
+            <div class="card-header text-center bg-white">
+                <h2 class="h2">{{__('Do you want to register as a')}} <font class="font-weight-bold text-dark h1">{{__('seller')}}</font> {{__('with us?')}}</h2>
+            </div>
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <a class="btn btn-success btn-lg"
+                        href="{{ url('register/store?sale=_sdbajfkenfefef?-weDSFdfdFGTwfLOa&register=_yes') }}">
+                        {{ __('Click Here') }}
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

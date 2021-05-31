@@ -20,7 +20,7 @@ class CategoryController extends Controller
     {
         $arr_conex_client_t = $this->arr_ip();
 
-        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->inRandomOrder()->get();
+        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('activo', 'Si')->inRandomOrder()->get();
         $categories = Category::with('subCategories')->orderBy('nombre')->get();
 
         $sub_categories = SubCategory::with('mainCategories')->get();
@@ -72,7 +72,7 @@ class CategoryController extends Controller
 
         $category = Category::with('subCategories')->where('slug', $slug)->firstOrFail();
         //return $category->id;
-        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->join('main_categories','products.main_category_id','=','main_categories.id')->join('sub_categories','main_categories.sub_category_id','=','sub_categories.id')->where('category_id', $category->id)->inRandomOrder()->paginate(10, 
+        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->join('main_categories','products.main_category_id','=','main_categories.id')->join('sub_categories','main_categories.sub_category_id','=','sub_categories.id')->where('category_id', $category->id)->where('activo', 'Si')->inRandomOrder()->paginate(10, 
         ['products.id','products.nombre','products.slug','products.main_category_id','products.cantidad','products.precio_actual','products.precio_anterior','products.porcentaje_descuento','products.visitas','products.ventas','products.estado','products.activo']);
 
         $user = Auth::user();

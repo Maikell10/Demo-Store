@@ -90,7 +90,7 @@ return $data;*/
             $cant_dm_new = $controller->cant_dm_new(Auth::user()->id);
         }
 
-        $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->join('product_user', 'products.id', '=', 'product_user.product_id')->where('product_user.user_id', $user->id)->orderBy('products.nombre')->paginate(
+        $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->join('product_user', 'products.id', '=', 'product_user.product_id')->where('product_user.user_id', $user->id)->where('activo', 'Si')->orderBy('products.nombre')->paginate(
             12,
             ['products.id', 'products.nombre', 'products.slug', 'products.main_category_id', 'products.cantidad', 'products.precio_actual', 'products.precio_anterior', 'products.porcentaje_descuento', 'products.visitas', 'products.ventas', 'products.estado', 'products.activo']
         );

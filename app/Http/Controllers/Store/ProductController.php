@@ -49,7 +49,7 @@ class ProductController extends Controller
         }
 
         if ($request->all() == null) {
-            $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('nombre', 'like', '%' . $search . '%')->inRandomOrder()->paginate(8);
+            $productos = Product::with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('activo', 'Si')->where('nombre', 'like', '%' . $search . '%')->inRandomOrder()->paginate(8);
         }else{
             if ($request->select_rank != null) {
                 if ($request->select_rank == 'price_asc') {
@@ -66,7 +66,7 @@ class ProductController extends Controller
                 }
             }
 
-            $productos_query = Product::select('products.id','products.nombre','products.slug','products.main_category_id','products.cantidad','products.precio_actual','products.precio_anterior','products.porcentaje_descuento','products.estado','main_categories.nombre as nombre_main_cat','sub_categories.nombre as nombre_sub_cat','categories.nombre as nombre_cat')->with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('products.nombre', 'like', '%' . $search . '%')->join('main_categories', 'main_categories.id', '=', 'products.main_category_id')->join('sub_categories', 'sub_categories.id', '=', 'main_categories.sub_category_id')->join('categories', 'categories.id', '=', 'sub_categories.category_id');
+            $productos_query = Product::select('products.id','products.nombre','products.slug','products.main_category_id','products.cantidad','products.precio_actual','products.precio_anterior','products.porcentaje_descuento','products.estado','main_categories.nombre as nombre_main_cat','sub_categories.nombre as nombre_sub_cat','categories.nombre as nombre_cat')->with('images', 'main_category', 'main_category.sub_category', 'main_category.sub_category.category', 'users')->where('products.nombre', 'like', '%' . $search . '%')->where('activo', 'Si')->join('main_categories', 'main_categories.id', '=', 'products.main_category_id')->join('sub_categories', 'sub_categories.id', '=', 'main_categories.sub_category_id')->join('categories', 'categories.id', '=', 'sub_categories.category_id');
 
             ($request->category != null) ? $productos=$productos_query->where('category_id',$request->category) : '';
             ($request->select_rank != null) ? $productos=$productos_query->orderBy($rank,$cond) : '';

@@ -1,6 +1,6 @@
 @extends('plantilla.tienda')
 
-@section('titulo','Políticas de Privacidad | TuMiniMercado')
+@section('titulo', __('Privacy policies') . ' | TuMiniMercado')
 
 @section('estilos')
 

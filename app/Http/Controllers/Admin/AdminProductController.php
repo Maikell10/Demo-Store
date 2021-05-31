@@ -42,14 +42,15 @@ class AdminProductController extends Controller
 
         $nombre = $request->get('nombre');
 //->paginate(10);
+/*
         if(Auth::user()->id == 1) {
             $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->get();
         } else {
             $productos = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$nombre%")->orderBy('nombre')->get();
-        }
+        }*/
         
 
-        return view('admin.product.index', compact('productos','notifications','direct_m'));
+        return view('admin.product.index', compact('notifications','direct_m'));
     }
 
     /**
@@ -345,7 +346,14 @@ class AdminProductController extends Controller
 
     public function getProduct(Request $request)
     {
-        $products = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$request->nombre%")->get();
+        //$products = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$request->nombre%")->get();
+
+        if(Auth::user()->id == 1) {
+            $products = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$request->nombre%")->where('activo', 'Si')->orderBy('nombre')->get();
+        } else {
+            $products = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$request->nombre%")->where('activo', 'Si')->orderBy('nombre')->get();
+        }
+
         return DataTables::of($products)
                 ->addColumn('image', function($products) {
                     if ($products->images->count() <= 0) {
@@ -363,5 +371,37 @@ class AdminProductController extends Controller
                 ->toJson();
 
                 //<a class="hover_zoom mr-2" href="{{route(\'admin.product.index\')}}" v-on:click.prevent="deseas_eliminar({{$id}})"><i class="fas fa-times-circle fa-2x text-danger"></i></a>
+    }
+
+    public function getProductI(Request $request)
+    {
+        if(Auth::user()->id == 1) {
+            $products = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$request->nombre%")->where('activo', 'No')->orderBy('nombre')->get();
+        } else {
+            $products = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', Auth::user()->id)->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('nombre', 'like', "%$request->nombre%")->where('activo', 'No')->orderBy('nombre')->get();
+        }
+
+        return DataTables::of($products)
+                ->addColumn('image', function($products) {
+                    if ($products->images->count() <= 0) {
+                        return '<img style="height:90px;width:90px"
+                        src="/imagenes/boxed-bg.jpg" class="rounded-circle">';
+                    } else {
+                        return '<img style="height:90px;width:90px" src="'.$products->images->random()->url.'"
+                        class="rounded-circle">';
+                    }
+                })
+                
+                ->addColumn('action', '<a class="hover_zoom mr-2" href="{{route(\'admin.product.show\', $slug)}}" class="btn btn-info btn-sm"><i class="far fa-eye fa-2x text-primary"></i></a>
+                <a class="hover_zoom mr-2" href="{{route(\'admin.product.edit\',$slug)}}"><i class="fas fa-pencil-alt fa-2x text-warning"></i></a>')
+                ->rawColumns(['image','action'])
+                ->toJson();
+
+                //<a class="hover_zoom mr-2" href="{{route(\'admin.product.index\')}}" v-on:click.prevent="deseas_eliminar({{$id}})"><i class="fas fa-times-circle fa-2x text-danger"></i></a>
+    }
+
+    public function ProductActive(Request $request, $id)
+    {
+        return $request;
     }
 }

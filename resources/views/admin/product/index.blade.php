@@ -89,6 +89,48 @@
                     }
                 },
             });
+            
+            $("#productITable").DataTable({
+                "aaSorting": [],
+                "responsive": true,
+                "autoWidth": false,
+                processing: true,
+                serverSide: true,
+                pageLength: 0,
+                "lengthMenu": [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "Todos"]
+                ],
+                ajax: "{{url('admin/getProductI?nombre=')}}"+nombre,
+                columns: [
+                    {data: 'image'},
+                    {data: 'nombre'},
+                    {data: 'cantidad'},
+                    {data: 'estado'},
+                    {data: 'activo'},
+                    {data: 'action'},
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            });
         } else {
             $("#productTable").DataTable({
                 "aaSorting": [],
@@ -111,8 +153,29 @@
                     {data: 'action'},
                 ],
             });
+
+            $("#productITable").DataTable({
+                "aaSorting": [],
+                "responsive": true,
+                "autoWidth": false,
+                processing: true,
+                serverSide: true,
+                pageLength: 0,
+                "lengthMenu": [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "All"]
+                ],
+                ajax: "{{url('admin/getProductI?nombre=')}}"+nombre,
+                columns: [
+                    {data: 'image'},
+                    {data: 'nombre'},
+                    {data: 'cantidad'},
+                    {data: 'estado'},
+                    {data: 'activo'},
+                    {data: 'action'},
+                ],
+            });
         }
-        
     });
     
 </script>
@@ -206,6 +269,40 @@
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
+
+        <div class="card card-danger card-outline" id="card2">
+            <div class="card-header">
+                <h3 class="card-title">{{__('Inactive Products')}}</h3>
+            </div>
+
+            <div class="card-body table-responsive">
+                
+                <table class="table table-hover dataTable dtr-inline" role="grid" id="productITable">
+                    <thead>
+                        <tr class="bg-gradient-red text-center">
+                            <th>{{__('Image')}}</th>
+                            <th>{{__('Name')}}</th>
+                            <th>{{__('Quantity')}}</th>
+                            <th>{{__('Status')}}</th>
+                            <th>{{__('Active')}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr class="bg-gradient-secondary text-center">
+                            <th>{{__('Image')}}</th>
+                            <th>{{__('Name')}}</th>
+                            <th>{{__('Quantity')}}</th>
+                            <th>{{__('Status')}}</th>
+                            <th>{{__('Active')}}</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
     </div>
 </div>
 <!-- /.row -->

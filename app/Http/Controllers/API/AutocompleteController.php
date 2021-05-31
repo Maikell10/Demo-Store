@@ -17,10 +17,10 @@ class AutocompleteController extends Controller
         $user_id = $request->get('user_id_autocomplete');
 
         if ($user_id == 1) {
-            $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->orderBy('nombre')->get();
+            $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->where('activo', 'Si')->orderBy('nombre')->get();
         } 
         else {
-            $productos = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', $user_id)->with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->orderBy('nombre')->get();
+            $productos = Product::join('product_user', 'products.id', '=', 'product_user.product_id')->where('user_id', $user_id)->with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->where('activo', 'Si')->orderBy('nombre')->get();
         }
 
         $resultados = [];
@@ -48,7 +48,7 @@ class AutocompleteController extends Controller
         $palabraabuscar = $request->get('palabraabuscar');
         $applocate = $request->get('applocate');
 
-        $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->orderBy('nombre')->get();
+        $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->where('activo', 'Si')->orderBy('nombre')->get();
 
         $resultados = [];
         foreach ($productos as $prod) {

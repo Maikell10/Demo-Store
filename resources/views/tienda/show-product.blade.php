@@ -98,9 +98,15 @@
 
 <div class="super_container_inner" id="apirating">
 
-    <div class="products">
-        @if (isset($producto))
+    @if (isset($producto))
 
+    @if ($producto->activo == 'Si')
+    <div class="products">
+    @else
+    <h2 class="bg-warning text-center font-weight-bold">{{__('Publication Paused')}}</h2>
+    <div class="products" style="pointer-events:none; opacity:0.5 !important;">
+    @endif
+        
         <div class="container">
             <a href="{{ url('store/show-category/'.$category->slug.'') }}"
                 class="text-success">{{$category->nombre}}</a> <i class="nav-icon fas fa-arrow-right text-warning"></i>
@@ -723,7 +729,7 @@
             </div>
         </div>
 
-        <div class="float-right m-2">
+        <div class="float-right m-2" style="z-index: 100">
             {{$productos->appends($_GET)->links()}}
         </div>
 

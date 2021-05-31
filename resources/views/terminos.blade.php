@@ -1,6 +1,6 @@
 @extends('plantilla.tienda')
 
-@section('titulo','Términos y Condiciones | TuMiniMercado')
+@section('titulo', __('Terms and Conditions of Use') . ' | TuMiniMercado')
 
 @section('estilos')
 
@@ -17,7 +17,7 @@
         <div class="card">
             <div class="card-header text-center bg-white">
                 <h1 class="h1">{{__('Terms and Conditions of Use')}}</h1>
-              </div>
+            </div>
             <div class="card-body">
                 <h2 class="card-title h2">{{__('RELEVANT INFORMATION')}}</h2>
 

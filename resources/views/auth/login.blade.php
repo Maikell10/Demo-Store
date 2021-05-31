@@ -111,7 +111,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                {{__('Do you want to register as a seller with us?')}}
+                                {{__('Do you want to register as a')}} <font class="font-weight-bold text-dark h5">{{__('seller')}}</font> {{__('with us?')}}
                             </div>
                             <div class="col-md-8 offset-md-6">
                                 <a class="btn btn-link"

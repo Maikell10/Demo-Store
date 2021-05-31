@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterStoreController extends Controller
 {
@@ -16,7 +17,17 @@ class RegisterStoreController extends Controller
     {
         $arr_conex_client_t = $this->arr_ip();
 
-        return view('auth.register-store', compact('arr_conex_client_t'));
+        $user = Auth::user();
+
+        // Direct Messages
+        $cant_dm_new = 0;
+        $direct_m = 0;
+        if ($user != null) {
+            $direct_m = $this->direct_m_user($user->id);
+            $cant_dm_new = $this->cant_dm_new($user->id);
+        }
+
+        return view('auth.register-store', compact('arr_conex_client_t','direct_m','cant_dm_new','user'));
     }
 
     /**

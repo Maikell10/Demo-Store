@@ -52,6 +52,23 @@ Route::get('/politicas', function () {
     return view('politicas', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
 });
 
+Route::get('/contact', function () {
+    $controller = new Controller();
+    $arr_conex_client_t = $controller->arr_ip();
+    $user = Auth::user();
+
+    // Direct Messages
+    $controller = new Controller();
+    $cant_dm_new = 0;
+    $direct_m = 0;
+    if ($user != null) {
+        $direct_m = $controller->direct_m_user($user->id);
+        $cant_dm_new = $controller->cant_dm_new($user->id);
+    }
+
+    return view('contact', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
+});
+
 Route::get('/delete_user', function () {
     return 'Próximamente';
 });
@@ -59,7 +76,7 @@ Route::get('/delete_user', function () {
 Route::get('/', function () {
 
     //$productos = Product::with('images', 'category', 'users')->orderBy('nombre')->paginate(10);
-    $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->inRandomOrder()->get();
+    $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('activo', 'Si')->inRandomOrder()->get();
     $categories = Category::with('subCategories')->inRandomOrder()->get();
     //return $productos;
 
@@ -75,8 +92,10 @@ Route::get('/', function () {
         $direct_m = $controller->direct_m_user($user->id);
         $cant_dm_new = $controller->cant_dm_new($user->id);
     }
+
+    $populars = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('activo', 'Si')->orderBy('visitas','DESC')->inRandomOrder()->take(6)->get();
     
-    return view('tienda.index', compact('productos', 'categories', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m'));
+    return view('tienda.index', compact('productos', 'categories', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'populars'));
 });
 
 // Ruta de Registro Store
@@ -492,8 +511,11 @@ Route::get('admin/products-visits', function () {
 // Admin
 Route::resource('admin/category', 'Admin\AdminCategoryController')->names('admin.category');
 Route::post('admin/category/addCategory', 'Admin\AdminCategoryController@addCategory')->name('admin.category.addCategory');
+// Admin Product
 Route::resource('admin/product', 'Admin\AdminProductController')->names('admin.product');
 Route::get('admin/getProduct','Admin\AdminProductController@getProduct')->name('admin.getProduct');
+Route::get('admin/getProductI','Admin\AdminProductController@getProductI')->name('admin.getProductI');
+Route::put('admin/ProductActive','Admin\AdminProductController@ProductActive')->name('admin.ProductActive');
 
 Route::get('cancelar/{ruta}', function ($ruta) {
     return redirect()->route($ruta)->with('cancelar', 'Acción Cancelada');

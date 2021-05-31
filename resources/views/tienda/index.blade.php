@@ -180,20 +180,20 @@
 
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
-                    <div class="section_title text-center">{{__('Popular of the Week')}}</div>
+                    <div class="section_title text-center">{{__('Populars')}}</div>
                 </div>
             </div>
 
             <div class="row products_row">
 
                 <!-- item-->
-                @if (count($productos) >= 6)
+                @if (count($populars) >= 6)
                 @php
                 $contador = 6;
                 @endphp
                 @else
                 @php
-                $contador = count($productos);
+                $contador = count($populars);
                 @endphp
                 @endif
 
@@ -201,22 +201,22 @@
                     <div class="col-xl-4 col-md-6">
                         <div class="product">
 
-                            @if ($productos[$i]->estado == 'En Oferta')
-                            <span class="badge-offer"><b> - {{$productos[$i]->porcentaje_descuento}}%</b></span>
-                            <span class="badge-new"><b> {{$productos[$i]->estado}} </b></span>
+                            @if ($populars[$i]->estado == 'En Oferta')
+                            <span class="badge-offer"><b> - {{$populars[$i]->porcentaje_descuento}}%</b></span>
+                            <span class="badge-new"><b> {{$populars[$i]->estado}} </b></span>
                             @else
-                            <span class="badge-new"><b> {{$productos[$i]->estado}} </b></span>
+                            <span class="badge-new"><b> {{$populars[$i]->estado}} </b></span>
                             @endif
 
-                            <a href="{{ url('store/show-product/'.$productos[$i]->slug.'') }}">
-                                @if ($productos[$i]->images->count() <= 0) <div class="product_image"
+                            <a href="{{ url('store/show-product/'.$populars[$i]->slug.'') }}">
+                                @if ($populars[$i]->images->count() <= 0) <div class="product_image"
                                     style="height: 300px">
                                     <img src="/imagenes/boxed-bg.jpg" alt=""
                                         style="object-fit: cover; height: 100%; width: 100%">
                         </div>
                         @else
                         <div class="product_image" style="height: 300px">
-                            <img src="{{$productos[$i]->images->random()->url}}" alt=""
+                            <img src="{{$populars[$i]->images->random()->url}}" alt=""
                                 style="object-fit: cover; height: 100%; width: 100%">
                         </div>
                         @endif
@@ -229,30 +229,30 @@
                                 <div>
                                     <div>
                                         <div class="product_name" data-toggle="tooltip" data-placement="top" title=""
-                                            data-original-title="{{$productos[$i]->nombre}}"><a
-                                                href="{{ url('store/show-product/'.$productos[$i]->slug.'') }}">{{\Illuminate\Support\Str::limit($productos[$i]->nombre ?? '',22,' ...')}}</a>
+                                            data-original-title="{{$populars[$i]->nombre}}"><a
+                                                href="{{ url('store/show-product/'.$populars[$i]->slug.'') }}">{{\Illuminate\Support\Str::limit($populars[$i]->nombre ?? '',22,' ...')}}</a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="ml-auto text-right">
                                     <div class="product_category">{{__('In')}} <a
-                                            href="{{url ('/store/show-category/'.$productos[$i]->main_category->sub_category->category->slug.'')}}">
-                                            <td>{{$productos[$i]->main_category->sub_category->category->nombre}}</td>
+                                            href="{{url ('/store/show-category/'.$populars[$i]->main_category->sub_category->category->slug.'')}}">
+                                            <td>{{$populars[$i]->main_category->sub_category->category->nombre}}</td>
                                         </a></div>
 
-                                    @if ($productos[$i]->estado == 'En Oferta')
+                                    @if ($populars[$i]->estado == 'En Oferta')
                                     <div class="product_price text-right"><del class="price-old"
                                             style="font-size: 15px">
-                                            ${{number_format($productos[$i]->precio_anterior,2)}}</del>${{number_format($productos[$i]->precio_actual,2)}}
+                                            ${{number_format($populars[$i]->precio_anterior,2)}}</del>${{number_format($populars[$i]->precio_actual,2)}}
                                     </div>
                                     @else
                                     <div class="product_price text-right">
-                                        ${{number_format($productos[$i]->precio_actual,2)}}
+                                        ${{number_format($populars[$i]->precio_actual,2)}}
                                     </div>
                                     @endif
                                 </div>
                             </div>
-                            <div class="product_buttons" onclick="addToCart({{$productos[$i]->id}})">
+                            <div class="product_buttons" onclick="addToCart({{$populars[$i]->id}})">
                                 <div class="text-right d-flex flex-row align-items-start justify-content-start">
                                     <div
                                         class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center">
@@ -271,7 +271,7 @@
             @endfor
 
         </div>
-        <div class="row load_more_row">
+        <div class="row load_more_row" hidden>
             <div class="col">
                 <div class="button load_more ml-auto mr-auto"><a
                         href="{{ url('store/show-product') }}">{{__('See All')}}</a></div>

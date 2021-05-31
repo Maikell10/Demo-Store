@@ -482,9 +482,10 @@
                                 </div>
                             </div>
                             @else
-                            <div class="col-sm-6" hidden>
+                            <div class="col-sm-6">
                                 <!-- checkbox -->
                                 <div class="form-group clearfix">
+                                    <label>{{__('Select if the Product is Active or Not')}}</label>
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="activo" name="activo"
                                             @if ($producto->activo=='Si')
@@ -494,7 +495,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" hidden>
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="sliderprincipal"
                                             name="sliderprincipal" @if ($producto->sliderprincipal=='Si')
