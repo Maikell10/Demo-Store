@@ -38,7 +38,7 @@ const api_search_autocomplete_store = new Vue({
             this.$refs.SubmitButonSearch.click();
         },
         changeSubmitSearch(name){
-            $("#header_search_form").attr("action",'http://tiendademo1.test/commerce/'+name);
+            $("#header_search_form").attr("action",'https://tuminimercado.com/commerce/'+name);
         }
     },
     mounted() {

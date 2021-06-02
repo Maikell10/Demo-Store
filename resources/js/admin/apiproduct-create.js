@@ -118,7 +118,7 @@ const apiproductCreate = new Vue({
         loadSubCategories() {
             this.selected_category = $("#category_id").val();
             axios
-                .get("http://tiendademo1.test/api/sub-category", {
+                .get("https://tuminimercado.com/api/sub-category", {
                     params: { category_id: this.selected_category }
                 })
                 .then(response => {

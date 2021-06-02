@@ -18,7 +18,11 @@ const api_place_plan = new Vue({
                     cancelButtonText: "Cancelar"
                 }).then(result => {
                     if (result.value) {
+<<<<<<< HEAD
                         location.replace('http://tiendademo1.test/plan_subscription/subscribe?gpont_=gheyudjiqnnsdk15_?daj_DfsR&plan='+plan+'&auth_user='+this.auth_user);
+=======
+                        location.replace('https://tuminimercado.com/plan_subscription/subscribe?gpont_=gheyudjiqnnsdk15_?daj_DfsR&plan='+plan+'&auth_user='+this.auth_user);
+>>>>>>> fa3eebe9acece14827051d0507f00532207eafe3
                     } else {
                         Swal.fire(
                             "Cancelado!",
@@ -39,7 +43,11 @@ const api_place_plan = new Vue({
                     cancelButtonText: "Cancel"
                 }).then(result => {
                     if (result.value) {
+<<<<<<< HEAD
                         location.replace('http://tiendademo1.test/plan_subscription/subscribe?gpont_=gheyudjiqnnsdk15_?daj_DfsR&plan='+plan+'&auth_user='+this.auth_user);
+=======
+                        location.replace('https://tuminimercado.com/plan_subscription/subscribe?gpont_=gheyudjiqnnsdk15_?daj_DfsR&plan='+plan+'&auth_user='+this.auth_user);
+>>>>>>> fa3eebe9acece14827051d0507f00532207eafe3
                     } else {
                         Swal.fire(
                             "Canceled!",

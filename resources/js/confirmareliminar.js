@@ -24,7 +24,7 @@ const confirmareliminar = new Vue({
         deseas_eliminar_purchase_detail(id) {
             this.urlaeliminar =
                 //document.getElementById("urlbase").innerHTML + "/" + id;
-                'http://tiendademo1.test/admin/purchaseDetail/destroy' + '/' + id;
+                'https://tuminimercado.com/admin/purchaseDetail/destroy' + '/' + id;
         },
     },
     mounted(){
