@@ -32,7 +32,7 @@ const api_search_autocomplete = new Vue({
             this.palabra_a_buscar = resultado.nombre;
 
             await this.$nextTick();
-            window.location.href = 'https://tuminimercado.com/admin/product?nombre=' + this.palabra_a_buscar;
+            window.location.href = 'http://tiendademo1.test/admin/product?nombre=' + this.palabra_a_buscar;
             //this.SubmitForm();
             //$nextTick() sirve para esperar que luego q se actualice el DOM se ejecute una funcion
         },

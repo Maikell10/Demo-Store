@@ -404,43 +404,14 @@
 
         <div class="card card-success card-outline">
             <div class="card-header text-center bg-white">
-
-                @if ($store_profile != null && $user->sale == 1)
-                    @if ($store_profile->date_expiration >= date('Y-m-d'))
-                        @if ($store_profile->plan == 'premium_month_free' || $store_profile->plan == 'premium_year_free')
-                        <h5 class="h4 text-center font-weight-bold">{{__('You are enjoying our month')}} <font class="text-danger">{{__('FREE')}}</font>, {{__('remember to write to us')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20full%20request')}}">pagos@tuminimercado.com</a> {{__('to continue enjoying your membership')}}</h5>
-
-                        <h5 class="h5 text-center font-weight-bold">{{__('You have')}} <font class="text-danger">{{$dif_date_plan}}</font> {{__('days left')}} {{__('FREE')}}</h5>
-                        @else
-                        <h5 class="h4 text-center font-weight-bold">
-                            {{__('You have a')}} 
-                            @if ($store_profile->plan == 'premium_month')
-                                {{__('Monthly Subscription')}} ({{__('Premium Plan')}})
-                            @endif
-                            @if ($store_profile->plan == 'premium_year')
-                                {{__('Annual Subscription')}} ({{__('Premium Plan')}})
-                            @endif
-                        </h5>
-                        <h5 class="h6 text-center font-weight-bold">{{__('Expiration date:')}} {{date("d-m-Y",strtotime($store_profile->date_expiration))}}</h5>
-                        @endif
-                    @else
-                        <h5 class="h4 text-center font-weight-bold">{{__('Your Plan is expired, write to')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20renewal%20request')}}">pagos@tuminimercado.com</a> {{__('to renew and continue enjoying your membership')}}</h5>
-                    @endif
-                @else
-                    <h2 class="h2">{{__('Do you want to register as a')}} <font class="font-weight-bold text-dark h1">{{__('seller')}}</font> {{__('with us?')}}</h2>
-                @endif
+                <h2 class="h2">{{__('Do you want to register as a')}} <font class="font-weight-bold text-dark h1">{{__('seller')}}</font> {{__('with us?')}}</h2>
             </div>
             <div class="card-body box-profile">
                 <div class="text-center">
-                    @if ($store_profile != null && $user->sale == 1)
-                        <a class="btn btn-success btn-lg" href="{{ url('register/store?sale=_sdbajfkenfefef?-weDSFdfdFGTwfLOa&register=_yes') }}">
-                            {{ __('Our Plans') }}
-                        </a>
-                    @else
-                        <a class="btn btn-success btn-lg" href="{{ url('register/store?sale=_sdbajfkenfefef?-weDSFdfdFGTwfLOa&register=_yes') }}">
-                            {{ __('Click Here') }}
-                        </a>
-                    @endif
+                    <a class="btn btn-success btn-lg"
+                        href="{{ url('register/store?sale=_sdbajfkenfefef?-weDSFdfdFGTwfLOa&register=_yes') }}">
+                        {{ __('Click Here') }}
+                    </a>
                 </div>
             </div>
         </div>

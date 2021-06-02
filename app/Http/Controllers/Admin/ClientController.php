@@ -11,12 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('valid_store');
-    }
-    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $this->authorize('haveaccess','store.full');

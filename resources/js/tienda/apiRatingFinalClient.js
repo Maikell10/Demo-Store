@@ -58,7 +58,7 @@ const apiratingfinalclient = new Vue({
             }).then(result => {
                 if (result.value) {
                     axios
-                    .get("https://tuminimercado.com/store/rating_seller", {
+                    .get("http://tiendademo1.test/store/rating_seller", {
                         params: { option: this.option, user_id: this.user_id, store_user_id: this.store_user_id, selectOption:this.selectOption, calification:this.calification, opinion:this.opinion, type_rating:this.type_rating, created_sale:this.created_sale }
                     })
                     .then(response => {
@@ -70,7 +70,7 @@ const apiratingfinalclient = new Vue({
                                 timer: 1200
                             })
                             window.setTimeout(function(){
-                                location.assign('https://tuminimercado.com/store/purchases');
+                                location.assign('http://tiendademo1.test/store/purchases');
                             }, 1200)
                         } else {
                             Swal.fire({

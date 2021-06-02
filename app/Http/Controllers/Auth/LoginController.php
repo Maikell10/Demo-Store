@@ -65,7 +65,7 @@ class LoginController extends Controller
         }
 
         $userSocialite = Socialite::driver($driver)->user();
-        //dd($userSocialite);
+//dd($userSocialite);
         $social_profile = SocialProfile::where('social_id', $userSocialite->getId())->where('social_name', $driver)->first();
 
         if (!$social_profile) {

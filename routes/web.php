@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Image;
 use App\Purchase;
 use App\Sale;
-use App\StoreProfile;
 use App\User;
 use App\Visit;
 use Carbon\Carbon;
@@ -278,7 +277,7 @@ Route::get('/admin', function () {
 
 
 Route::get('/user', function () {
-    if (Auth::user()->roles[0]->slug == 'registeredseller' || Auth::user()->id == 1) {
+    if (Auth::user()->roles[0]->slug == 'registeredseller') {
         // Notifications
         $controller = new Controller();
         $notifications = $controller->notifications(Auth::user()->id);
@@ -399,23 +398,10 @@ Route::get('/user', function () {
         $clients = User::select('users.id','users.name','users.email')->join('sales', 'users.id', '=', 'sales.user_id')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id',Auth::user()->id)->distinct('users.id')->count();
 
         //return $comments = Comment::with('products','products.users')->join('product_user', 'comments.product_id', '=', 'product_user.product_id')->where('product_user.user_id', 6)->get();
-
-        // Store Profile
-        $dif_date_plan = null;
-        $store_profile = StoreProfile::where('user_id', Auth::user()->id)->first();
-
-        $today = date("Y-m-d");
-        $date1 = new DateTime($today);
-        $date2 = new DateTime($store_profile->date_expiration);
-        $diff = $date1->diff($date2);
-
-        // Comprobando los días restantes
-        $dif_date_plan = ($diff->invert == 1) ? ' - ' . $diff->days  : $diff->days;
-
-        return view('user.user', compact('notifications','direct_m','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count','priceSaleSumT','priceSaleSumT_ant','saleCanT','saleCanT_ant','category_sales','category_sales_cant','profit_sales','products','prod_cant','comments_count','answers_count','purchases_count','sales_count','clients','store_profile','dif_date_plan'));
+        return view('user.user', compact('notifications','direct_m','sales_canceled_count','visits','profit_visits','total_sale','total_sales_count','priceSaleSumT','priceSaleSumT_ant','saleCanT','saleCanT_ant','category_sales','category_sales_cant','profit_sales','products','prod_cant','comments_count','answers_count','purchases_count','sales_count','clients'));
     }
     return redirect('/')->with('mensajeInfo', 'No tiene permiso para entrar aquí');
-})->name('user')->middleware('auth','verified','isseller','valid_store');
+})->name('user')->middleware('auth','verified','isseller');
 
 
 // Bounce Rate
@@ -584,6 +570,3 @@ Route::get('direct_message/new','Store\DirectMessageController@store');
 
 // Business Profile
 Route::resource('/admin/business-profile/configuration', 'Admin\BusinessProfileController')->names('admin.business-profile')->middleware('auth');
-
-// Plan Subscribe
-Route::get('plan_subscription/subscribe','Admin\UserController@plan_subscription');

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\StoreProfile;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,19 +18,6 @@ class RegisterStoreController extends Controller
         $arr_conex_client_t = $this->arr_ip();
 
         $user = Auth::user();
-        $store_profile = null;
-        $dif_date_plan = null;
-        if ($user != null) {
-            $store_profile = StoreProfile::where('user_id', $user->id)->first();
-
-            $today = date("Y-m-d");
-            $date1 = new DateTime($today);
-            $date2 = new DateTime($store_profile->date_expiration);
-            $diff = $date1->diff($date2);
-
-            // Comprobando los días restantes
-            $dif_date_plan = ($diff->invert == 1) ? ' - ' . $diff->days  : $diff->days;
-        }
 
         // Direct Messages
         $cant_dm_new = 0;
@@ -42,7 +27,7 @@ class RegisterStoreController extends Controller
             $cant_dm_new = $this->cant_dm_new($user->id);
         }
 
-        return view('auth.register-store', compact('arr_conex_client_t','direct_m','cant_dm_new','user','store_profile','dif_date_plan'));
+        return view('auth.register-store', compact('arr_conex_client_t','direct_m','cant_dm_new','user'));
     }
 
     /**

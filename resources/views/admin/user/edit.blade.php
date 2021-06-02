@@ -7,44 +7,6 @@
 <li class="breadcrumb-item active">@yield('titulo')</li>
 @endsection
 
-@section('scripts')
-    <!-- InputMask -->
-    <script src="{{ asset('adminlte/plugins/moment/moment-with-locales.min.js') }}"></script>
-    <script src="{{ asset('adminlte/plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="{{ asset('adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
-    </script>
-
-    <script>
-        $(function () {
-            $('[data-mask]').inputmask();
-            
-            //Date range picker
-            $('#reservationdate').datetimepicker({
-                format: 'DD-MM-YYYY',
-                locale: moment.locale('es-us'),
-                tooltips: {
-                    today: 'Hoy',
-                    clear: 'Limpiar Selección',
-                    close: 'Cerrar el picker',
-                    selectMonth: 'Seleccionar Mes',
-                    prevMonth: 'Mes Anterior',
-                    nextMonth: 'Mes Siguiente',
-                    selectYear: 'Seleccionar Año',
-                    prevYear: 'Año Anterior',
-                    nextYear: 'Año Siguiente',
-                    selectDecade: 'Seleccionar Década',
-                    prevDecade: 'Década Anterior',
-                    nextDecade: 'Década Siguiente',
-                    prevCentury: 'Siglo Anterior',
-                    nextCentury: 'Siglo Siguiente',
-                    selectDate: 'Seleccionar Fecha'
-                },
-            });
-        });
-    </script>
-@endsection
-
 @section('contenido')
 
 <!-- /.row -->
@@ -92,27 +54,6 @@
                                 >{{$role->name}}</option>
                             @endforeach
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="number">{{__('Date')}}</label>
-
-                        <div class="input-group">
-                            <div class="input-group date" id="reservationdate"
-                                data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input col-md-4"
-                                    data-target="#reservationdate"
-                                    data-inputmask-alias="datetime"
-                                    data-inputmask-inputformat="dd-mm-yyyy" data-mask id="date_expiration"
-                                    name="date_expiration" />
-                                <div class="input-group-append" data-target="#reservationdate"
-                                    data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i
-                                            class="far fa-calendar-alt"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <hr>
