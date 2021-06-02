@@ -16,6 +16,8 @@ class StoreProfilesEditTable extends Migration
         Schema::table('store_profiles', function (Blueprint $table) {
             $table->decimal('change', 12, 2)->nullable()->after('gmaps');
             $table->timestamp('created_change')->nullable()->after('change');
+            $table->string('plan')->nullable()->after('created_change');
+            $table->date('date_expiration')->nullable()->after('plan');
         });
     }
 
@@ -29,6 +31,8 @@ class StoreProfilesEditTable extends Migration
         Schema::table('store_profiles', function (Blueprint $table) {
             $table->dropColumn('change');
             $table->dropColumn('created_change');
+            $table->dropColumn('plan');
+            $table->dropColumn('date_expiration');
         });
     }
 }

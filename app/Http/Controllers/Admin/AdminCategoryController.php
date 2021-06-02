@@ -16,6 +16,7 @@ class AdminCategoryController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('valid_store');
     }
     /**
      * Display a listing of the resource.

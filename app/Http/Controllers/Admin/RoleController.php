@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('valid_store');
+    }
+    
     public function index(Request $request)
     {
         Gate::authorize('haveaccess','role.index');

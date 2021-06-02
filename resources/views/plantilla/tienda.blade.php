@@ -405,6 +405,13 @@
                                 </a>
                             </li>
 
+                            <li class="nav-item has-treeview">
+                                <a class="nav-link" href="{{ url('/register/store') }}"><i
+                                        class="nav-icon fas fa-briefcase"></i>
+                                        {{__('Our Plans')}}
+                                </a>
+                            </li>
+
 
                         </ul>
                     </nav>
@@ -606,6 +613,22 @@
                 Swal.fire({
                     text: {!! json_encode(session("mensajeInfo")) !!},
                     icon: 'error',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    toast: true,
+                    position: 'top-end',
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+            }
+
+            if ({!! json_encode(session("mensajeSuccess")) !!}) {
+                Swal.fire({
+                    text: {!! json_encode(session("mensajeSuccess")) !!},
+                    icon: 'success',
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true,

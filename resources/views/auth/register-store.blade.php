@@ -1,6 +1,6 @@
 @extends('plantilla.tienda')
 
-@section('titulo','Registrate | TuMiniMercado')
+@section('titulo', __('Our Plans').' | TuMiniMercado')
 
 @section('estilos')
 
@@ -10,11 +10,10 @@
 @endsection
 
 @section('scripts')
-<script
-    src="https://www.paypal.com/sdk/js?client-id=ASmTZ5cj3P9Vp-z-3_bfPKpyerjr5-a6gSXV3NO2KBU-_tGIucMOpDgCw4mEjhF1r-EcNms-6HB0c834&vault=true"
-    data-sdk-integration-source="button-factory"></script>
+    {{-- <script src="https://www.paypal.com/sdk/js?client-id=ASmTZ5cj3P9Vp-z-3_bfPKpyerjr5-a6gSXV3NO2KBU-_tGIucMOpDgCw4mEjhF1r-EcNms-6HB0c834&vault=true"
+    data-sdk-integration-source="button-factory"></script> --}}
 <script>
-    paypal.Buttons({
+    /*paypal.Buttons({
         style: {
             shape: 'pill',
             color: 'silver',
@@ -29,22 +28,52 @@
         onApprove: function(data, actions) {
             alert(data.subscriptionID);
         }
-    }).render('#paypal-button-container');
+    }).render('#paypal-button-container');*/
 </script>
 @endsection
 
 @section('contenido')
+<!-- applocate for use in javascript -->
+<input type="text" value="{{session('applocate')}}" hidden id="lang">
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
 
             <div class="card card-success card-outline mt-2">
                 <div class="card-body table-responsive">
+
+                    @if(auth()->user())
+                        @if (auth()->user()->sale == 1 && $store_profile != null)
+                            @if ($store_profile->date_expiration >= date('Y-m-d'))
+                                @if ($store_profile->plan == 'premium_month_free' || $store_profile->plan == 'premium_year_free')
+                                <h5 class="h4 text-center font-weight-bold">{{__('You are enjoying our month')}} <font class="text-danger">{{__('FREE')}}</font>, {{__('remember to write to us')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20full%20request')}}">pagos@tuminimercado.com</a> {{__('to continue enjoying your membership')}}</h5>
+
+                                <h5 class="h5 text-center font-weight-bold">{{__('You have')}} <font class="text-danger">{{$dif_date_plan}}</font> {{__('days left')}} {{__('FREE')}}</h5>
+                                @else
+                                <h5 class="h4 text-center font-weight-bold">
+                                    {{__('You have a')}} 
+                                    @if ($store_profile->plan == 'premium_month')
+                                        {{__('Monthly Subscription')}} ({{__('Premium Plan')}})
+                                    @endif
+                                    @if ($store_profile->plan == 'premium_year')
+                                        {{__('Annual Subscription')}} ({{__('Premium Plan')}})
+                                    @endif
+                                </h5>
+                                <h5 class="h6 text-center font-weight-bold">{{__('Expiration date:')}} {{date("d-m-Y",strtotime($store_profile->date_expiration))}}</h5>
+                                @endif
+                            @else
+                                <h5 class="h4 text-center font-weight-bold">{{__('Your Plan is expired, write to')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20renewal%20request')}}">pagos@tuminimercado.com</a> {{__('to renew and continue enjoying your membership')}}</h5>
+                            @endif
+                        @endif
+                    @else
                     <h5 class="h4 text-center font-weight-bold">{{__('With any of our plans the first month is')}} <font class="text-danger">{{__('FREE')}}</font></h5>
+                    @endif
+                    
                 </div>
             </div>
 
-            <div class="card-deck">
+            <div class="card-deck" id="api_place_plan">
                 <div class="card card-success card-outline">
                     <img class="mt-2" style="width: 200px;align-self: center;"
                         src="{{ asset('asset/images/LogoTM3.svg') }}" class="card-img-top" alt="TuMiniMercado Logo">
@@ -94,6 +123,18 @@
                         </ul>
 
                         <h1 class="text-center">5$</h1>
+
+                        @if(auth()->user())
+                            @if (auth()->user()->sale == 1 && $store_profile != null)
+                                <h5 class="h5 text-center font-weight-bold">{{__('For questions write to')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20renewal%20request')}}">pagos@tuminimercado.com</a></h5>
+                            @else
+                                <button v-on:click="place_order('premium_month_free')" class="btn btn-warning font-weight-bold btn-block" style="white-space: break-spaces">{{__('Subscribe to Our Plan')}}</button>
+                                <input type="hidden" value="{{auth()->user()->id}}" id="auth_user">
+                            @endif
+                        @else
+                            <a href="{{url('login?pag=register/store')}}" class="btn btn-outline-dark font-weight-bold btn-block" style="white-space: break-spaces">{{__('You must log in or sign up to proceed with the subscription')}}</a>
+                        @endif
+
                     </div>
                 </div>
                 <div class="card card-success card-outline">
@@ -118,6 +159,17 @@
                         </ul>
 
                         <h1 class="text-center">55$</h1>
+
+                        @if(auth()->user())
+                            @if (auth()->user()->sale == 1 && $store_profile != null)
+                                <h5 class="h5 text-center font-weight-bold">{{__('For questions write to')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20renewal%20request')}}">pagos@tuminimercado.com</a></h5>
+                            @else
+                                <button v-on:click="place_order('premium_year_free')" class="btn btn-warning font-weight-bold btn-block" style="white-space: break-spaces">{{__('Subscribe to Our Plan')}}</button>
+                                <input type="hidden" value="{{auth()->user()->id}}" id="auth_user">
+                            @endif
+                        @else
+                            <a href="{{url('login?pag=register/store')}}" class="btn btn-outline-dark font-weight-bold btn-block" style="white-space: break-spaces">{{__('You must log in or sign up to proceed with the subscription')}}</a>
+                        @endif
                     </div>
                 </div>
             </div>

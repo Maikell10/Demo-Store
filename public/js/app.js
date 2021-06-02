@@ -51710,6 +51710,10 @@ if (document.getElementById("apiratingBuyer")) {
   __webpack_require__(/*! ./tienda/apiratingBuyer */ "./resources/js/tienda/apiratingBuyer.js");
 }
 
+if (document.getElementById("api_place_plan")) {
+  __webpack_require__(/*! ./tienda/api_place_plan */ "./resources/js/tienda/api_place_plan.js");
+}
+
 $(document).ready(function () {
   initSvg();
   /*
@@ -51810,6 +51814,9 @@ var confirmareliminar = new Vue({
     deseas_eliminar_provider: function deseas_eliminar_provider(id) {
       this.urlaeliminar = document.getElementById("urlbase").innerHTML + "/" + id;
     },
+    deseas_eliminar_user: function deseas_eliminar_user(id) {
+      this.urlaeliminar = document.getElementById("urlbase").innerHTML + "/" + id;
+    },
     deseas_eliminar_purchase: function deseas_eliminar_purchase(id) {
       this.urlaeliminar = document.getElementById("urlbase").innerHTML + "/" + id;
     },
@@ -51825,6 +51832,13 @@ var confirmareliminar = new Vue({
 
       $(e.currentTarget).find('input[name="providerID"]').val(providerID);
       confirmareliminar.deseas_eliminar_provider($('#providerID').val());
+    });
+    $('#modal_eliminar_user').on('show.bs.modal', function (e) {
+      //get id attribute of the clicked element
+      var userID = $(e.relatedTarget).data('id'); //populate the textbox
+
+      $(e.currentTarget).find('input[name="userID"]').val(userID);
+      confirmareliminar.deseas_eliminar_purchase($('#userID').val());
     });
     $('#modal_eliminar_purchase').on('show.bs.modal', function (e) {
       //get id attribute of the clicked element
@@ -51971,6 +51985,65 @@ var api_direct_m = new Vue({
   mounted: function mounted() {
     document.getElementById('direct-chat-messages').scrollTop = document.getElementById('direct-chat-messages').scrollHeight;
   }
+});
+
+/***/ }),
+
+/***/ "./resources/js/tienda/api_place_plan.js":
+/*!***********************************************!*\
+  !*** ./resources/js/tienda/api_place_plan.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var api_place_plan = new Vue({
+  el: "#api_place_plan",
+  data: {
+    lang: $("#lang").val(),
+    auth_user: $("#auth_user").val()
+  },
+  methods: {
+    place_order: function place_order(plan) {
+      var _this = this;
+
+      if (this.lang == 'es') {
+        Swal.fire({
+          title: "¿Está seguro de adquirir este plan?",
+          text: "¡Puedes cambiar el plan de suscripción más tarde!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí!",
+          cancelButtonText: "Cancelar"
+        }).then(function (result) {
+          if (result.value) {
+            location.replace('http://tiendademo1.test/plan_subscription/subscribe?gpont_=gheyudjiqnnsdk15_?daj_DfsR&plan=' + plan + '&auth_user=' + _this.auth_user);
+          } else {
+            Swal.fire("Cancelado!", "Cancelado!", "error");
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Are You sure to purchase this Plan?",
+          text: "You can change the subscription plan later!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes!",
+          cancelButtonText: "Cancel"
+        }).then(function (result) {
+          if (result.value) {
+            location.replace('http://tiendademo1.test/plan_subscription/subscribe?gpont_=gheyudjiqnnsdk15_?daj_DfsR&plan=' + plan + '&auth_user=' + _this.auth_user);
+          } else {
+            Swal.fire("Canceled!", "Canceled!", "error");
+          }
+        });
+      }
+    }
+  },
+  mounted: function mounted() {}
 });
 
 /***/ }),

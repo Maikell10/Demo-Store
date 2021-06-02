@@ -13,6 +13,26 @@
                         <h5 class="card-title">{{__('Welcome ')}}<font class="font-weight-bold">{{ Auth::user()->name }}</font></h5>
                         <br>
 
+                        @if ($store_profile->date_expiration >= date('Y-m-d'))
+                            @if ($store_profile->plan == 'premium_month_free' || $store_profile->plan == 'premium_year_free')
+                            <h6 class="h6">{{__('You are enjoying our month')}} <font class="text-danger">{{__('FREE')}}</font>, {{__('remember to write to us')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20full%20request')}}">pagos@tuminimercado.com</a> {{__('to continue enjoying your membership')}}. {{__('You have')}} <font class="text-danger font-weight-bold">{{$dif_date_plan}}</font> {{__('days left')}} {{__('FREE')}}</h6>
+                            @else
+                            <h6 class="h6">
+                                {{__('You have a')}} 
+                                @if ($store_profile->plan == 'premium_month')
+                                    {{__('Monthly Subscription')}} <font class="text-success font-weight-bold">({{__('Premium Plan')}})</font>
+                                @endif
+                                @if ($store_profile->plan == 'premium_year')
+                                    {{__('Annual Subscription')}} <font class="text-success font-weight-bold">({{__('Premium Plan')}})</font>
+                                @endif
+                                . <font class="font-weight-bold">{{__('Expiration date:')}} {{date("d-m-Y",strtotime($store_profile->date_expiration))}}</font>
+                            </h6>
+                            @endif
+                        @else
+                            <h6 class="h6">{{__('Your Plan is expired, write to')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20renewal%20request')}}">pagos@tuminimercado.com</a> {{__('to renew and continue enjoying your membership')}}</h6>
+                        @endif
+                        
+
                         <!-- Small boxes (Stat box) -->
                         <div class="row mt-2">
                             <div class="col-lg-3 col-6 hover_zoom_home">
