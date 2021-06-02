@@ -12,7 +12,7 @@ const api_direct_m = new Vue({
         setDirectM() {
             if (this.user_id != '') {
                 axios
-                .get("http://tiendademo1.test/direct_message/new", {
+                .get("https://tuminimercado.com/direct_message/new", {
                     params: { order_id: this.order_id, user_id: this.user_id, store_user_id: this.store_user_id, direct_m:this.direct_m, type_dm:this.type_dm, date_order:this.date_order }
                 })
                 .then(response => {

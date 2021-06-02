@@ -37,7 +37,7 @@ const apirating = new Vue({
                     }).then(result => {
                         if (result.value) {
                             axios
-                            .get("http://tiendademo1.test/api/rating/new", {
+                            .get("https://tuminimercado.com/api/rating/new", {
                                 params: { product_id: this.product_id, user_id: this.user_id, rating:this.rating, review_rating:this.review_rating }
                             })
                             .then(response => {
@@ -85,7 +85,7 @@ const apirating = new Vue({
             }
         },
         getRating() {
-            fetch(`http://tiendademo1.test/api/rating/${this.product_id}`)
+            fetch(`https://tuminimercado.com/api/rating/${this.product_id}`)
             .then(res => res.json())
             .then(res => {
                 var mydata = res.data
@@ -148,7 +148,7 @@ const apirating = new Vue({
         setComment() {
             if (this.user_id != '') {
                 axios
-                .get("http://tiendademo1.test/comment/new", {
+                .get("https://tuminimercado.com/comment/new", {
                     params: { product_id: this.product_id, user_id: this.user_id, pregunta_prod:this.pregunta_prod }
                 })
                 .then(response => {

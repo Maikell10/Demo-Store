@@ -75,6 +75,10 @@ if (document.getElementById("apiratingBuyer")) {
     require("./tienda/apiratingBuyer");
 }
 
+if (document.getElementById("api_place_plan")) {
+    require("./tienda/api_place_plan");
+}
+
 $(document).ready(function() {
     initSvg();
 

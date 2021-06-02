@@ -13,6 +13,10 @@ const confirmareliminar = new Vue({
             this.urlaeliminar =
                 document.getElementById("urlbase").innerHTML + "/" + id;
         },
+        deseas_eliminar_user(id) {
+            this.urlaeliminar =
+                document.getElementById("urlbase").innerHTML + "/" + id;
+        },
         deseas_eliminar_purchase(id) {
             this.urlaeliminar =
                 document.getElementById("urlbase").innerHTML + "/" + id;
@@ -20,7 +24,7 @@ const confirmareliminar = new Vue({
         deseas_eliminar_purchase_detail(id) {
             this.urlaeliminar =
                 //document.getElementById("urlbase").innerHTML + "/" + id;
-                'http://tiendademo1.test/admin/purchaseDetail/destroy' + '/' + id;
+                'https://tuminimercado.com/admin/purchaseDetail/destroy' + '/' + id;
         },
     },
     mounted(){
@@ -32,6 +36,16 @@ const confirmareliminar = new Vue({
             $(e.currentTarget).find('input[name="providerID"]').val(providerID);
 
             confirmareliminar.deseas_eliminar_provider($('#providerID').val())
+        });
+
+        $('#modal_eliminar_user').on('show.bs.modal', function(e) {
+            //get id attribute of the clicked element
+            var userID = $(e.relatedTarget).data('id');
+    
+            //populate the textbox
+            $(e.currentTarget).find('input[name="userID"]').val(userID);
+
+            confirmareliminar.deseas_eliminar_purchase($('#userID').val())
         });
 
         $('#modal_eliminar_purchase').on('show.bs.modal', function(e) {

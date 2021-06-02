@@ -50,6 +50,10 @@
     "Annual Subscription": "Suscripción Anual",
     "Basic Plan": "Plan Básico",
     "Premium Plan": "Plan Premium",
+    "Premium Plan Month": "Plan Premium Mensual",
+    "Premium Plan Annual": "Plan Premium Anual",
+    "No Plan": "Sin Plan",
+    "Our Plans": "Nuestros Planes",
     "To sell and have all the benefits that we offer you, you can obtain a monthly subscription.": "Para poder vender y tener todos los benecifios que le ofrecemos puede obtener la suscripción mensual.",
     "To sell and have all the benefits that we offer you, you can obtain a annual premium subscription.": "Para poder vender y tener todos los benecifios que le ofrecemos puede obtener la suscripción anual premium.",
     "Comming Soon": "Próximamente",
@@ -63,8 +67,22 @@
     "Purchasing and Provider Management": "Gestión de Compras y Proveedores",
     "You can request your seller account by sending an email to": "Puede solicitar su cuenta de vendedor envíandonos un correo a",
     "Seller%20account%20request": "Solicitud%20cuenta%20Vendedor",
+    "Seller%20account%20full%20request": "Solicitud%20cuenta%20Vendedor%20Full",
+    "Seller%20account%20renewal%20request": "Solicitud%20de%20renovación%20de%20cuenta%20Vendedor",
     "for the activation of our plans and services, then we will provide you with the details of the payment method you have.": "para la activación de nuestros planes y servicios, luego le proporcionaremos los datos del método de pago que disponga.",
     "Publication Paused": "Publicación Pausada",
+    "For questions write to": "Para dudas escribir a",
+    "You are enjoying our month": "Estás disfrutando nuestro mes",
+    "remember to write to us": "recuerde escribirnos a",
+    "to continue enjoying your membership": "para seguir disfutando de su membresía",
+    "You have": "Le quedan",
+    "days left": "días",
+    "You have a": "Tiene una",
+    "Expiration date:": "Fecha de Expiración:",
+    "Your Plan is expired, write to": "Su Plan se encuentra vencido, escribir a",
+    "to renew and continue enjoying your membership": "para renovar y seguir disfrutando su membresía",
+
+    "You don't have any plan active right now": "No tienes ningún plan activo en este momento",
 
     "Do you want to delete this register?":  "¿Deseas eliminar este registro?",
     "Action Canceled": "Acción Cancelada",
@@ -238,6 +256,7 @@
     "Proceed to Purchase": "Proceder a la Compra",
     "Delete": "Eliminar",
     "You must log in to proceed with the purchase": "Debe iniciar sesión para proceder a la compra",
+    "You must log in or sign up to proceed with the subscription": "Debe iniciar sesión o registrarse para continuar con la suscripción",
 
     "Not Found": "No se Encuentra el Enlace",
     "Unauthorized": "No se Encuentra Autorizado",
@@ -470,5 +489,7 @@
     "CONTROL OF YOUR PERSONAL INFORMATION": "CONTROL DE SU INFORMACIÓN PERSONAL",
     "At any time you can restrict the collection or use of personal information that is provided to our website. Each time you are asked to fill in a form, such as user registration, you can check or uncheck the option to receive information by email. In case you have marked the option to receive our newsletter or advertising, you can cancel it at any time.": "En cualquier momento usted puede restringir la recopilación o el uso de la información personal que es proporcionada a nuestro sitio web. Cada vez que se le solicite rellenar un formulario, como el de alta de usuario, puede marcar o desmarcar la opción de recibir información por correo electrónico. En caso de que haya marcado la opción de recibir nuestro boletín o publicidad usted puede cancelarla en cualquier momento.",
     "This company will not sell, assign or distribute the personal information that is collected without your consent, unless required by a judge with a court order.": "Esta compañía no venderá, cederá ni distribuirá la información personal que es recopilada sin su consentimiento, salvo que sea requerido por un juez con una orden judicial.",
-    "TuMiniMercado reserves the right to change the terms of this Privacy Policy at any time.": "TuMiniMercado Se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier momento."
+    "TuMiniMercado reserves the right to change the terms of this Privacy Policy at any time.": "TuMiniMercado Se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier momento.",
+
+    "Subscribe to Our Plan": "Subscribete a Nuestro Plan"
 }

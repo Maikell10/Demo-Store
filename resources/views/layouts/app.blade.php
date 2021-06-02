@@ -243,6 +243,13 @@
                                 </a>
                             </li>
 
+                            <li class="nav-item has-treeview">
+                                <a class="nav-link" href="{{ url('/register/store') }}"><i
+                                        class="nav-icon fas fa-briefcase"></i>
+                                    {{__('Our Plans')}}
+                                </a>
+                            </li>
+
 
                         </ul>
                     </nav>

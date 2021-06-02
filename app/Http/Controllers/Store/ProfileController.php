@@ -9,8 +9,10 @@ use App\Rating;
 use App\RatingStore;
 use App\Sale;
 use App\StorePermission\Models\Role;
+use App\StoreProfile;
 use App\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -35,6 +37,20 @@ class ProfileController extends Controller
         $arr_conex_client_t = $controller->arr_ip();
 
         $user = Auth::user();
+
+        $store_profile = null;
+        $dif_date_plan = null;
+        if ($user != null) {
+            $store_profile = StoreProfile::where('user_id', $user->id)->first();
+
+            $today = date("Y-m-d");
+            $date1 = new DateTime($today);
+            $date2 = new DateTime($store_profile->date_expiration);
+            $diff = $date1->diff($date2);
+
+            // Comprobando los días restantes
+            $dif_date_plan = ($diff->invert == 1) ? ' - ' . $diff->days  : $diff->days;
+        }
 
         $cant_dm_new = 0;
         if ($user != null) {
@@ -80,7 +96,7 @@ class ProfileController extends Controller
         $activities = collect($array)->sortByDesc('created_at')->values();
 
 
-        return view('user.profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'activities', 'comments', 'ratings'));
+        return view('user.profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'activities', 'comments', 'ratings','store_profile','dif_date_plan'));
     }
 
     /**
