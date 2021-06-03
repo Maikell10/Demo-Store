@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use App\DirectMessages;
 use App\Http\Controllers\Controller;
+use App\Product;
 use App\RatingStore;
 use App\Sale;
 use App\User;
@@ -59,43 +60,59 @@ class PurchasesRatingController extends Controller
      */
     public function store(Request $request)
     {
-        
-            $rating_store = new RatingStore();
+        $rating_store = new RatingStore();
 
-            $rating_store->user_id = $request->user_id;
-            $rating_store->store_user_id = $request->store_user_id;
-            if ($request->calification == 'si') {
-                $rating_store->rating = '+';
-            }
-            if ($request->calification == 'no') {
-                $rating_store->rating = '-';
-            }
-            if ($request->calification == 'neutro') {
-                $rating_store->rating = 'N';
-            }
-            $rating_store->opinion = $request->opinion;
-            $rating_store->selectOption = $request->selectOption;
-            $rating_store->status = $request->type_rating;
-            $rating_store->created_sale = $request->created_sale;
-            $rating_store->save();
+        $rating_store->user_id = $request->user_id;
+        $rating_store->store_user_id = $request->store_user_id;
+        if ($request->calification == 'si') {
+            $rating_store->rating = '+';
+        }
+        if ($request->calification == 'no') {
+            $rating_store->rating = '-';
+        }
+        if ($request->calification == 'neutro') {
+            $rating_store->rating = 'N';
+        }
+        $rating_store->opinion = $request->opinion;
+        $rating_store->selectOption = $request->selectOption;
+        $rating_store->status = $request->type_rating;
+        $rating_store->created_sale = $request->created_sale;
+        $rating_store->save();
 
-            if ($request->type_rating == 'STORE') {
+        if ($request->type_rating == 'STORE') {
 
-                $sales = Sale::select('sales.id','sales.state', 'sales.price_sale', 'sales.cantidad', 'sales.updated_at', 'sales.created_at', 'sales.user_id', 'sales.product_id', 'sales.status')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id', Auth::user()->id)->with('products')->where('sales.created_at', $request->created_sale)->get();
+            $sales = Sale::select('sales.id','sales.state', 'sales.price_sale', 'sales.cantidad', 'sales.updated_at', 'sales.created_at', 'sales.user_id', 'sales.product_id', 'sales.status')->join('product_user', 'sales.product_id', '=', 'product_user.product_id')->where('product_user.user_id', Auth::user()->id)->with('products')->where('sales.created_at', $request->created_sale)->get();
 
-                foreach ($sales as $sale) {
-                    $sale_e = Sale::findOrFail($sale->id);
+            foreach ($sales as $sale) {
+                $sale_e = Sale::findOrFail($sale->id);
 
-                    $sale_e->state = $request->statusC;
+                $sale_e->state = $request->statusC;
 
-                    $sale_e->save();
-                }
-                
+                $sale_e->save();
             }
             
-            $res = 'positivo';
-    
-            return response()->json($res);
+        }
+
+        if ($request->type_rating == 'USER') {
+            if ($request->option == '2') {
+                $sales = Sale::where('user_id', Auth::user()->id)->where('created_at', $request->created_sale)->get();
+
+                foreach ($sales as $sale) {
+                    $sale->state = 'Cancelada';
+
+                    $sale->save();
+
+                    $product = Product::findOrFail($sale->product_id);
+                    $product->cantidad = $product->cantidad + $sale->cantidad;
+
+                    $product->save();
+                }
+            }
+        }
+        
+        $res = 'positivo';
+
+        return response()->json($res);
         
     }
 

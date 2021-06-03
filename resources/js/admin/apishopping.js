@@ -151,7 +151,10 @@ const apishopping = new Vue({
             this.products[index]['cant'] = parseInt(this.products[index]['cant'])
             this.cantidad[index] = this.products[index]['cant']
 
-            this.products[index]['precio_venta'] = ((this.precio_compra[index] * this.ganancia)/100);
+            taxes = parseFloat((this.precio_compra[index] * this.tax)/100);
+
+            this.products[index]['precio_venta'] = (((parseFloat(this.precio_compra[index]) + parseFloat(taxes)) * this.ganancia)/100);
+
             this.products[index]['precio_venta'] = parseFloat(this.products[index]['precio_venta']) + parseFloat(this.precio_compra[index])
 
             this.products[index]['subtotal'] = this.precio_compra[index] * this.cantidad[index];
@@ -176,7 +179,10 @@ const apishopping = new Vue({
 
         giveGanancia(){
             for (let i = 0; i < this.products.length; i++) {
-                this.products[i]['precio_venta'] = ((this.precio_compra[i] * this.ganancia)/100)
+                taxes = parseFloat((this.precio_compra[i] * this.tax)/100);
+
+                this.products[i]['precio_venta'] = (((parseFloat(this.precio_compra[i]) + parseFloat(taxes)) * this.ganancia)/100);
+
                 this.products[i]['precio_venta'] = parseFloat(this.products[i]['precio_venta']) + parseFloat(this.precio_compra[i])
 
                 this.products[i]['precio_ventaSF'] = this.products[i]['precio_venta']
@@ -194,6 +200,17 @@ const apishopping = new Vue({
             this.total_compraSF = (this.total_compra + this.subtotalE) + this.taxs
             this.total_compra = this.format((this.total_compra + this.subtotalE) + this.taxs)
             this.taxs = this.format(this.taxs)
+
+            for (let i = 0; i < this.products.length; i++) {
+                taxes = parseFloat((this.precio_compra[i] * this.tax)/100);
+
+                this.products[i]['precio_venta'] = (((parseFloat(this.precio_compra[i]) + parseFloat(taxes)) * this.ganancia)/100);
+
+                this.products[i]['precio_venta'] = parseFloat(this.products[i]['precio_venta']) + parseFloat(this.precio_compra[i])
+
+                this.products[i]['precio_ventaSF'] = this.products[i]['precio_venta']
+                this.products[i]['precio_venta'] = this.format(this.products[i]['precio_venta'])
+            }
         },
 
         deleteProd(index){

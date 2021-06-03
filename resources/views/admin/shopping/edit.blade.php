@@ -222,7 +222,7 @@
                                             @endphp
                                             <tr class="text-center">
                                                 <td class="align-middle">
-                                                    <span  data-toggle="tooltip" data-placement="bottom" title="{{ __('Delete Provider') }}">
+                                                    <span  data-toggle="tooltip" data-placement="bottom" title="{{ __('Delete Product') }}">
                                                         <a href="{{route('admin.shopping.index')}}" data-toggle="modal" data-id="{{$purchase_detail->id}}" data-target="#modal_eliminar_purchase_detail" class="hover_zoom" ><i class="fas fa-times-circle fa-2x text-danger"></i></a>
                                                     </span>
                                                 </td>

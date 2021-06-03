@@ -31,9 +31,9 @@
 @component('mail::footer')
 {{__('We send this message to')}} <a href="mailto:{{$user->email}}">{{$user->email}}</a>
 <br>
-{{__('Get to know us and visit our')}} <a href="https://tuminimercado.com/terminos">{{__('Terms and Conditions of TuMiniMercado')}}</a>
+{{__('Get to know us and visit our')}} <a href="http://tiendademo1.test/terminos">{{__('Terms and Conditions of TuMiniMercado')}}</a>
 <br>
-<strong>© {{ date('Y') }} <a href="https://tuminimercado.com">TuMiniMercado</a>.</strong> @lang('All rights reserved.')
+<strong>© {{ date('Y') }} <a href="http://tiendademo1.test">TuMiniMercado</a>.</strong> @lang('All rights reserved.')
 @endcomponent
 @endslot
 @endcomponent

@@ -154,6 +154,7 @@
     "See Category": "Ver Categoría",
     "Edit Category": "Editar Categoría",
     "Delete Category": "Eliminar Categoría",
+    "Delete Product": "Eliminar Producto",
     "Prices Section": "Sección de Precios",
     "Previous price": "Precio anterior",
     "Actual price": "Precio actual",
@@ -168,6 +169,8 @@
     "Limit per image of": "Límite por imagen de",
     "Allowed types: jpeg, jpg, png, gif, svg.": "Tipos permitidos: jpeg, jpg, png, gif, svg.",
     "Image gallery": "Galería de Imágenes",
+    "The products selected in the shopping cart do not guarantee its availability until the moment of purchase. Please check before making your purchase.": "Los productos seleccionados en el carrito de compras no le aseguran la disponibilidad del mismo sino hasta el momento de la compra. Por favor, verifique antes de concretar su compra.",
+    "You just made a similar purchase a few moments ago, please try again later": "Acabó de realizar una compra semejante hace unos momentos, intente luego",
 
     "Configuration": "Configuración",
     

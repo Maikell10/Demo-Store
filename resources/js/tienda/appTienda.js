@@ -37,7 +37,7 @@ const appTienda = new Vue({
             this.precio_total = this.format(this.precio_total)
 
             axios
-                .get("https://tuminimercado.com/store/cart/adde/"+this.id_producto, {
+                .get("http://tiendademo1.test/store/cart/adde/"+this.id_producto, {
                     params: { cantidad: $('#cantidad'+a).val() }
                 })
                 .then(response => {
@@ -78,7 +78,7 @@ const appTienda = new Vue({
                     cancelButtonText: "Cancelar"
                 }).then(result => {
                     if (result.value) {
-                        location.replace('https://tuminimercado.com/store/purchases?gpont_=gheyudjiqnnsdk15_?daj_DfsR');
+                        location.replace('http://tiendademo1.test/store/purchases?gpont_=gheyudjiqnnsdk15_?daj_DfsR');
                     } else {
                         Swal.fire(
                             "Cancelado!",
@@ -99,7 +99,7 @@ const appTienda = new Vue({
                     cancelButtonText: "Cancel"
                 }).then(result => {
                     if (result.value) {
-                        location.replace('https://tuminimercado.com/store/purchases?gpont_=gheyudjiqnnsdk15_?daj_DfsR');
+                        location.replace('http://tiendademo1.test/store/purchases?gpont_=gheyudjiqnnsdk15_?daj_DfsR');
                     } else {
                         Swal.fire(
                             "Canceled!",
@@ -131,7 +131,7 @@ const appTienda = new Vue({
             var store_user_id=document.forms["form"+a].elements[2].value;
             if (this.user_id != '') {
                 axios
-                .get("https://tuminimercado.com/direct_message/new", {
+                .get("http://tiendademo1.test/direct_message/new", {
                     params: { order_id: this.order_id, user_id: this.user_id, store_user_id: store_user_id, direct_m:this.direct_m, type_dm:this.type_dm, date_order:this.date_order }
                 })
                 .then(response => {

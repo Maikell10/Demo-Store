@@ -6,9 +6,9 @@
 
 <h2 style="text-align: center; font-weight: bold">{{__('Hello!')}} <font style="color: goldenrod">{{$user_client->name}}</font></h2>
 
-<h3 style="text-align: center"><font style="color: darkgreen; font-weight: bold">{{$user->name}}</font>{{__(' has answered your question in')}} <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
+<h3 style="text-align: center"><font style="color: darkgreen; font-weight: bold">{{$user->name}}</font>{{__(' has answered your question in')}} <a style="color: limegreen; font-weight: bold" href="http://tiendademo1.test">TuMiniMercado</a></h3>
 
-@component('mail::button', ['url' => 'https://tuminimercado.com/store/show-product/'.$product->slug, 'color' => 'success'])
+@component('mail::button', ['url' => 'http://tiendademo1.test/store/show-product/'.$product->slug, 'color' => 'success'])
 {{__('See Answer')}}
 @endcomponent
 

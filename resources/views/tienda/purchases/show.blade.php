@@ -122,6 +122,13 @@ $indice = 0;
                     <div class="card card-success card-outline">
                         <div class="card-body box-profile">
 
+                            @if ($sales[0]->state == 'Cancelada')
+                                <h3 class="profile-username text-center text-danger font-weight-bold">{{$sales[0]->state}}</h3>
+                            @endif
+                            @if ($sales[0]->state == 'Finalizada')
+                                <h3 class="profile-username text-center text-success font-weight-bold">{{$sales[0]->state}}</h3>
+                            @endif
+
                             <h3 class="profile-username text-center">{{__('Order Nº:')}}</h3>
                             <!-- dia año / dia mes / año / hora / minutos / segundos -->
                             <h3 class="profile-username text-center text-muted">

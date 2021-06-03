@@ -84,7 +84,7 @@
         var URLactual = window.location;
         var selectVal = $('#select_rank').val()
 
-        if (URLactual == 'https://tuminimercado.com/store/show-product') {
+        if (URLactual == 'http://tiendademo1.test/store/show-product') {
             window.location.replace(URLactual + '?select_rank=' + selectVal)
         }else {
             window.location.replace(URLactual + '&select_rank=' + selectVal)

@@ -154,6 +154,9 @@
                         @endfor
                     </div>
                 <h3 class="text-right mr-1">Subtotal (<font v-model="cantTotal">@{{cantTotal}}</font>): <font class="font-weight-bold">US$ @{{precio_total}}</font></h3>
+                
+                <h6 class="text-right mr-1 mt-3 font-italic mb-2">{{__('The products selected in the shopping cart do not guarantee its availability until the moment of purchase. Please check before making your purchase.')}}</h6>
+
                 </div>
                 <div class="col-md-4">
                     <div class="card border-success p-3">

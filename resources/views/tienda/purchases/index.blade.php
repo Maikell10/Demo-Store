@@ -100,7 +100,16 @@
 
                             <div class="row" style="flex-direction: row;">
                                 <div class="col-6 mt-2 mb-2">
+                                    @if ($distinct_sale[$a]->state == 'Cancelada')
+                                        <h5 class="font-weight-bold ml-3 text-danger">{{$distinct_sale[$a]->state}}</h5>
+                                    @endif
+                                    @if ($distinct_sale[$a]->state == 'Finalizada')
+                                        <h5 class="font-weight-bold ml-3 text-success">{{$distinct_sale[$a]->state}}</h5>
+                                    @endif
+                                    @if ($distinct_sale[$a]->state == 'Ordenado')
                                     <h5 class="font-weight-bold ml-3">{{$distinct_sale[$a]->state}}</h5>
+                                    @endif
+                                    
                                     <small class="ml-3 text-muted">{{ \Carbon\Carbon::parse($distinct_sale[$a]->updated_at)->diffForHumans() }}</small>
                                 </div>
                                 

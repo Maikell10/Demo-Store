@@ -30,7 +30,7 @@
         editar: 'Si',
         datos: {
             "nombre":"{{$producto->nombre}}",
-            "precioactual":"{{$producto->precioactual}}",
+            "precioactual":"{{$producto->precio_actual}}",
             "precioanterior":"{{$producto->precio_anterior}}",
             "porcentaje_descuento":"{{$producto->porcentaje_descuento}}"
         }

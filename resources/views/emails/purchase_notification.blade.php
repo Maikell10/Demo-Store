@@ -6,9 +6,9 @@
 
 <h2 style="text-align: center; font-weight: bold">{{__('Hello!')}} <font style="color: goldenrod">{{$user->name}}</font></h2>
 
-<h3 style="text-align: center">{{__('You have placed a new order in')}} <a style="color: limegreen; font-weight: bold" href="https://tuminimercado.com">TuMiniMercado</a></h3>
+<h3 style="text-align: center">{{__('You have placed a new order in')}} <a style="color: limegreen; font-weight: bold" href="http://tiendademo1.test">TuMiniMercado</a></h3>
 
-@component('mail::button', ['url' => 'https://tuminimercado.com/store/purchases/'.$sale->created_at, 'color' => 'success'])
+@component('mail::button', ['url' => 'http://tiendademo1.test/store/purchases/'.$sale->created_at, 'color' => 'success'])
 {{__('See Order')}}
 @endcomponent
 

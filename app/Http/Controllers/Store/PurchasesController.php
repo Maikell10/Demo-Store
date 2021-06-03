@@ -51,20 +51,19 @@ class PurchasesController extends Controller
                 
                 foreach ($carts as $index => $cart) {
                     $products[] = Product::where('id', $cart['product_id'])->firstOrFail();
-                    $sales_h = Sale::get();
+                    $sales_h = Sale::where('user_id', Auth::user()->id)->get();
 
                     if ($sales_h != '[]') {
                         $cont = 0;
                         foreach ($sales_h as $sale_h) {
-                            $created_at = strtotime ( '+2 hour' , strtotime ($sale_h->created_at) );
+                            $created_at = strtotime ( '+5 minute' , strtotime ($sale_h->created_at) );
                             $created_at = date ( 'Y-m-d H:i:s' , $created_at );
-
                             
                             if ($created_at > $today && $sale_h->product_id == $cart->product_id && $sale_h->user_id == Auth::user()->id) {
                                 $cont = 1;
                             }
                         }
-                        if ($cont === 0) {
+                        if ($cont == 0) {
                             $sale = new Sale();
                             $sale->product_id = $cart->product_id;
                             $sale->cantidad = $cart->cantidad;
@@ -73,6 +72,11 @@ class PurchasesController extends Controller
                             $sale->created_at = $today;
                             $sale->updated_at = $today;
                             $sale->save();
+
+                            $products[$index]['cantidad'] = $products[$index]['cantidad'] - $cart->cantidad;
+                            $products[$index]->save();
+                        } else {
+                            $sale = '0';
                         }
                     } else {
                         $sale = new Sale();
@@ -83,7 +87,15 @@ class PurchasesController extends Controller
                         $sale->created_at = $today;
                         $sale->updated_at = $today;
                         $sale->save();
+
+                        $products[$index]['cantidad'] = $products[$index]['cantidad'] - $cart->cantidad;
+                        $products[$index]->save();
                     }
+
+                    if ($sale == '0') {
+                        return back()->with('mensajeInfo', __('You just made a similar purchase a few moments ago, please try again later'));
+                    }
+                    
                     $sales_all[] = $sale;
 
                     $cart = Cart::where('product_id', $cart->product_id)->where('user_id', Auth::user()->id)->first();

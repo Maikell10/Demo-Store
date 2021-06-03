@@ -115,6 +115,13 @@ class AdminShoppingController extends Controller
             $purchaseDetail->price_sell = json_encode($products[$i]->precio_ventaSF);
 
             $purchaseDetail->save();
+
+            $product = Product::findOrFail(json_encode($products[$i]->id));
+            $product->precio_actual = json_encode($products[$i]->precio_ventaSF);
+            $product->precio_anterior = json_encode($products[$i]->precio_ventaSF);
+            $product->porcentaje_descuento = 0;
+            $product->cantidad = json_encode($products[$i]->cant) + $product->cantidad;
+            $product->save();
         }
 
         return redirect()->route('admin.shopping.index')->with('datos', __('Register Created Successfully'));
@@ -241,6 +248,13 @@ class AdminShoppingController extends Controller
             $purchaseDetail->price_sell = json_encode($products[$i]->precio_ventaSF);
 
             $purchaseDetail->save();
+
+            $product = Product::findOrFail(json_encode($products[$i]->id));
+            $product->precio_actual = json_encode($products[$i]->precio_ventaSF);
+            $product->precio_anterior = json_encode($products[$i]->precio_ventaSF);
+            $product->porcentaje_descuento = 0;
+            $product->cantidad = json_encode($products[$i]->cant) + $product->cantidad;
+            $product->save();
         }
 
         return redirect()->route('admin.shopping.index')->with('datos', __('Register Updated Successfully'));
@@ -402,6 +416,11 @@ class AdminShoppingController extends Controller
         $purchase->save();
 
         $purchase_detail->delete();
+
+        // Delete Cant PurchaseDetail in Products
+        $product = Product::findOrFail($purchase_detail->product_id);
+        $product->cantidad = $product->cantidad - $purchase_detail->cant;
+        $product->save();
 
         return back()->with('datos', __('Register Deleted Successfully'));
     }
