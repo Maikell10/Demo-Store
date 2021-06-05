@@ -25,13 +25,16 @@ class RegisterStoreController extends Controller
         if ($user != null) {
             $store_profile = StoreProfile::where('user_id', $user->id)->first();
 
-            $today = date("Y-m-d");
-            $date1 = new DateTime($today);
-            $date2 = new DateTime($store_profile->date_expiration);
-            $diff = $date1->diff($date2);
+            $dif_date_plan = '';
+            if ($store_profile != null) {
+                $today = date("Y-m-d");
+                $date1 = new DateTime($today);
+                $date2 = new DateTime($store_profile->date_expiration);
+                $diff = $date1->diff($date2);
 
-            // Comprobando los días restantes
-            $dif_date_plan = ($diff->invert == 1) ? ' - ' . $diff->days  : $diff->days;
+                // Comprobando los días restantes
+                $dif_date_plan = ($diff->invert == 1) ? ' - ' . $diff->days  : $diff->days;
+            }
         }
 
         // Direct Messages

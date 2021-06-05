@@ -65,6 +65,8 @@
                             @else
                                 <h5 class="h4 text-center font-weight-bold">{{__('Your Plan is expired, write to')}} <a href="mailto:pagos@tuminimercado.com?subject={{__('Seller%20account%20renewal%20request')}}">pagos@tuminimercado.com</a> {{__('to renew and continue enjoying your membership')}}</h5>
                             @endif
+                        @else
+                            <h5 class="h4 text-center font-weight-bold">{{__('With any of our plans the first month is')}} <font class="text-danger">{{__('FREE')}}</font></h5>
                         @endif
                     @else
                     <h5 class="h4 text-center font-weight-bold">{{__('With any of our plans the first month is')}} <font class="text-danger">{{__('FREE')}}</font></h5>
