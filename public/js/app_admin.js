@@ -15391,8 +15391,18 @@ module.exports = g;
 /*!***********************************************!*\
   !*** ./resources/js/admin/apiProfileStore.js ***!
   \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var apiProfileStore = new Vue({
   el: "#apiProfileStore",
@@ -15404,7 +15414,10 @@ var apiProfileStore = new Vue({
     inputFacebook: $('#inputFacebookH').val(),
     inputTwitter: $('#inputTwitterH').val(),
     inputInstagram: $('#inputInstagramH').val(),
-    inputGoogleMaps: $('#inputGoogleMapsH').val()
+    inputGoogleMaps: $('#inputGoogleMapsH').val(),
+    inputCountry: $('#inputCountryH').val(),
+    inputState: $('#inputStateH').val(),
+    cities: ''
   },
   methods: {
     setCheck: function setCheck() {
@@ -15475,6 +15488,14 @@ var apiProfileStore = new Vue({
           Swal.fire("Cancelado!", "Cancelado!", "error");
         }
       });
+    },
+    loadCities: function loadCities() {
+      var _this = this;
+
+      this.selected_inputCountry = $("#inputCountry").val();
+      axios.get("http://tiendademo1.test/api/cities/" + this.selected_inputCountry).then(function (response) {
+        _this.cities = response.data;
+      });
     }
   },
   mounted: function mounted() {
@@ -15489,6 +15510,28 @@ var apiProfileStore = new Vue({
     $('#updateStoreForm').on("submit", function (e) {
       e.preventDefault();
     });
+    $("#inputCountry").on('change', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return apiProfileStore.loadCities();
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })));
+    $('#inputCountry').select2();
+    $('#inputState').select2();
+
+    if (this.inputCountry != '') {
+      $("#inputState option[value='" + $("#inputStateH").val() + "']").attr("selected", "selected");
+      this.loadCities();
+    }
   }
 });
 
@@ -15982,7 +16025,7 @@ var apiproduct = new Vue({
       this.subcategories = '';
       this.maincategories = '';
       this.selected_category = $("#category_id").val();
-      axios.get("https://tuminimercado.com/api/sub-category", {
+      axios.get("http://tiendademo1.test/api/sub-category", {
         params: {
           category_id: this.selected_category
         }
@@ -15995,7 +16038,7 @@ var apiproduct = new Vue({
 
       this.maincategories = '';
       this.selected_subcategory = $("#sub_category_id").val();
-      axios.get("https://tuminimercado.com/api/main-category", {
+      axios.get("http://tiendademo1.test/api/main-category", {
         params: {
           sub_category_id: this.selected_subcategory
         }
@@ -16008,7 +16051,7 @@ var apiproduct = new Vue({
 
       this.maincategories = '';
       this.selected_subcategory = $("#subcategoryid").val();
-      axios.get("https://tuminimercado.com/api/main-category", {
+      axios.get("http://tiendademo1.test/api/main-category", {
         params: {
           sub_category_id: this.selected_subcategory
         }

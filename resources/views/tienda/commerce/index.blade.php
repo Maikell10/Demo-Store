@@ -108,6 +108,12 @@
                                 @else
                                     <h3 class="profile-username text-center">{{ $user->name }}</h3>
                                 @endif
+
+                                @if ($store_profile_config != null)
+                                    @if ($store_profile_config->city_id != null)
+                                    <h6 class="text-muted text-center">{{App\City::with('country')->findOrFail($store_profile_config->city_id)->country->name}} / {{App\City::findOrFail($store_profile_config->city_id)->name}}</h6>
+                                    @endif
+                                @endif
                                 
 
                                 <ul class="list-group list-group-unbordered mb-3">
@@ -125,28 +131,28 @@
                                     </li>
                                 </ul>
 
-                                @if ($store_profile_config != '[]')
-                                    @if ($store_profile_config[0]->contact_phone != null)
-                                        <h5 class="text-center h6">{{__('Contact')}}: <a href="tel:{{$store_profile_config[0]->contact_phone}}" class="btn btn-link">{{$store_profile_config[0]->contact_phone}}</a></h5>
+                                @if ($store_profile_config != null)
+                                    @if ($store_profile_config->contact_phone != null)
+                                        <h5 class="text-center h6">{{__('Contact')}}: <a href="tel:{{$store_profile_config->contact_phone}}" class="btn btn-link">{{$store_profile_config->contact_phone}}</a></h5>
                                     @endif
                                 @endif
 
-                                @if ($store_profile_config != '[]')
-                                @if ($store_profile_config[0]->facebook != null || $store_profile_config[0]->instagram != null || $store_profile_config[0]->twitter != null)
+                                @if ($store_profile_config != null)
+                                @if ($store_profile_config->facebook != null || $store_profile_config->instagram != null || $store_profile_config->twitter != null)
                                     <div class="menu_social">
                                         <ul
                                             class="menu_social_list d-flex flex-row align-items-center justify-content-center">
 
-                                            @if ($store_profile_config[0]->facebook != null)
-                                                <li><a href="{{$store_profile_config[0]->facebook}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                            @if ($store_profile_config->facebook != null)
+                                                <li><a href="{{$store_profile_config->facebook}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                                             @endif
                                             
-                                            @if ($store_profile_config[0]->twitter != null)
-                                                <li><a href="{{$store_profile_config[0]->twitter}}" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                            @if ($store_profile_config->twitter != null)
+                                                <li><a href="{{$store_profile_config->twitter}}" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
                                             @endif
                                             
-                                            @if ($store_profile_config[0]->instagram != null)
-                                                <li><a href="{{$store_profile_config[0]->instagram}}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                            @if ($store_profile_config->instagram != null)
+                                                <li><a href="{{$store_profile_config->instagram}}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
                                             @endif
                                         </ul>
                                         <h5 class="text-center h6 text-success font-weight-bold">Siguenos!!</h5>
@@ -224,14 +230,14 @@
 
         </div>
 
-        @if ($store_profile_config != '[]')
-            @if ($store_profile_config[0]->gmaps != null)
+        @if ($store_profile_config != null)
+            @if ($store_profile_config->gmaps != null)
                 <hr>
                 <div class="d-flex flex-row align-items-center justify-content-center">
                     <h5 class="h2 font-weight-bold">Ubícanos <img src="{{asset('asset/images/maps.png')}}" style="width: 30px" /></h5>
                 </div>
                 <div class="row">
-                    <iframe src="{{$store_profile_config[0]->gmaps}}" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe src="{{$store_profile_config->gmaps}}" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             @endif
         @endif

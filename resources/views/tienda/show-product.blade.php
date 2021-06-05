@@ -154,6 +154,12 @@
                     @if ($producto->users[0]->verified == 1)
                         <img src="{{asset('asset/images/verified-account.png')}}" style="width: 30px" data-toggle="tooltip" data-placement="right" title="{{ __('Verified') }}" />
                     @endif
+
+                    @if ($store_profile_config != null)
+                        @if ($store_profile_config->city_id != null)
+                        <h6><font class="font-weight-bold">Ubicación: </font><font class="text-muted">{{App\City::with('country')->findOrFail($store_profile_config->city_id)->country->name}} / {{App\City::findOrFail($store_profile_config->city_id)->name}}</font></h6>
+                        @endif
+                    @endif
                 </span>
 
                 <!--
@@ -172,9 +178,9 @@
                 <H4>${{number_format($producto->precio_actual,2)}}</H4>
                 @endif
 
-                @if ($store_profile_config != '[]')
-                    @if ($store_profile_config[0]->change != null)
-                        <H5>Bs.{{number_format($producto->precio_actual * $store_profile_config[0]->change,2)}}</H5>
+                @if ($store_profile_config != null)
+                    @if ($store_profile_config->change != null)
+                        <H5>Bs.{{number_format($producto->precio_actual * $store_profile_config->change,2)}}</H5>
                     @endif
                 @endif
 

@@ -51065,7 +51065,7 @@ var apiproduct = new Vue({
       this.subcategories = '';
       this.maincategories = '';
       this.selected_category = $("#category_id").val();
-      axios.get("https://tuminimercado.com/api/sub-category", {
+      axios.get("http://tiendademo1.test/api/sub-category", {
         params: {
           category_id: this.selected_category
         }
@@ -51078,7 +51078,7 @@ var apiproduct = new Vue({
 
       this.maincategories = '';
       this.selected_subcategory = $("#sub_category_id").val();
-      axios.get("https://tuminimercado.com/api/main-category", {
+      axios.get("http://tiendademo1.test/api/main-category", {
         params: {
           sub_category_id: this.selected_subcategory
         }
@@ -51091,7 +51091,7 @@ var apiproduct = new Vue({
 
       this.maincategories = '';
       this.selected_subcategory = $("#subcategoryid").val();
-      axios.get("https://tuminimercado.com/api/main-category", {
+      axios.get("http://tiendademo1.test/api/main-category", {
         params: {
           sub_category_id: this.selected_subcategory
         }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\City;
+use App\Country;
 use App\Http\Controllers\Controller;
 use App\StoreProfile;
 use App\User;
@@ -31,9 +33,18 @@ class BusinessProfileController extends Controller
 
         $user = User::with('roles','image')->where('id', Auth::user()->id)->firstOrFail();
 
-        $store_profile_config =  StoreProfile::where('user_id', $user->id)->get();
+        $store_profile_config =  StoreProfile::where('user_id', $user->id)->first();
+        $city = '0';
+        if ($store_profile_config != '[]') {
+            if ($store_profile_config->city_id != null) {
+                $city = City::with('country')->findOrFail($store_profile_config->city_id);
+            }
+        }
 
-        return view('admin.business_profile', compact('user', 'notifications','direct_m','store_profile_config'));
+        $countries = Country::get();
+        $cities = City::with('country')->get();
+
+        return view('admin.business_profile', compact('user', 'notifications','direct_m','store_profile_config','countries','cities','city'));
     }
 
     /**
@@ -78,7 +89,7 @@ class BusinessProfileController extends Controller
             
             return redirect()->back()->with('datos', __('Register Created Successfully'));
         }
-
+        
         $request->validate([
             'inputPhone' => 'nullable|max:18',
             'inputFacebook' => 'nullable|url',
@@ -142,6 +153,7 @@ class BusinessProfileController extends Controller
             'inputTwitter' => 'nullable|url',
             'inputInstagram' => 'nullable|url',
             'inputGoogleMaps' => 'nullable|url',
+            'inputState' => 'nullable',
         ]);
 
         if ($id != Auth::user()->id) {
@@ -156,6 +168,7 @@ class BusinessProfileController extends Controller
         $store_profile_config->twitter = $request->inputTwitter;
         $store_profile_config->instagram = $request->inputInstagram;
         $store_profile_config->gmaps = $request->inputGoogleMaps;
+        $store_profile_config->city_id = $request->inputState;
 
         $store_profile_config->save();
 

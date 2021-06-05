@@ -58,17 +58,17 @@
                             </div>
 
                             @if ($store_profile_config != '[]')
-                                @if ($store_profile_config[0]->change != null)
+                                @if ($store_profile_config->change != null)
                                 <div class="col-md-6">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="tasaDia" class="col-md-12 col-form-label">Última Tasa del Día <font class="text-muted text-sm ml-3">{{ \Carbon\Carbon::parse($store_profile_config[0]->created_change)->diffForHumans() }}</font></label>
+                                            <label for="tasaDia" class="col-md-12 col-form-label">Última Tasa del Día <font class="text-muted text-sm ml-3">{{ \Carbon\Carbon::parse($store_profile_config->created_change)->diffForHumans() }}</font></label>
                 
                                             <div class="input-group col-md-8">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text font-weight-bold" id="basic-addon1">Bs.</span>
                                                 </div>
-                                                <input type="text" class="form-control" value={{number_format($store_profile_config[0]->change, 2)}} readonly>
+                                                <input type="text" class="form-control" value={{number_format($store_profile_config->change, 2)}} readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -233,6 +233,67 @@
                                 @endif
                                 
                                     @csrf
+
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label for="inputCountry" class="col-form-label">{{__('Country')}}</label>
+
+                                            <div class="input-group">
+                                                @if ($city != '0')
+                                                    <input type="hidden" id="inputCountryH" value="{{$city->country->id}}">
+                                                @else
+                                                    <input type="hidden" id="inputCountryH" value="">
+                                                @endif
+    
+                                                <select name="inputCountry" class="country form-control @error('inputCountry') is-invalid @enderror" id="inputCountry" width="100%" v-model="inputCountry">
+                                                    <option selected="selected" value="">--Seleccionar Pais--</option>
+                                                    @foreach($countries as $country)
+                                                        <option value="{{ $country->id }}">{{ $country->name }}</option> 
+                                                    @endforeach
+                                                </select>
+    
+                                                @error('inputCountry')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputState" class="col-form-label">{{__('State')}}</label>
+
+                                            <div class="input-group">
+                                                @if ($city != '0')
+                                                    <input type="hidden" id="inputStateH" value="{{$city->id}}">
+                                                @else
+                                                    <input type="hidden" id="inputStateH" value="">
+                                                @endif
+
+                                                <select name="inputState" id="inputState"
+                                                    class="form-control select2 @error('inputState') is-invalid @enderror" v-if="cities.length != 0" v-model="inputState">
+                                                    <option value="">{{__('Select one')}}</option>
+                                                    <option v-for="(city, index) in cities"
+                                                        v-bind:value="index+1">
+                                                        @{{ city.name }}
+                                                    </option>
+                                                </select>
+
+                                                <select name="inputState" id="inputState"
+                                                    class="form-control select2 @error('inputState') is-invalid @enderror" v-else disabled>
+                                                    <option value="">{{__('Select one')}}</option>
+                                                </select>
+    
+                                                @error('inputState')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                     <div class="form-group row">
                                         <label for="inputPhone" class="col-md-12 col-form-label">{{__('Contact')}}</label>
 
@@ -243,14 +304,14 @@
                                             </div>
 
                                             @if ($store_profile_config != '[]')
-                                                <input type="hidden" id="inputPhoneH" value="{{$store_profile_config[0]->contact_phone}}">
+                                                <input type="hidden" id="inputPhoneH" value="{{$store_profile_config->contact_phone}}">
                                             @else
                                                 <input type="hidden" id="inputPhoneH" value="">
                                             @endif
                                                 
                                             <input class="form-control @error('inputPhone') is-invalid @enderror" type="text" name="inputPhone" id="inputPhone" data-inputmask='"mask": "+99 (999) 999-9999"' data-mask v-model="inputPhone">
 
-                                            @error('inputName')
+                                            @error('inputPhone')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -268,14 +329,14 @@
                                             </div>
 
                                             @if ($store_profile_config != '[]')
-                                                <input type="hidden" id="inputFacebookH" value="{{$store_profile_config[0]->facebook}}">
+                                                <input type="hidden" id="inputFacebookH" value="{{$store_profile_config->facebook}}">
                                             @else
                                                 <input type="hidden" id="inputFacebookH" value="">
                                             @endif
                                                 
                                             <input class="form-control @error('inputFacebook') is-invalid @enderror" type="url" name="inputFacebook" id="inputFacebook" placeholder="Facebook Url" v-model="inputFacebook">
 
-                                            @error('inputName')
+                                            @error('inputFacebook')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -293,14 +354,14 @@
                                             </div>
 
                                             @if ($store_profile_config != '[]')
-                                                <input type="hidden" id="inputTwitterH" value="{{$store_profile_config[0]->twitter}}">
+                                                <input type="hidden" id="inputTwitterH" value="{{$store_profile_config->twitter}}">
                                             @else
                                                 <input type="hidden" id="inputTwitterH" value="">
                                             @endif
                                                 
                                             <input class="form-control @error('inputTwitter') is-invalid @enderror" type="url" name="inputTwitter" id="inputTwitter" placeholder="Twitter Url" v-model="inputTwitter">
 
-                                            @error('inputName')
+                                            @error('inputTwitter')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -318,14 +379,14 @@
                                             </div>
 
                                             @if ($store_profile_config != '[]')
-                                                <input type="hidden" id="inputInstagramH" value="{{$store_profile_config[0]->instagram}}">
+                                                <input type="hidden" id="inputInstagramH" value="{{$store_profile_config->instagram}}">
                                             @else
                                                 <input type="hidden" id="inputInstagramH" value="">
                                             @endif
                                                 
                                             <input class="form-control @error('inputInstagram') is-invalid @enderror" type="url" name="inputInstagram" id="inputInstagram" placeholder="Instagram Url" v-model="inputInstagram">
 
-                                            @error('inputName')
+                                            @error('inputInstagram')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -343,14 +404,14 @@
                                             </div>
                                             
                                             @if ($store_profile_config != '[]')
-                                                <input type="hidden" id="inputGoogleMapsH" value="{{$store_profile_config[0]->gmaps}}">
+                                                <input type="hidden" id="inputGoogleMapsH" value="{{$store_profile_config->gmaps}}">
                                             @else
                                                 <input type="hidden" id="inputGoogleMapsH" value="">
                                             @endif
                                                 
                                             <input class="form-control @error('inputGoogleMaps') is-invalid @enderror" type="url" name="inputGoogleMaps" id="inputGoogleMaps" placeholder="Google Maps Url" v-model="inputGoogleMaps">
 
-                                            @error('inputName')
+                                            @error('inputGoogleMaps')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>

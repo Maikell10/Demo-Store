@@ -1,6 +1,8 @@
 <?php
 
 use App\Category;
+use App\City;
+use App\Country;
 use App\MainCategory;
 use Illuminate\Database\Seeder;
 use App\User;
@@ -5264,16 +5266,6 @@ class StorePermissionInfoSeeder extends Seeder
         };
 
 
-
-
-
-
-
-
-
-
-
-
         // --------------- Nuevos Agreados ----------------------
 
         // Cosméticos
@@ -5309,7 +5301,210 @@ class StorePermissionInfoSeeder extends Seeder
 
 
 
+        // Countries
+        //
+        //
+        // Countries
+        $country = Country::where('name', 'Venezuela')->first();
+        if (!$country) {
+            $country = Country::create([
+                'name' => 'Venezuela'
+            ]);
+        }
 
+        // Cities Venezuela
+        $city = City::where('name', 'Amazonas')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Amazonas'
+            ]);
+        }
         
+        $city = City::where('name', 'Anzoátegui')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Anzoátegui'
+            ]);
+        }
+
+        $city = City::where('name', 'Apure')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Apure'
+            ]);
+        }
+
+        $city = City::where('name', 'Aragua')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Aragua'
+            ]);
+        }
+
+        $city = City::where('name', 'Barinas')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Barinas'
+            ]);
+        }
+
+        $city = City::where('name', 'Bolívar')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Bolívar'
+            ]);
+        }
+
+        $city = City::where('name', 'Carabobo')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Carabobo'
+            ]);
+        }
+
+        $city = City::where('name', 'Cojedes')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Cojedes'
+            ]);
+        }
+
+        $city = City::where('name', 'Delta Amacuro')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Delta Amacuro'
+            ]);
+        }
+
+        $city = City::where('name', 'Distrito Capital')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Distrito Capital'
+            ]);
+        }
+
+        $city = City::where('name', 'Falcón')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Falcón'
+            ]);
+        }
+
+        $city = City::where('name', 'Guárico')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Guárico'
+            ]);
+        }
+
+        $city = City::where('name', 'Lara')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Lara'
+            ]);
+        }
+
+        $city = City::where('name', 'Mérida')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Mérida'
+            ]);
+        }
+
+        $city = City::where('name', 'Miranda')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Miranda'
+            ]);
+        }
+
+        $city = City::where('name', 'Monagas')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Monagas'
+            ]);
+        }
+
+        $city = City::where('name', 'Nueva Esparta')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Nueva Esparta'
+            ]);
+        }
+
+        $city = City::where('name', 'Portuguesa')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Portuguesa'
+            ]);
+        }
+
+        $city = City::where('name', 'Sucre')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Sucre'
+            ]);
+        }
+
+        $city = City::where('name', 'Táchira')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Táchira'
+            ]);
+        }
+
+        $city = City::where('name', 'Trujillo')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Trujillo'
+            ]);
+        }
+
+        $city = City::where('name', 'Vargas')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Vargas'
+            ]);
+        }
+
+        $city = City::where('name', 'Yaracuy')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Yaracuy'
+            ]);
+        }
+
+        $city = City::where('name', 'Zulia')->first();
+        if (!$city) {
+            $city = City::create([
+                'country_id' => 1,
+                'name' => 'Zulia'
+            ]);
+        }
+
+
     }
 }

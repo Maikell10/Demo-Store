@@ -101,7 +101,7 @@ return $data;*/
         $negative_rating = RatingStore::where('store_user_id',$user->id)->where('status', 'USER')->where('rating', '-')->count();
         $neutral_rating = RatingStore::where('store_user_id',$user->id)->where('status', 'USER')->where('rating', 'N')->count();
 
-        $store_profile_config =  StoreProfile::where('user_id', $user->id)->get();
+        $store_profile_config =  StoreProfile::where('user_id', $user->id)->first();
 
 
         return view('tienda.commerce.index', compact('user', 'productos', 'arr_conex_client_t', 'cant_dm_new', 'direct_m','sales_count','positive_rating','negative_rating','neutral_rating','store_profile_config'));

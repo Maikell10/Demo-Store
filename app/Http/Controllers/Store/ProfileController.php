@@ -43,13 +43,15 @@ class ProfileController extends Controller
         if ($user != null) {
             $store_profile = StoreProfile::where('user_id', $user->id)->first();
 
-            $today = date("Y-m-d");
-            $date1 = new DateTime($today);
-            $date2 = new DateTime($store_profile->date_expiration);
-            $diff = $date1->diff($date2);
+            if ($store_profile != null) {
+                $today = date("Y-m-d");
+                $date1 = new DateTime($today);
+                $date2 = new DateTime($store_profile->date_expiration);
+                $diff = $date1->diff($date2);
 
-            // Comprobando los días restantes
-            $dif_date_plan = ($diff->invert == 1) ? ' - ' . $diff->days  : $diff->days;
+                // Comprobando los días restantes
+                $dif_date_plan = ($diff->invert == 1) ? ' - ' . $diff->days  : $diff->days;
+            }
         }
 
         $cant_dm_new = 0;
@@ -307,7 +309,8 @@ class ProfileController extends Controller
 
         $activities = collect($array)->sortByDesc('created_at')->values();
 
+        $store_profile = StoreProfile::where('user_id', $user->id)->first();
 
-        return view('user.public_profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'activities', 'comments', 'ratings'));
+        return view('user.public_profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'activities', 'comments', 'ratings', 'store_profile'));
     }
 }

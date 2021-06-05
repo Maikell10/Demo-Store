@@ -1,6 +1,8 @@
 <?php
 
+use App\City;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +41,13 @@ Route::get('shopping/add','API\ProductController@fillTable')->name('api.fillTabl
 
 // Edit User-Profile
 Route::get('profile/edit','Store\ProfileController@updateUser')->name('api.updateUser');
+
+// Cities
+Route::get('cities/{id}', function($id)
+{
+	$country_id = $id;
+
+	$cities = City::where('country_id', $country_id)->get();
+	
+    return Response::json($cities);
+});

@@ -10,6 +10,11 @@ const apiProfileStore = new Vue({
         inputTwitter: $('#inputTwitterH').val(),
         inputInstagram: $('#inputInstagramH').val(),
         inputGoogleMaps: $('#inputGoogleMapsH').val(),
+
+        inputCountry: $('#inputCountryH').val(),
+        inputState: $('#inputStateH').val(),
+
+        cities: ''
     },
     methods: {
         setCheck() {
@@ -92,6 +97,15 @@ const apiProfileStore = new Vue({
                 }
             })
         },
+
+        loadCities() {
+            this.selected_inputCountry = $("#inputCountry").val();
+            axios
+                .get("http://tiendademo1.test/api/cities/" + this.selected_inputCountry)
+                .then(response => {
+                    this.cities = response.data;
+                });
+        },
     },
     mounted() {
         $("#btnConfig").on("click",function(e){
@@ -105,5 +119,17 @@ const apiProfileStore = new Vue({
         $('#updateStoreForm').on("submit", function(e){
             e.preventDefault() 
         })
+
+        $("#inputCountry").on('change', async function() {
+            await apiProfileStore.loadCities()
+        });
+
+        $('#inputCountry').select2();
+        $('#inputState').select2();
+
+        if (this.inputCountry != '') {
+            $("#inputState option[value='"+$("#inputStateH").val()+"']").attr("selected","selected");
+            this.loadCities()
+        }
     }
 });

@@ -100,6 +100,12 @@
                                             <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
                                         @endif
 
+                                        @if ($store_profile != null)
+                                            @if ($store_profile->city_id != null)
+                                            <h6 class="text-muted text-center">{{App\City::with('country')->findOrFail($store_profile->city_id)->country->name}} / {{App\City::findOrFail($store_profile->city_id)->name}}</h6>
+                                            @endif
+                                        @endif
+
                                         <ul class="list-group list-group-unbordered mb-3">
                                             <li class="list-group-item">
                                                 <b>{{ __('Shopping') }}</b> <a class="float-right">{{$sales_count}}</a>
