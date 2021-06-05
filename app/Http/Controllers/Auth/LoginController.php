@@ -72,12 +72,23 @@ class LoginController extends Controller
             $user = User::where('email', $userSocialite->getEmail())->first();
 
             if (!$user) {
-                $user = User::create([
-                    'name' => $userSocialite->getName(),
-                    'email' => $userSocialite->getEmail(),
-                ]);
+                if ($driver == 'google') {
+                    $user = User::create([
+                        'name' => $userSocialite->getName().'_G',
+                        'email' => $userSocialite->getEmail(),
+                    ]);
 
-                $user->roles()->sync([2]);
+                    $user->roles()->sync([2]);
+                }
+
+                if ($driver == 'facebook') {
+                    $user = User::create([
+                        'name' => $userSocialite->getName().'_F',
+                        'email' => $userSocialite->getEmail(),
+                    ]);
+
+                    $user->roles()->sync([2]);
+                }
             }
 
             $social_profile = SocialProfile::create([
