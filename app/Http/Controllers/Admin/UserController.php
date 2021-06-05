@@ -14,7 +14,6 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('valid_store');
     }
     
     public function index()
@@ -165,6 +164,8 @@ class UserController extends Controller
 
             $user->sale = 1;
             $user->save();
+
+            $user->roles()->sync([3]);
 
             $store_profile = StoreProfile::where('user_id', $user->id)->first();
             if ($store_profile == '') {
