@@ -462,7 +462,7 @@
     <div class="">
         <div class="row load_more_row">
             <div class="col">
-                <div class="button load_more ml-auto mr-auto" style="margin-top: 50%"><a href="#">{{__('See All')}}</a>
+                <div class="button load_more ml-auto mr-auto" style="margin-top: 50%"><a href="{{ url('store/show-product-offer') }}">{{__('See All')}}</a>
                 </div>
             </div>
         </div>

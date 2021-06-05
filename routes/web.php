@@ -104,6 +104,7 @@ Route::resource('/register/store', 'Auth\RegisterStoreController')->names('auth.
 
 // Ruta de Productos
 Route::resource('/store/show-product', 'Store\ProductController')->names('tienda.show-product');
+Route::get('/store/show-product-offer', 'Store\ProductController@indexOffer')->name('tienda.show-product.offer');
 
 // Ruta de Categorias
 Route::resource('/store/show-category', 'Store\CategoryController')->names('tienda.show-category');

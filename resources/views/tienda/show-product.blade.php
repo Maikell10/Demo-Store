@@ -86,7 +86,11 @@
 
         if (URLactual == 'http://tiendademo1.test/store/show-product') {
             window.location.replace(URLactual + '?select_rank=' + selectVal)
-        }else {
+        }
+        else if(URLactual == 'http://tiendademo1.test/store/show-product-offer'){
+            window.location.replace(URLactual + '?select_rank=' + selectVal)
+        }
+        else {
             window.location.replace(URLactual + '&select_rank=' + selectVal)
         }
     }

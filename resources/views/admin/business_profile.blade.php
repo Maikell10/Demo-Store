@@ -246,7 +246,7 @@
                                                 @endif
     
                                                 <select name="inputCountry" class="country form-control @error('inputCountry') is-invalid @enderror" id="inputCountry" width="100%" v-model="inputCountry">
-                                                    <option selected="selected" value="">--Seleccionar Pais--</option>
+                                                    <option selected value="">{{__('Select one')}}</option>
                                                     @foreach($countries as $country)
                                                         <option value="{{ $country->id }}">{{ $country->name }}</option> 
                                                     @endforeach
