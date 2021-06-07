@@ -17,7 +17,7 @@ use Yajra\DataTables\DataTables;
 
 use Intervention\Image\Facades\Image;
 
-//DEFINE('DS', DIRECTORY_SEPARATOR);
+DEFINE('DS', DIRECTORY_SEPARATOR);
 
 class AdminProductController extends Controller
 {
@@ -25,6 +25,9 @@ class AdminProductController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('valid_store');
+
+        // Public Path Servidor
+        $this->public_path = '/home/u904324574/domains/tuminimercado.com/public_html';
     }
     /**
      * Display a listing of the resource.
@@ -98,21 +101,33 @@ class AdminProductController extends Controller
                     $solo_nombre = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME);
                     $nombre = time() . '_' . $solo_nombre . '.jpg';
     
+                    //$ruta = $this->public_path . DS . 'imagenes';
                     $ruta = public_path() . DS . 'imagenes';
     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,30);
+                    $img = Image::make($imagen);
+                    $img->resize(800, 800, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $img->save($path,50);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 } else {
                     $nombre = time() . '_' . $imagen->getClientOriginalName();
 
+                    //$ruta = $this->public_path . DS . 'imagenes';
                     $ruta = public_path() . DS . 'imagenes';
     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,30);
+                    $img = Image::make($imagen);
+                    $img->resize(800, 800, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $img->save($path,50);
 
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 }
@@ -251,21 +266,33 @@ class AdminProductController extends Controller
                     $solo_nombre = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME);
                     $nombre = time() . '_' . $solo_nombre . '.jpg';
     
+                    //$ruta = $this->public_path . DS . 'imagenes';
                     $ruta = public_path() . DS . 'imagenes';
     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,30);
+                    $img = Image::make($imagen);
+                    $img->resize(800, 800, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $img->save($path,50);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 } else {
                     $nombre = time() . '_' . $imagen->getClientOriginalName();
 
+                    //$ruta = $this->public_path . DS . 'imagenes';
                     $ruta = public_path() . DS . 'imagenes';
                     
                     //$imagen->move($ruta, $nombre);
                     $path = $ruta . DS . $nombre;
-                    Image::make($imagen)->save($path,30);
+                    $img = Image::make($imagen);
+                    $img->resize(800, 800, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $img->save($path,50);
     
                     $urlimagenes[]['url'] = DS . 'imagenes' . DS  . $nombre;
                 }

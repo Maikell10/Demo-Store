@@ -99,6 +99,7 @@ const apiProfileStore = new Vue({
         },
 
         loadCities() {
+            this.cities = '';
             this.selected_inputCountry = $("#inputCountry").val();
             axios
                 .get("http://tiendademo1.test/api/cities/" + this.selected_inputCountry)

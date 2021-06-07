@@ -15492,6 +15492,7 @@ var apiProfileStore = new Vue({
     loadCities: function loadCities() {
       var _this = this;
 
+      this.cities = '';
       this.selected_inputCountry = $("#inputCountry").val();
       axios.get("http://tiendademo1.test/api/cities/" + this.selected_inputCountry).then(function (response) {
         _this.cities = response.data;

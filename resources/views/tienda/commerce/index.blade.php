@@ -234,7 +234,7 @@
             @if ($store_profile_config->gmaps != null)
                 <hr>
                 <div class="d-flex flex-row align-items-center justify-content-center">
-                    <h5 class="h2 font-weight-bold">Ubícanos <img src="{{asset('asset/images/maps.png')}}" style="width: 30px" /></h5>
+                    <h5 class="h2 font-weight-bold">{{__('Locate us')}} <img src="{{asset('asset/images/maps.png')}}" style="width: 30px" /></h5>
                 </div>
                 <div class="row">
                     <iframe src="{{$store_profile_config->gmaps}}" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
