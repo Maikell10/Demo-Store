@@ -390,8 +390,17 @@
 
 
 <!-- En oferta -->
+@php
+    $cont_prod_offer = 0;
+@endphp
+@foreach ($productos as $producto)
+    @if ($producto->estado == 'En Oferta')
+        {{$cont_prod_offer = 1}}
+    @endif
+@endforeach
 
 
+@if ($cont_prod_offer == 1) 
 <div class="lomasvendidocontenedor">
     <div class="section_title text-center">{{__('Offers')}}</div>
     <br>
@@ -470,6 +479,7 @@
 
 </div>
 </div>
+@endif
 
 <br>
 

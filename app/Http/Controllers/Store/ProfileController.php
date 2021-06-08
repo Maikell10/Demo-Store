@@ -4,22 +4,20 @@ namespace App\Http\Controllers\Store;
 
 use App\Comment;
 use App\Http\Controllers\Controller;
-use App\Image;
 use App\Rating;
 use App\RatingStore;
 use App\Sale;
-use App\StorePermission\Models\Role;
 use App\StoreProfile;
 use App\User;
-use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
-use Intervention\Image\Facades\Image as Imagen;
+use App\Image AS Imagen;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
+
 use Throwable;
 
 DEFINE('DS', DIRECTORY_SEPARATOR);
@@ -30,6 +28,9 @@ class ProfileController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('verified');
+
+        // Public Path Servidor
+        $this->public_path = '/home/u904324574/domains/tuminimercado.com/public_html';
     }
     
     public function index()
@@ -102,22 +103,11 @@ class ProfileController extends Controller
         return view('user.profile', compact('user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'sales_count', 'positive_rating', 'negative_rating', 'neutral_rating', 'activities', 'comments', 'ratings','store_profile','dif_date_plan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -128,12 +118,12 @@ class ProfileController extends Controller
 
         if ($request->hasFile('imagenes')) {
             // Deleting Previous Image
-            $image_prev = Image::where('imageable_id', Auth::user()->id)->where('imageable_type', 'App\User')->first();
-/*
+            $image_prev = Imagen::where('imageable_id', Auth::user()->id)->where('imageable_type', 'App\User')->first();
+
             if ($image_prev) {
                 $archivo = substr($image_prev->url, 1);
                 File::delete($archivo);
-            }*/
+            }
 
             $imagen = $request->file('imagenes');
 
@@ -141,20 +131,32 @@ class ProfileController extends Controller
                 $solo_nombre = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME);
                 $nombre = time() . '_' . $solo_nombre . '.jpg';
 
+                //$ruta = $this->public_path . DS . 'imagenes';
                 $ruta = public_path() . DS . 'imagenes';
 
                 $path = $ruta . DS . $nombre;
-                Imagen::make($imagen)->save($path,10);
+                $img = Image::make($imagen);
+                $img->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+                $img->save($path,50);
 
                 $urlimagen = DS . 'imagenes' . DS  . $nombre;
             } else {
                 $nombre = time() . '_' . $imagen->getClientOriginalName();
 
+                //$ruta = $this->public_path . DS . 'imagenes';
                 $ruta = public_path() . DS . 'imagenes';
                 
                 $path = $ruta . DS . $nombre;
                 try {
-                    Imagen::make($imagen)->save($path,10);
+                    $img = Image::make($imagen);
+                    $img->resize(800, 800, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $img->save($path,50);
                 } catch (Throwable $e) {
                     return $e;
                 }
@@ -177,46 +179,21 @@ class ProfileController extends Controller
         return redirect()->route('profile.auth')->with('datos', __('Profile Picture Updated Successfully'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
