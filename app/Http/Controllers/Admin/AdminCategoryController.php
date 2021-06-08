@@ -173,7 +173,7 @@ class AdminCategoryController extends Controller
     {
         $request->validate([
             'descripcion' => 'required',
-            'id' => 'required'
+            //'id' => 'required'
         ]);
 
         // Preparing the Mail
