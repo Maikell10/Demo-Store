@@ -63,7 +63,14 @@
                 <div class="card card-success card-outline">
                     <div class="card-header">
                         <h2 class="card-title">{{__('Questions of:')}} {{$producto->nombre}}</h2>
-                        <span class="float-right badge badge-pill badge-danger">Hay {{$cant_left}} sin responder</span>
+                        
+                        @if ($cant_left != 0)
+                            @if ($cant_left == 1)
+                                <span class="float-right badge badge-pill badge-danger">{{__('There is')}} {{$cant_left}} {{__('without answering')}}</span>
+                            @else
+                                <span class="float-right badge badge-pill badge-danger">{{__('There are')}} {{$cant_left}} {{__('without answering')}}</span>
+                            @endif
+                        @endif
                     </div>
 
                     <div class="card-body">

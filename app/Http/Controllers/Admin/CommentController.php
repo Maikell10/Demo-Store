@@ -76,6 +76,7 @@ class CommentController extends Controller
         $comment->user_id = Auth::user()->id;
         $comment->parent_id = $request->parent_id;
         $comment->body = $request->body;
+        $comment->status = 'PUBLISHED';
 
         $res = $comment->save();
 
@@ -114,9 +115,11 @@ class CommentController extends Controller
         if ($producto->users[0]->id === Auth::user()->id | Auth::user()->id === 1) {
             if (Auth::user()->id != 1) {
                 foreach ($producto->comments as $comment) {
-                    $comm = Comment::findOrFail($comment->id);
-                    $comm->status = 'VIEW';
-                    $comm->save();
+                    if ($comment->parent_id == null) {
+                        $comm = Comment::findOrFail($comment->id);
+                        $comm->status = 'VIEW';
+                        $comm->save();
+                    }
                 }
             }
             
