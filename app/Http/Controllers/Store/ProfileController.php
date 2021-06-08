@@ -26,8 +26,8 @@ class ProfileController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('verified');
+        //$this->middleware('auth');
+        //$this->middleware('verified');
 
         // Public Path Servidor
         $this->public_path = '/home/u904324574/domains/tuminimercado.com/public_html';
@@ -35,6 +35,9 @@ class ProfileController extends Controller
     
     public function index()
     {
+        $this->middleware('auth');
+        $this->middleware('verified');
+
         $controller = new Controller();
         $arr_conex_client_t = $controller->arr_ip();
 

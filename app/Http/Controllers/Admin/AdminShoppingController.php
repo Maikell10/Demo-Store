@@ -337,8 +337,7 @@ class AdminShoppingController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'number' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
         ]);
 
         $email = Provider::where('user_id', $user_id)->where('email', $request->email)->get();
@@ -382,8 +381,7 @@ class AdminShoppingController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'number' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
         ]);
 
         $email = Provider::where('user_id', $user_id)->where('email', $request->email)->get();

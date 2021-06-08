@@ -19,8 +19,8 @@ class CreateProvidersTable extends Migration
             $table->string('name');
             $table->enum('document',['CI','RIF','RUC','DNI'])->default('RIF');
             $table->string('number');
-            $table->string('phone');
-            $table->string('email');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();

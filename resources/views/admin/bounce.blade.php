@@ -26,8 +26,11 @@
                                 <!-- small box -->
                                 <div class="small-box bg-success">
                                     <div class="inner">
-                                        <h3>{{number_format(($sales_canceled_count * 100)/$total_sales_count,2)}}<sup
-                                                style="font-size: 20px">%</sup></h3>
+                                        @if ($total_sales_count == 0)
+                                            <h3>{{number_format(0,2)}}<sup style="font-size: 20px">%</sup></h3>
+                                        @else
+                                            <h3>{{number_format(($sales_canceled_count * 100)/$total_sales_count,2)}}<sup style="font-size: 20px">%</sup></h3>
+                                        @endif
 
                                         <p>{{__('Bounce Rate')}}</p>
                                     </div>

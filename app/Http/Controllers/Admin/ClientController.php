@@ -27,6 +27,9 @@ class ClientController extends Controller
         // Messages
         $direct_m = $this->direct_m(Auth::user()->id);
 
+        $comments = '0';
+        $sales = '0';
+
         if (Auth::user()->id == 1) {
             $clients = User::with('image')->orderBy('users.id', 'Desc')->get();
 
