@@ -247,10 +247,11 @@ class ProfileController extends Controller
 
         $user = User::where('name', $name)->first();
 
+        $user_auth = Auth::user();
         $cant_dm_new = 0;
-        if ($user != null) {
-            $direct_m = $controller->direct_m_user($user->id);
-            $cant_dm_new = $controller->cant_dm_new($user->id);
+        if ($user_auth != null) {
+            $direct_m = $controller->direct_m_user($user_auth->id);
+            $cant_dm_new = $controller->cant_dm_new($user_auth->id);
         }
 
         $sales_count = Sale::where('user_id',$user->id)->where('state', 'Finalizada')->count();
