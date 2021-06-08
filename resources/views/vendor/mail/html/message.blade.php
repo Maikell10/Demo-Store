@@ -29,7 +29,10 @@
 {{-- Footer --}}
 @slot('footer')
 @component('mail::footer')
+@if (isset($user))
 {{__('We send this message to')}} <a href="mailto:{{$user->email}}">{{$user->email}}</a>
+@endif
+
 <br>
 {{__('Get to know us and visit our')}} <a href="http://tiendademo1.test/terminos">{{__('Terms and Conditions of TuMiniMercado')}}</a>
 <br>

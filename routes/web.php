@@ -5,7 +5,6 @@ use App\Category;
 use App\Comment;
 use App\DirectMessages;
 use App\Http\Controllers\Controller;
-use App\Image;
 use App\Purchase;
 use App\Sale;
 use App\StoreProfile;
@@ -18,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
 Route::get('/set_language/{lang}', 'Controller@set_language')->name('set_language');
+
+// E-mail verification
+Route::get('/register/verify/{code}', 'GuestController@verify');
 
 Route::get('/terminos', function () {
     $controller = new Controller();
@@ -136,7 +138,7 @@ Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallba
 
 // Profile
 Route::get('/profile/auth', 'Store\ProfileController@index')->name('profile.auth')->middleware('auth','verified');
-Route::resource('profile', 'Store\ProfileController')->names('profile')->middleware('auth','verified');
+Route::resource('profile', 'Store\ProfileController')->names('profile')->middleware('auth');
 Route::post('/profile/updateUser', 'Store\ProfileController@updateUser')->name('profile.updateUser')->middleware('auth','verified');
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
@@ -572,7 +574,7 @@ Route::resource('admin/client', 'Admin\ClientController')->names('admin.client')
 
 
 // Client Orders
-Route::resource('/store/purchases', 'Store\PurchasesController')->names('tienda.purchases')->middleware('auth','verified');
+Route::resource('/store/purchases', 'Store\PurchasesController')->names('tienda.purchases')->middleware('auth');
 
 // Client Rating Product
 Route::resource('/store/rating_purchases', 'Store\PurchasesRatingController')->names('tienda.rating_purchases')->middleware('auth','verified');
