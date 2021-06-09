@@ -35,7 +35,7 @@ class BusinessProfileController extends Controller
 
         $store_profile_config =  StoreProfile::where('user_id', $user->id)->first();
         $city = '0';
-        if ($store_profile_config != '[]') {
+        if ($store_profile_config != null) {
             if ($store_profile_config->city_id != null) {
                 $city = City::with('country')->findOrFail($store_profile_config->city_id);
             }

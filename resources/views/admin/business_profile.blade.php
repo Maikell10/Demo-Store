@@ -57,7 +57,7 @@
                                 </form>
                             </div>
 
-                            @if ($store_profile_config != '[]')
+                            @if ($store_profile_config != null)
                                 @if ($store_profile_config->change != null)
                                 <div class="col-md-6">
                                     <div class="col-md-12">
@@ -221,7 +221,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                @if ($store_profile_config != '[]')
+                                @if ($store_profile_config != null)
                                 <h3 class="font-weight-bold">{{__('Data of the Store')}}</h3>
                                 <form class="form-horizontal" action="{{ route('admin.business-profile.update', auth()->user()->id) }}" method="POST"
                                     id="updateStoreForm">
@@ -303,7 +303,7 @@
                                                         class="fa fa-phone"></i></span>
                                             </div>
 
-                                            @if ($store_profile_config != '[]')
+                                            @if ($store_profile_config != null)
                                                 <input type="hidden" id="inputPhoneH" value="{{$store_profile_config->contact_phone}}">
                                             @else
                                                 <input type="hidden" id="inputPhoneH" value="">
@@ -328,7 +328,7 @@
                                                         class="fab fa-facebook-f"></i></span>
                                             </div>
 
-                                            @if ($store_profile_config != '[]')
+                                            @if ($store_profile_config != null)
                                                 <input type="hidden" id="inputFacebookH" value="{{$store_profile_config->facebook}}">
                                             @else
                                                 <input type="hidden" id="inputFacebookH" value="">
@@ -353,7 +353,7 @@
                                                         class="fab fa-twitter"></i></span>
                                             </div>
 
-                                            @if ($store_profile_config != '[]')
+                                            @if ($store_profile_config != null)
                                                 <input type="hidden" id="inputTwitterH" value="{{$store_profile_config->twitter}}">
                                             @else
                                                 <input type="hidden" id="inputTwitterH" value="">
@@ -378,7 +378,7 @@
                                                         class="fab fa-instagram"></i></span>
                                             </div>
 
-                                            @if ($store_profile_config != '[]')
+                                            @if ($store_profile_config != null)
                                                 <input type="hidden" id="inputInstagramH" value="{{$store_profile_config->instagram}}">
                                             @else
                                                 <input type="hidden" id="inputInstagramH" value="">
@@ -403,7 +403,7 @@
                                                         class="fab fa-google"></i></span>
                                             </div>
                                             
-                                            @if ($store_profile_config != '[]')
+                                            @if ($store_profile_config != null)
                                                 <input type="hidden" id="inputGoogleMapsH" value="{{$store_profile_config->gmaps}}">
                                             @else
                                                 <input type="hidden" id="inputGoogleMapsH" value="">
@@ -421,7 +421,7 @@
 
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            @if ($store_profile_config != '[]')
+                                            @if ($store_profile_config != null)
                                                 <button type="submit" @click='updateStoreUser()' id="btnStoreUser" class="btn btn-success btn-block">{{__('Edit')}}</button>
                                             @else
                                             <button type="submit" @click='saveStoreUser()' id="btnSaveStoreUser" class="btn bg-yellow btn-block">{{__('Save')}}</button>
