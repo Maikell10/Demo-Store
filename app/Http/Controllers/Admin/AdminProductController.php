@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
-
+use App\Image as AppImage;
 use App\MainCategory;
 use App\Product;
 use App\SubCategory;
@@ -431,5 +431,43 @@ class AdminProductController extends Controller
     public function ProductActive(Request $request, $id)
     {
         return $request;
+    }
+
+    public function ImageRotateLeft($id)
+    {
+        $imagen = AppImage::findOrFail($id)->url;
+
+        //$ruta = $this->public_path;
+        $ruta = public_path();
+    
+        $path = $ruta . '' . $imagen;
+        // create Image from file
+        $img = Image::make($path);
+
+        // rotate image 90 degrees clockwise
+        $img->rotate(90);
+
+        $img->save($path);
+
+        return redirect()->back()->with('datos', __('Image Rotated Left Successfully'));
+    }
+
+    public function ImageRotateRight($id)
+    {
+        $imagen = AppImage::findOrFail($id)->url;
+
+        //$ruta = $this->public_path;
+        $ruta = public_path();
+    
+        $path = $ruta . '' . $imagen;
+        // create Image from file
+        $img = Image::make($path);
+
+        // rotate image 90 degrees clockwise
+        $img->rotate(-90);
+
+        $img->save($path);
+
+        return redirect()->back()->with('datos', __('Image Rotated Right Successfully'));
     }
 }

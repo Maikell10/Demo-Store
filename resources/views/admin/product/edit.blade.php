@@ -410,6 +410,13 @@
                                 <a href="{{$image->url}}" v-on:click.prevent="eliminarImagen({{$image}})">
                                     <i class="fas fa-trash-alt" style="color: red"></i>
                                 </a>
+
+                                <a href="{{route('admin.ImageRotateLeft',$image)}}" style="margin-left: 90px">
+                                    <i class="fas fa-undo text-navy"></i>
+                                </a>
+                                <a href="{{route('admin.ImageRotateRight',$image)}}" class="ml-1">
+                                    <i class="fas fa-redo text-secondary"></i>
+                                </a>
                             </div>
 
 

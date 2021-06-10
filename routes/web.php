@@ -533,6 +533,8 @@ Route::resource('admin/product', 'Admin\AdminProductController')->names('admin.p
 Route::get('admin/getProduct','Admin\AdminProductController@getProduct')->name('admin.getProduct');
 Route::get('admin/getProductI','Admin\AdminProductController@getProductI')->name('admin.getProductI');
 Route::put('admin/ProductActive','Admin\AdminProductController@ProductActive')->name('admin.ProductActive');
+Route::get('admin/ImageRotateLeft/{id}','Admin\AdminProductController@ImageRotateLeft')->name('admin.ImageRotateLeft');
+Route::get('admin/ImageRotateRight/{id}','Admin\AdminProductController@ImageRotateRight')->name('admin.ImageRotateRight');
 
 Route::get('cancelar/{ruta}', function ($ruta) {
     return redirect()->route($ruta)->with('cancelar', 'Acción Cancelada');
