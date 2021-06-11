@@ -75,7 +75,14 @@
 @section('contenido')
 
 <div class="super_container_inner">
+
+    @if ($store_profile_config->date_expiration >= date('Y-m-d'))
     <div class="products">
+    @else
+        <h2 class="bg-warning text-center font-weight-bold">{{__('Inactive Store')}}</h2>
+        <div class="products" style="pointer-events:none; opacity:0.5 !important;">
+    @endif
+
         <div class="container-fluid">
             <img class="home__image" src="{{asset('asset/images/banner.jpg')}}" alt="" />
 

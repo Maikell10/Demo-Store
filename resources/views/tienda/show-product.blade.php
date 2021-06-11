@@ -104,11 +104,15 @@
 
     @if (isset($producto))
 
-    @if ($producto->activo == 'Si')
+    @if ($producto->activo == 'Si' && $store_profile_config->date_expiration >= date('Y-m-d'))
     <div class="products">
     @else
-    <h2 class="bg-warning text-center font-weight-bold">{{__('Publication Paused')}}</h2>
-    <div class="products" style="pointer-events:none; opacity:0.5 !important;">
+        @if ($store_profile_config->date_expiration < date('Y-m-d'))
+        <h2 class="bg-warning text-center font-weight-bold">{{__('Inactive Store')}}</h2>
+        @else
+        <h2 class="bg-warning text-center font-weight-bold">{{__('Publication Paused')}}</h2>
+        @endif
+        <div class="products" style="pointer-events:none; opacity:0.5 !important;">
     @endif
         
         <div class="container">

@@ -72,7 +72,7 @@ class CategoryController extends Controller
 
         $category = Category::with('subCategories')->where('slug', $slug)->firstOrFail();
         //return $category->id;
-        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->join('main_categories','products.main_category_id','=','main_categories.id')->join('sub_categories','main_categories.sub_category_id','=','sub_categories.id')->where('category_id', $category->id)->where('activo', 'Si')->inRandomOrder()->paginate(10, 
+        $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->join('main_categories','products.main_category_id','=','main_categories.id')->join('sub_categories','main_categories.sub_category_id','=','sub_categories.id')->where('category_id', $category->id)->where('activo', 'Si')->inRandomOrder()->join('product_user', 'product_user.product_id', 'products.id')->join('store_profiles', 'store_profiles.user_id', 'product_user.user_id')->where('store_profiles.date_expiration', '>=', date('Y-m-d'))->paginate(10, 
         ['products.id','products.nombre','products.slug','products.main_category_id','products.cantidad','products.precio_actual','products.precio_anterior','products.porcentaje_descuento','products.visitas','products.ventas','products.estado','products.activo']);
 
         $user = Auth::user();

@@ -48,7 +48,7 @@ class AutocompleteController extends Controller
         $palabraabuscar = $request->get('palabraabuscar');
         $applocate = $request->get('applocate');
 
-        $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->where('activo', 'Si')->orderBy('nombre')->get();
+        $productos = Product::with('main_category')->where('nombre', 'like', '%' . $palabraabuscar . '%')->where('activo', 'Si')->orderBy('nombre')->join('product_user', 'product_user.product_id', 'products.id')->join('store_profiles', 'store_profiles.user_id', 'product_user.user_id')->where('store_profiles.date_expiration', '>=', date('Y-m-d'))->get();
 
         $resultados = [];
         foreach ($productos as $prod) {

@@ -51,20 +51,37 @@ class PurchasesController extends Controller
                 }
                 
                 foreach ($carts as $index => $cart) {
-                    $products[] = Product::where('id', $cart['product_id'])->firstOrFail();
+                    $products[] = Product::select('products.id','precio_actual','cantidad')->where('products.id', $cart['product_id'])->where('cantidad', '>', 0)->join('product_user', 'product_user.product_id', 'products.id')->join('store_profiles', 'store_profiles.user_id', 'product_user.user_id')->where('store_profiles.date_expiration', '>=', date('Y-m-d'))->first();
                     $sales_h = Sale::where('user_id', Auth::user()->id)->get();
+                    $sale = null;
 
-                    if ($sales_h != '[]') {
-                        $cont = 0;
-                        foreach ($sales_h as $sale_h) {
-                            $created_at = strtotime ( '+5 minute' , strtotime ($sale_h->created_at) );
-                            $created_at = date ( 'Y-m-d H:i:s' , $created_at );
-                            
-                            if ($created_at > $today && $sale_h->product_id == $cart->product_id && $sale_h->user_id == Auth::user()->id) {
-                                $cont = 1;
+                    if ($products[$index] != null) {
+                        if ($sales_h != '[]') {
+                            $cont = 0;
+                            foreach ($sales_h as $sale_h) {
+                                $created_at = strtotime ( '+5 minute' , strtotime ($sale_h->created_at) );
+                                $created_at = date ( 'Y-m-d H:i:s' , $created_at );
+                                
+                                if ($created_at > $today && $sale_h->product_id == $cart->product_id && $sale_h->user_id == Auth::user()->id) {
+                                    $cont = 1;
+                                }
                             }
-                        }
-                        if ($cont == 0) {
+                            if ($cont == 0) {
+                                $sale = new Sale();
+                                $sale->product_id = $cart->product_id;
+                                $sale->cantidad = $cart->cantidad;
+                                $sale->user_id = Auth::user()->id;
+                                $sale->price_sale = $products[$index]['precio_actual'];
+                                $sale->created_at = $today;
+                                $sale->updated_at = $today;
+                                $sale->save();
+    
+                                $products[$index]['cantidad'] = $products[$index]['cantidad'] - $cart->cantidad;
+                                $products[$index]->save();
+                            } else {
+                                $sale = '0';
+                            }
+                        } else {
                             $sale = new Sale();
                             $sale->product_id = $cart->product_id;
                             $sale->cantidad = $cart->cantidad;
@@ -73,49 +90,44 @@ class PurchasesController extends Controller
                             $sale->created_at = $today;
                             $sale->updated_at = $today;
                             $sale->save();
-
+    
                             $products[$index]['cantidad'] = $products[$index]['cantidad'] - $cart->cantidad;
                             $products[$index]->save();
-                        } else {
-                            $sale = '0';
                         }
-                    } else {
-                        $sale = new Sale();
-                        $sale->product_id = $cart->product_id;
-                        $sale->cantidad = $cart->cantidad;
-                        $sale->user_id = Auth::user()->id;
-                        $sale->price_sale = $products[$index]['precio_actual'];
-                        $sale->created_at = $today;
-                        $sale->updated_at = $today;
-                        $sale->save();
-
-                        $products[$index]['cantidad'] = $products[$index]['cantidad'] - $cart->cantidad;
-                        $products[$index]->save();
                     }
 
                     if ($sale == '0') {
                         return back()->with('mensajeInfo', __('You just made a similar purchase a few moments ago, please try again later'));
                     }
-                    
+
                     $sales_all[] = $sale;
 
                     $cart = Cart::where('product_id', $cart->product_id)->where('user_id', Auth::user()->id)->first();
                     $cart->delete();
-                    session()->forget('hjwebajjasxwk8164qds4.as84');
                 }
+                session()->forget('hjwebajjasxwk8164qds4.as84');
 
-                // Enviar correo al cliente
-                Mail::to(Auth::user()->email)->queue(new PurchaseNotification(Auth::user(),$sale));
 
                 // Buscar la data para enviar correo de notificacion a la tienda
                 foreach ($sales_all as $sale_all) {
-                    $product = Product::with('users')->where('id', $sale_all['product_id'])->firstOrFail();
-                    $store_users[] = User::where('id', $product->users[0]->id)->firstOrFail();;
+                    $null = 0;
+                    if ($sale_all != null) {
+                        $null = 1;
+                        $product = Product::with('users')->where('id', $sale_all['product_id'])->firstOrFail();
+                        $store_users[] = User::where('id', $product->users[0]->id)->firstOrFail();
+                    }
                 }
+                if ($null == 0) {
+                    return back()->with('mensajeInfo', __('The Products in your cart are not available now'));
+                }
+
                 $store_users = array_unique($store_users);
                 foreach ($store_users as $store_user) {
                     Mail::to($product->users[0]->email)->queue(new PurchaseStoreNotification(Auth::user(),$sale,$product->users[0]));
                 }
+
+                // Enviar correo al cliente
+                Mail::to(Auth::user()->email)->queue(new PurchaseNotification(Auth::user(),$sale));
                 // -----------------------------------------------------------
 
                 $distinct_sale = Sale::select('state', 'updated_at', 'created_at')->distinct('updated_at')->where('user_id', Auth::user()->id)->orderBy('updated_at', 'desc')->get();

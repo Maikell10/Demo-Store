@@ -133,6 +133,11 @@
                                             $cantidad_p = $cantidad_p + $products[$a]->cantidad;
                                         @endphp
                                     @else
+                                        <div hidden>
+                                            <select name="cantidad{{$a}}" id="cantidad{{$a}}" class="form-control select2">
+                                                <option value="0">0</option>
+                                            </select>
+                                        </div>
                                         <h5 class="text-danger">{{__('Not available.')}}</h5>
                                     @endif
 
@@ -165,7 +170,9 @@
                         <h4><font class="font-weight-bold">US$ @{{precio_total}}</font></h4>
 
                         @if(isset(Auth::user()->name))
-                        <button v-on:click="order()" class="btn btn-warning font-weight-bold" style="white-space: break-spaces">{{__('Proceed to Purchase')}}</button>
+                        <button v-on:click="order()" v-if="cantTotal != 0" class="btn btn-warning font-weight-bold" style="white-space: break-spaces">{{__('Proceed to Purchase')}}</button>
+
+                        <button v-if="cantTotal == 0" class="btn btn-warning font-weight-bold disabled" style="white-space: break-spaces">{{__('Proceed to Purchase')}}</button>
                         @else
                         <a href="{{url('login?pag=store/cart')}}" class="btn btn-outline-success font-weight-bold" style="white-space: break-spaces">{{__('You must log in to proceed with the purchase')}}</a>
                         @endif

@@ -79,7 +79,7 @@ Route::get('/delete_user', function () {
 Route::get('/', function () {
 
     //$productos = Product::with('images', 'category', 'users')->orderBy('nombre')->paginate(10);
-    $productos = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('activo', 'Si')->inRandomOrder()->get();
+    $productos = Product::select('products.id','sliderprincipal','precio_actual','precio_anterior','slug','nombre','estado','porcentaje_descuento','main_category_id')->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('activo', 'Si')->inRandomOrder()->join('product_user', 'product_user.product_id', 'products.id')->join('store_profiles', 'store_profiles.user_id', 'product_user.user_id')->where('store_profiles.date_expiration', '>=', date('Y-m-d'))->get();
     $categories = Category::with('subCategories')->inRandomOrder()->get();
     //return $productos;
 
@@ -96,7 +96,7 @@ Route::get('/', function () {
         $cant_dm_new = $controller->cant_dm_new($user->id);
     }
 
-    $populars = Product::with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('activo', 'Si')->orderBy('visitas','DESC')->inRandomOrder()->take(6)->get();
+    $populars = Product::select('products.id','sliderprincipal','precio_actual','precio_anterior','slug','nombre','estado','porcentaje_descuento','main_category_id')->with('images', 'main_category', 'main_category.sub_category','main_category.sub_category.category', 'users')->where('activo', 'Si')->orderBy('visitas','DESC')->inRandomOrder()->join('product_user', 'product_user.product_id', 'products.id')->join('store_profiles', 'store_profiles.user_id', 'product_user.user_id')->where('store_profiles.date_expiration', '>=', date('Y-m-d'))->take(6)->get();
     
     return view('tienda.index', compact('productos', 'categories', 'user', 'arr_conex_client_t', 'cant_dm_new', 'direct_m', 'populars'));
 });
